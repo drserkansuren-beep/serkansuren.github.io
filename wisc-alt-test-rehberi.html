@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WISC-IV / WISC-V Alt Test Rehberi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#121A2B;
+  --ink-2:#3D4759;
+  --ink-3:#6B7688;
+  --paper:#EEF1F5;
+  --card:#FFFFFF;
+  --line:#DDE3EB;
+
+  --vci:#2563A8;
+  --vsi:#0E8577;
+  --fri:#7A3FA6;
+  --wmi:#B36618;
+  --psi:#B02E5A;
+  --cmp:#4A5568;
+
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Source Sans 3",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.55;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 72px}
+
+/* ---------- header ---------- */
+header{padding:44px 0 8px}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 14px;
+}
+h1{
+  font-family:"Archivo",sans-serif;font-weight:800;
+  font-size:clamp(30px,6.2vw,54px);line-height:1.02;letter-spacing:-.025em;
+  margin:0 0 16px;max-width:16ch;
+}
+h1 em{font-style:normal;color:var(--fri)}
+.lede{font-size:clamp(16px,2.4vw,18.5px);color:var(--ink-2);max-width:62ch;margin:0}
+
+/* ---------- hero split diagram ---------- */
+.split{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:22px 20px 18px;margin:30px 0 8px;
+}
+.split h2{
+  font-family:"Archivo",sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;
+  margin:0 0 4px;
+}
+.split p{margin:0 0 16px;font-size:14.5px;color:var(--ink-2);max-width:70ch}
+.split svg{width:100%;height:auto;display:block}
+
+/* ---------- legend ---------- */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 6px}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  border:1px solid var(--line);background:var(--card);border-radius:999px;
+  padding:6px 13px 6px 9px;font-size:13.5px;color:var(--ink-2);
+}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+.chip code{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3)}
+
+/* ---------- filters ---------- */
+.filters{
+  position:sticky;top:0;z-index:20;background:var(--paper);
+  padding:18px 0 14px;margin-top:22px;border-bottom:1px solid var(--line);
+}
+.frow{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.frow + .frow{margin-top:9px}
+.flabel{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin-right:4px;min-width:74px;
+}
+button.f{
+  font-family:"Source Sans 3",sans-serif;font-size:13.5px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink-2);
+  border-radius:999px;padding:6px 14px;cursor:pointer;transition:.14s;
+}
+button.f:hover{border-color:var(--ink-3)}
+button.f[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+button.f:focus-visible{outline:2px solid var(--fri);outline-offset:2px}
+.count{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);
+  margin-left:auto;padding-left:10px;
+}
+
+/* ---------- grid ---------- */
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));
+  gap:14px;margin-top:22px;
+}
+article{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:0 18px 18px;display:flex;flex-direction:column;position:relative;overflow:hidden;
+}
+article::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--accent)}
+.top{display:flex;gap:14px;align-items:flex-start;padding:20px 0 12px}
+.glyph{
+  width:54px;height:54px;flex:none;border-radius:10px;
+  background:var(--tint);display:grid;place-items:center;
+}
+.glyph svg{width:34px;height:34px}
+.titles{min-width:0}
+.tr{
+  font-family:"Archivo",sans-serif;font-weight:700;font-size:17.5px;
+  letter-spacing:-.015em;line-height:1.15;margin:0 0 3px;
+}
+.en{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-3);margin:0}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 12px}
+.b{
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.05em;
+  border-radius:5px;padding:3px 7px;white-space:nowrap;
+}
+.b-idx{background:var(--accent);color:#fff}
+.b-idx2{background:var(--accent2);color:#fff}
+.b-out{border:1px solid var(--line);color:var(--ink-3)}
+.b-new{background:#FFD84D;color:#3A2B00;font-weight:600}
+.b-gone{background:#F0F2F5;color:var(--ink-3);text-decoration:line-through}
+dl{margin:0;font-size:14.5px}
+dt{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin:11px 0 3px;
+}
+dd{margin:0;color:var(--ink-2)}
+dd strong{color:var(--ink);font-weight:600}
+.clin{
+  margin-top:14px;padding:11px 12px;border-radius:9px;background:var(--tint);
+  font-size:13.8px;color:var(--ink-2);line-height:1.5;
+}
+.clin b{color:var(--ink);font-weight:600}
+
+/* ---------- prose sections ---------- */
+section.prose{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:26px 22px;margin-top:34px;
+}
+section.prose h2{
+  font-family:"Archivo",sans-serif;font-weight:800;font-size:clamp(20px,3.4vw,27px);
+  letter-spacing:-.02em;margin:0 0 8px;
+}
+section.prose h3{
+  font-family:"Archivo",sans-serif;font-weight:700;font-size:16px;
+  margin:24px 0 6px;letter-spacing:-.01em;
+}
+section.prose p{color:var(--ink-2);margin:0 0 12px;max-width:76ch}
+.recipe{display:grid;gap:10px;margin:16px 0 4px}
+.step{
+  display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;
+  border:1px solid var(--line);border-radius:11px;padding:13px 15px;
+}
+.step .k{
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;
+  color:#fff;background:var(--ink);border-radius:5px;padding:3px 8px;margin-top:2px;
+}
+.step p{margin:0;font-size:14.5px}
+.step .h{font-family:"Archivo",sans-serif;font-weight:700;font-size:14.5px;color:var(--ink);margin:0 0 3px}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0 4px;font-size:14px}
+.tbl th{
+  text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);
+  border-bottom:1px solid var(--line);padding:0 10px 7px 0;font-weight:500;
+}
+.tbl td{border-bottom:1px solid var(--line);padding:9px 10px 9px 0;color:var(--ink-2);vertical-align:top}
+.tbl td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+.mono{font-family:"IBM Plex Mono",monospace;font-size:13px}
+.warn{
+  border-left:3px solid var(--psi);background:#FCF2F5;
+  padding:13px 15px;border-radius:0 9px 9px 0;margin:16px 0 0;
+  font-size:14.3px;color:var(--ink-2);
+}
+footer{margin-top:34px;font-size:13px;color:var(--ink-3);max-width:78ch}
+footer p{margin:0 0 8px}
+.hidden{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:520px){
+  .flabel{min-width:100%;margin-bottom:2px}
+  .count{margin-left:0;padding-left:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">Klinik referans · Wechsler ölçekleri</p>
+  <h1>WISC-IV ve WISC-V alt testleri: <em>ne ölçer, ne değişti</em></h1>
+  <p class="lede">Her alt testin ölçtüğü yapı, görev biçimi ve klinik yorum notu. WISC-V ile gelen üç yeni alt test ve algısal akıl yürütmenin ikiye ayrılması ayrıca işaretlendi.</p>
+</header>
+
+<div class="split">
+  <h2>WISC-IV'ün Algısal Akıl Yürütme indeksi, WISC-V'te ikiye ayrıldı</h2>
+  <p>Aynı alt testler farklı bilişsel yapıları ölçüyordu: Küplerle Desen görsel-uzamsal işlemleme, Matris ve Resim Kavramları ise akıcı muhakeme. WISC-V bu ayrımı iki ayrı indekse dönüştürdü ve her birine yeni bir alt test ekledi.</p>
+  <svg viewBox="0 0 900 260" role="img" aria-label="Algısal Akıl Yürütme indeksinin Görsel-Uzamsal ve Akıcı Muhakeme indekslerine ayrılması">
+    <defs>
+      <linearGradient id="pri" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#0E8577"/><stop offset="100%" stop-color="#7A3FA6"/>
+      </linearGradient>
+    </defs>
+    <!-- left -->
+    <rect x="8" y="86" width="250" height="88" rx="11" fill="url(#pri)"/>
+    <text x="133" y="118" text-anchor="middle" fill="#fff" font-family="Archivo,sans-serif" font-weight="700" font-size="19">Algısal Akıl Yürütme</text>
+    <text x="133" y="142" text-anchor="middle" fill="#ffffffcc" font-family="IBM Plex Mono,monospace" font-size="12.5">PRI · WISC-IV</text>
+    <text x="133" y="163" text-anchor="middle" fill="#ffffffcc" font-family="IBM Plex Mono,monospace" font-size="11">KD + MR + RK</text>
+    <!-- arrows -->
+    <path d="M264 122 C 320 122, 320 60, 372 60" fill="none" stroke="#0E8577" stroke-width="2.4"/>
+    <path d="M264 138 C 320 138, 320 200, 372 200" fill="none" stroke="#7A3FA6" stroke-width="2.4"/>
+    <path d="M366 54 l12 6 -12 6 z" fill="#0E8577"/>
+    <path d="M366 194 l12 6 -12 6 z" fill="#7A3FA6"/>
+    <!-- top right -->
+    <rect x="382" y="18" width="510" height="84" rx="11" fill="#fff" stroke="#0E8577" stroke-width="1.6"/>
+    <text x="402" y="46" fill="#0E8577" font-family="Archivo,sans-serif" font-weight="700" font-size="18">Görsel-Uzamsal İndeks</text>
+    <text x="402" y="66" fill="#6B7688" font-family="IBM Plex Mono,monospace" font-size="11.5">VSI · Gv</text>
+    <text x="402" y="88" fill="#3D4759" font-family="Source Sans 3,sans-serif" font-size="14.5">Küplerle Desen  +  Görsel Bulmacalar</text>
+    <rect x="676" y="70" width="88" height="21" rx="5" fill="#FFD84D"/>
+    <text x="720" y="85" text-anchor="middle" fill="#3A2B00" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600">YENİ</text>
+    <!-- bottom right -->
+    <rect x="382" y="158" width="510" height="84" rx="11" fill="#fff" stroke="#7A3FA6" stroke-width="1.6"/>
+    <text x="402" y="186" fill="#7A3FA6" font-family="Archivo,sans-serif" font-weight="700" font-size="18">Akıcı Muhakeme İndeksi</text>
+    <text x="402" y="206" fill="#6B7688" font-family="IBM Plex Mono,monospace" font-size="11.5">FRI · Gf</text>
+    <text x="402" y="228" fill="#3D4759" font-family="Source Sans 3,sans-serif" font-size="14.5">Matris Muhakeme  +  Şekil Ağırlıkları</text>
+    <rect x="676" y="210" width="88" height="21" rx="5" fill="#FFD84D"/>
+    <text x="720" y="225" text-anchor="middle" fill="#3A2B00" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600">YENİ</text>
+  </svg>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<div class="filters">
+  <div class="frow">
+    <span class="flabel">Sürüm</span>
+    <button class="f" data-g="src" data-v="all" aria-pressed="true">Tümü</button>
+    <button class="f" data-g="src" data-v="iv" aria-pressed="false">WISC-IV</button>
+    <button class="f" data-g="src" data-v="v" aria-pressed="false">WISC-V</button>
+    <button class="f" data-g="src" data-v="new" aria-pressed="false">V'te yeni</button>
+    <button class="f" data-g="src" data-v="gone" aria-pressed="false">V'te kaldırıldı</button>
+  </div>
+  <div class="frow">
+    <span class="flabel">İndeks</span>
+    <button class="f" data-g="idx" data-v="all" aria-pressed="true">Tümü</button>
+    <button class="f" data-g="idx" data-v="vci" aria-pressed="false">Sözel Kavrama</button>
+    <button class="f" data-g="idx" data-v="vsi" aria-pressed="false">Görsel-Uzamsal</button>
+    <button class="f" data-g="idx" data-v="fri" aria-pressed="false">Akıcı Muhakeme</button>
+    <button class="f" data-g="idx" data-v="wmi" aria-pressed="false">Çalışma Belleği</button>
+    <button class="f" data-g="idx" data-v="psi" aria-pressed="false">İşlem Hızı</button>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<section class="prose">
+  <h2>Elimizde WISC-IV varken VSI / FRI ayrımını nasıl yaparız?</h2>
+  <p>Normlanmış bir Görsel-Uzamsal veya Akıcı Muhakeme <em>indeks puanı</em> üretemezsiniz — bunun için WISC-V norm tablosu gerekir. Ancak WISC-IV alt testlerini iki kümeye ayırıp <strong>klinik yorum düzeyinde</strong> karşılaştırmak psikometrik olarak savunulabilir; beş faktörlü CHC analizleri (Keith ve ark., 2006) zaten bu ayrışmayı WISC-IV verisinde göstermiştir.</p>
+
+  <div class="recipe">
+    <div class="step"><span class="k">1</span><div>
+      <p class="h">Kümeleri kurun</p>
+      <p><strong>Gv kümesi:</strong> Küplerle Desen (+ yedek: Resim Tamamlama) &nbsp;·&nbsp; <strong>Gf kümesi:</strong> Matris Muhakeme + Resim Kavramları. Aritmetik'i Gf'ye eklemeyin — çalışma belleği yükü ayrışmayı bulandırır.</p>
+    </div></div>
+    <div class="step"><span class="k">2</span><div>
+      <p class="h">Standart puan ortalamalarını alın</p>
+      <p>Her kümenin alt test standart puanlarının (ort. 10, SS 3) aritmetik ortalamasını hesaplayın. Bu bir indeks puanı değildir; birim standart puandır ve raporda öyle yazılmalıdır.</p>
+    </div></div>
+    <div class="step"><span class="k">3</span><div>
+      <p class="h">Ayrışmayı yorumlayın</p>
+      <p>Kümeler arası <span class="mono">≥3</span> puan (1 SS) fark klinik olarak dikkate değer, <span class="mono">≥5</span> puan belirgin kabul edilir. Küme <em>içi</em> dağılım da ≥4 puan ise ortalamayı yorumlamayın — o küme homojen değildir.</p>
+    </div></div>
+    <div class="step"><span class="k">4</span><div>
+      <p class="h">İkinci bir araçla doğrulayın</p>
+      <p>Gf için CAS Sözel Olmayan Matrisler veya Raven; Gv için Beery VMI Görsel Algı alt testi (motor bileşeni ayıklar). Tek ölçümle ayrışma iddia etmeyin.</p>
+    </div></div>
+  </div>
+
+  <h3>Rapor dili</h3>
+  <table class="tbl">
+    <tr><th>Yazmayın</th><th>Yazın</th></tr>
+    <tr><td>Görsel-Uzamsal İndeks = 88</td><td>Görsel-uzamsal görevlerde (Küplerle Desen) performans, akıcı muhakeme görevlerine (Matris, Resim Kavramları) kıyasla belirgin biçimde düşüktür.</td></tr>
+    <tr><td>FRI normal sınırlarda</td><td>Akıcı muhakeme kümesi ortalama düzeydedir; algısal akıl yürütme indeksindeki düşüş öncelikle görsel-uzamsal bileşenden kaynaklanmaktadır.</td></tr>
+  </table>
+
+  <div class="warn"><b>Not:</b> WISC-V'in Türkiye standardizasyonu tamamlanmadığı için Şekil Ağırlıkları, Görsel Bulmacalar ve Resim Uzamı alt testleri ülkemizde kullanılamaz. Bu materyaller Pearson telifli olup Türkçe norm olmadan ham puanları yorumlanamaz. WISC-V materyallerini yurt dışından temin edip uygulamak hem telif hem de psikometrik açıdan geçersizdir.</div>
+</section>
+
+<section class="prose">
+  <h2>WISC-V'in tamamlayıcı alt testleri ve ÖÖG</h2>
+  <p>WISC-V, beş primer indeksin dışında öğrenme güçlüğü değerlendirmesi için tasarlanmış tamamlayıcı bir grup içerir. Türkiye'de mevcut değildir, ancak neyin eksik kaldığını bilmek batarya planlaması açısından yararlıdır.</p>
+  <table class="tbl">
+    <tr><th>Alt test</th><th>Ölçtüğü</th><th>Türkiye'deki karşılığı</th></tr>
+    <tr><td>İsimlendirme Hızı</td><td>Hızlı otomatik isimlendirme (RAN) — okuma akıcılığının en güçlü yordayıcılarından</td><td>RAN/RAS görevleri, TODİL'in ilgili bölümleri</td></tr>
+    <tr><td>Simge Çevirisi</td><td>Görsel-sözel eşleştirmeli öğrenme, anlık ve gecikmeli geri çağırma</td><td>Doğrudan karşılığı yok; sözel öğrenme testleriyle kısmen ikame edilebilir</td></tr>
+  </table>
+  <p>Pratik sonuç: WISC-IV ile çalışırken ÖÖG değerlendirmesinde bu boşluğu okuma akıcılığı ve isimlendirme hızı ölçümleriyle ayrıca kapatmanız gerekir — zekâ testi tek başına yeterli olmaz.</p>
+</section>
+
+<footer>
+  <p><strong>Test güvenliği:</strong> Bu belgedeki görseller alt testlerin <em>görev tipini</em> temsil eden soyut çizimlerdir; hiçbiri gerçek test maddesi değildir. Gerçek maddelerin, materyallerin veya puanlama anahtarlarının hasta/veli ile paylaşılması test geçerliğini kalıcı olarak bozar.</p>
+  <p>Kaynaklar: WISC-IV Türkiye uyarlaması (Öktem ve ark., 2016, Türk Psikologlar Derneği), WISC-V Technical and Interpretive Manual (Wechsler, 2014), Keith ve ark. (2006) beş faktörlü CHC analizi. Türkçe alt test adlandırmalarında TPD el kitabı esas alınmıştır.</p>
+</footer>
+
+</div>
+
+<script>
+const IDX = {
+  vci:{n:"Sözel Kavrama",c:"var(--vci)",t:"#EDF3FA",code:"VCI · Gc"},
+  vsi:{n:"Görsel-Uzamsal",c:"var(--vsi)",t:"#E8F5F3",code:"VSI · Gv"},
+  fri:{n:"Akıcı Muhakeme",c:"var(--fri)",t:"#F3EDF8",code:"FRI · Gf"},
+  wmi:{n:"Çalışma Belleği",c:"var(--wmi)",t:"#FAF1E7",code:"WMI · Gsm"},
+  psi:{n:"İşlem Hızı",c:"var(--psi)",t:"#FBEDF1",code:"PSI · Gs"},
+  cmp:{n:"Tamamlayıcı",c:"var(--cmp)",t:"#F0F2F5",code:"— "}
+};
+const S = (b)=>`<svg viewBox="0 0 40 40" fill="none" stroke="${'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${b}</svg>`;
+const G = {
+  blocks:S('<rect x="6" y="6" width="12" height="12"/><rect x="22" y="6" width="12" height="12" fill="currentColor" opacity=".25"/><rect x="6" y="22" width="12" height="12" fill="currentColor" opacity=".25"/><rect x="22" y="22" width="12" height="12"/>'),
+  puzzle:S('<circle cx="20" cy="20" r="14"/><path d="M20 6v14l12 7"/>'),
+  matrix:S('<rect x="5" y="5" width="13" height="13"/><rect x="22" y="5" width="13" height="13"/><rect x="5" y="22" width="13" height="13"/><path d="M25 28h7M28.5 24.5v7" opacity=".6"/><rect x="22" y="22" width="13" height="13" stroke-dasharray="3 3"/>'),
+  scale:S('<path d="M20 8v24M10 32h20M8 14h24"/><path d="M8 14l-4 8h8zM32 14l-4 8h8z"/>'),
+  concept:S('<circle cx="12" cy="12" r="6"/><rect x="22" y="6" width="12" height="12" rx="2"/><circle cx="12" cy="28" r="6" fill="currentColor" opacity=".25"/><rect x="22" y="22" width="12" height="12" rx="2" fill="currentColor" opacity=".25"/>'),
+  talk:S('<path d="M6 10h28v18H18l-8 7v-7H6z"/><path d="M13 17h14M13 22h9" opacity=".6"/>'),
+  book:S('<path d="M6 8h11a3 3 0 013 3v21a3 3 0 00-3-3H6z"/><path d="M34 8H23a3 3 0 00-3 3v21a3 3 0 013-3h11z"/>'),
+  info:S('<circle cx="20" cy="20" r="14"/><path d="M20 18v10M20 12h.01"/>'),
+  digits:S('<rect x="4" y="14" width="9" height="12" rx="2"/><rect x="15.5" y="14" width="9" height="12" rx="2" fill="currentColor" opacity=".25"/><rect x="27" y="14" width="9" height="12" rx="2"/>'),
+  letters:S('<path d="M6 28l6-16 6 16M8 23h8"/><rect x="24" y="12" width="10" height="16" rx="3"/>'),
+  picspan:S('<rect x="4" y="10" width="14" height="14" rx="2"/><rect x="22" y="10" width="14" height="14" rx="2" opacity=".35"/><path d="M8 31h24" stroke-dasharray="3 3"/>'),
+  calc:S('<rect x="9" y="5" width="22" height="30" rx="3"/><path d="M14 13h12M15 22h2M19 22h2M23 22h2M15 28h2M19 28h2M23 28h2"/>'),
+  code:S('<rect x="5" y="8" width="10" height="10" rx="2"/><path d="M20 13h15"/><rect x="5" y="22" width="10" height="10" rx="2" fill="currentColor" opacity=".25"/><path d="M20 27h10"/>'),
+  search:S('<circle cx="17" cy="17" r="11"/><path d="M25 25l10 10"/><path d="M13 17h8" opacity=".6"/>'),
+  cancel:S('<circle cx="10" cy="11" r="4"/><circle cx="22" cy="11" r="4" fill="currentColor" opacity=".25"/><circle cx="10" cy="26" r="4" fill="currentColor" opacity=".25"/><circle cx="22" cy="26" r="4"/><path d="M30 6L34 34" opacity=".5"/>'),
+  missing:S('<rect x="5" y="8" width="30" height="24" rx="3"/><path d="M12 26l6-8 5 6 3-3 4 5"/><circle cx="27" cy="15" r="2.5" stroke-dasharray="2 2"/>'),
+  word:S('<path d="M8 12h24M8 20h18M8 28h12"/><circle cx="31" cy="27" r="4" stroke-dasharray="2 2"/>'),
+  speed:S('<path d="M6 28a14 14 0 1128 0"/><path d="M20 28l8-8"/><path d="M8 33h24"/>')
+};
+
+const D = [
+ {g:G.blocks,tr:"Küplerle Desen",en:"Block Design",idx:"vsi",iv:"PRI · temel",v:"VSI · primer",
+  task:"Kırmızı-beyaz küplerle modeldeki deseni süre sınırı içinde oluşturma.",
+  meas:"<strong>Görsel-uzamsal işlemleme (Gv)</strong>, bütünü parçalara ayırabilme, görsel-motor koordinasyon, planlama.",
+  clin:"WISC-IV'te PRI'yi düşüren tek alt test buysa <b>saf görsel-uzamsal zayıflık</b> düşünün. Yavaş ama doğru çözüm nonverbal öğrenme profili; parça-bütün ilişkisini kuramama OSB'de sık görülen ayrıntıya odaklanma ile karışabilir."},
+
+ {g:G.puzzle,tr:"Görsel Bulmacalar",en:"Visual Puzzles",idx:"vsi",v:"VSI · primer",isnew:1,
+  task:"Tamamlanmış bir şeklin hangi üç parçadan oluştuğunu <em>zihinde</em> birleştirerek bulma. Motor yanıt yok.",
+  meas:"<strong>Görsel-uzamsal muhakeme (Gv)</strong>, zihinsel döndürme ve birleştirme — motor bileşenden arındırılmış.",
+  clin:"Küplerle Desen'e motor-bağımsız bir eş olarak eklendi. Serebral palsi, dispraksi veya ince motor sorunu olan çocukta Gv'yi motor engelden ayırt etmeyi sağlar. <b>Türkiye'de mevcut değil.</b>"},
+
+ {g:G.matrix,tr:"Matris Muhakeme",en:"Matrix Reasoning",idx:"fri",iv:"PRI · temel",v:"FRI · primer",
+  task:"Eksik parçası olan görsel örüntüyü inceleyip beş seçenek arasından tamamlayanı seçme. Süre sınırı yok.",
+  meas:"<strong>Akıcı muhakeme (Gf)</strong>, tümevarımsal akıl yürütme, soyut örüntü algısı.",
+  clin:"WISC-IV'teki adı el kitabında <b>Mantık Yürütme Kareleri</b> olarak da geçer. Kültür ve dilden en az etkilenen alt testlerden; iki dilli çocukta veya dil bozukluğunda muhakeme kapasitesinin en temiz göstergesi. Dürtüsel çocuk hızlı ve yanlış seçer — süre sınırı yok, mutlaka düşünmeye teşvik edin."},
+
+ {g:G.scale,tr:"Şekil Ağırlıkları",en:"Figure Weights",idx:"fri",v:"FRI · primer",isnew:1,
+  task:"Dengede olan terazilerdeki şekillerin ilişkisinden yola çıkarak eksik ağırlığı bulma. Süre sınırlı.",
+  meas:"<strong>Niceliksel akıcı muhakeme (Gf/RQ)</strong>, tümdengelimli akıl yürütme, eşitlik ve denklik kavramı.",
+  clin:"Matris'ten farklı olarak <b>niceliksel</b> muhakemeyi ölçer ve matematik güçlüğüne duyarlıdır. Diskalkuli profilinde Aritmetik'ten daha ayırt edici çünkü çalışma belleği ve hesaplama becerisi yükü düşüktür. <b>Türkiye'de mevcut değil.</b>"},
+
+ {g:G.concept,tr:"Resim Kavramları",en:"Picture Concepts",idx:"fri",iv:"PRI · temel",v:"FRI · ikincil",
+  task:"İki-üç sıra resim arasından ortak bir kavram paylaşan resimleri seçme.",
+  meas:"<strong>Akıcı ve kategorik muhakeme (Gf)</strong>, soyutlama — sözel yanıt gerektirmeden.",
+  clin:"Benzerlikler'in sözel olmayan karşılığıdır. Benzerlikler düşük + Resim Kavramları normal ise sorun <b>soyutlamada değil sözel ifadededir</b>. WISC-V'te ikincile düşürüldü çünkü Gf yükü Matris ve Şekil Ağırlıkları kadar güçlü bulunmadı."},
+
+ {g:G.talk,tr:"Benzerlikler",en:"Similarities",idx:"vci",iv:"VCI · temel",v:"VCI · primer",
+  task:"İki kelimenin ortak yönünü sözel olarak açıklama (ör. bir meyve ile bir sebzenin ortak yanı).",
+  meas:"<strong>Sözel kavram oluşturma (Gc)</strong>, soyut düşünme, kategorik akıl yürütme.",
+  clin:"Somut yanıtlar (görünüş, işlev) 1 puan, üst kategori 2 puan alır. <b>Sürekli somut düzeyde kalma</b> OSB ve zihinsel yetersizlikte tipiktir; ÖÖG'de genelde korunur."},
+
+ {g:G.book,tr:"Sözcük Dağarcığı",en:"Vocabulary",idx:"vci",iv:"VCI · temel",v:"VCI · primer",
+  task:"Sunulan kelimelerin anlamını tanımlama.",
+  meas:"<strong>Kazanılmış bilgi (Gc)</strong>, kelime bilgisi, uzun süreli bellekten geri çağırma, ifade edici dil.",
+  clin:"Genel zekâ ile en yüksek korelasyonu olan alt testlerden. Eğitim fırsatı ve ev ortamından güçlü etkilenir — <b>düşük SED'de düşük puanı yetenek eksikliği olarak yorumlamayın</b>. Kelimeyi bilip anlatamama, ifade edici dil bozukluğunu düşündürür."},
+
+ {g:G.info,tr:"Kavrama",en:"Comprehension",idx:"vci",iv:"VCI · temel",v:"VCI · ikincil",
+  task:"Sosyal kuralları, günlük yaşam durumlarını ve nedenlerini açıklama.",
+  meas:"<strong>Sosyal yargı ve pratik bilgi (Gc)</strong>, sosyal kuralları içselleştirme, sözel muhakeme.",
+  clin:"El kitabında <b>Yargılama</b> olarak da anılır. Sözcük Dağarcığı yüksek + Kavrama belirgin düşük profili, kelime bilgisi yeterliyken <b>sosyal muhakemenin zayıf olduğuna</b> işaret eder; OSB değerlendirmesinde destekleyici bir bulgudur (tek başına tanısal değildir)."},
+
+ {g:G.info,tr:"Genel Bilgi",en:"Information",idx:"vci",iv:"VCI · yedek",v:"VCI · ikincil",
+  task:"Genel kültür ve okul bilgisine dair kısa sorulara yanıt verme.",
+  meas:"<strong>Kristalize bilgi birikimi (Gc)</strong>, uzun süreli belleğe kodlanmış olgusal bilgi.",
+  clin:"Öğrenme fırsatına en duyarlı alt test. Devamsızlık, okul değişikliği veya sınırlı uyarana maruz kalma ile düşer. Diğer VCI alt testleri normalken tek başına düşükse <b>eğitsel yoksunluğu</b> araştırın."},
+
+ {g:G.word,tr:"Sözcük Muhakemesi",en:"Word Reasoning",idx:"vci",iv:"VCI · yedek",gone:1,
+  task:"Sırayla verilen ipuçlarından ortak kavramı bulma.",
+  meas:"<strong>Sözel tümevarımsal muhakeme (Gc/Gf)</strong>, ipucu bütünleştirme, alternatif üretme.",
+  clin:"WISC-V'te <b>kaldırıldı</b> — Benzerlikler ve Kavrama ile fazla örtüştüğü, ayırt edici katkısının düşük olduğu gerekçesiyle."},
+
+ {g:G.digits,tr:"Sayı Dizisi",en:"Digit Span",idx:"wmi",iv:"WMI · temel",v:"WMI · primer",
+  task:"Sayı dizilerini düz ve tersten tekrarlama. WISC-V'te ayrıca artan sırada söyleme bölümü eklendi.",
+  meas:"<strong>İşitsel kısa süreli bellek ve çalışma belleği (Gsm)</strong>, zihinsel manipülasyon, dikkat sürdürme.",
+  clin:"<b>Düz ile ters arasındaki fark klinik altın madenidir:</b> düz normal + ters düşük, depolamanın değil <em>zihinsel işlemenin</em> bozulduğunu gösterir — DEHB'de tipik. Her ikisi de düşükse önce işitsel dikkati ve işitmeyi sorgulayın."},
+
+ {g:G.letters,tr:"Harf-Rakam Dizisi",en:"Letter-Number Sequencing",idx:"wmi",iv:"WMI · temel",v:"WMI · ikincil",
+  task:"Karışık verilen harf ve rakamları, rakamlar küçükten büyüğe ve harfler alfabetik sırada olacak şekilde yeniden düzenleyip söyleme.",
+  meas:"<strong>Çalışma belleği (Gsm)</strong>, zihinde iki kategoriyi eşzamanlı sıralama, yürütücü kontrol.",
+  clin:"WISC-IV'ün en yüksek yürütücü işlev yüklü alt testi. <b>Alfabeyi tam bilmeyen küçük çocukta puan yapay olarak düşer</b> — uygulamadan önce alfabe bilgisini mutlaka doğrulayın."},
+
+ {g:G.picspan,tr:"Resim Uzamı",en:"Picture Span",idx:"wmi",v:"WMI · primer",isnew:1,
+  task:"Kısa süre gösterilen resimleri, ardından daha kalabalık bir sayfadan sırasıyla tanıma.",
+  meas:"<strong>Görsel çalışma belleği (Gsm-visual)</strong>, görsel bellekte tutma ve tanıma, proaktif ket vurmaya direnç.",
+  clin:"WISC-IV'ün en büyük eksiğini kapatır: çalışma belleği <b>yalnızca işitsel</b> ölçülüyordu. İşitsel işlemleme bozukluğu veya dil bozukluğu olan çocukta çalışma belleğini haksız yere düşük ölçme riskini azaltır. <b>Türkiye'de mevcut değil.</b>"},
+
+ {g:G.calc,tr:"Aritmetik",en:"Arithmetic",idx:"wmi",idx2:"fri",iv:"WMI · yedek",v:"FRI · ikincil",
+  task:"Sözel olarak sunulan matematik problemlerini kâğıt-kalem kullanmadan, süre sınırı içinde çözme.",
+  meas:"<strong>Niceliksel muhakeme + çalışma belleği (Gq/Gf/Gsm)</strong> — karma yüklü.",
+  clin:"İndeks değiştiren tek alt test: WISC-IV'te çalışma belleğine, WISC-V'te akıcı muhakemeye atanmıştır. <b>Düşük puanı tek başına diskalkuli kanıtı sayılmaz</b> — dinleme, tutma ve hesaplama aynı anda yüklendiği için kaynak belirsizdir. Ayrıştırmak için işlemi kâğıtla tekrar ettirin (sınır ötesi test, puanlanmaz)."},
+
+ {g:G.code,tr:"Şifre",en:"Coding",idx:"psi",iv:"PSI · temel",v:"PSI · primer",
+  task:"Anahtarda verilen şekil-sembol eşleşmelerini 120 saniye içinde mümkün olduğunca hızlı kopyalama.",
+  meas:"<strong>İşlem hızı (Gs)</strong>, görsel-motor hız, ilişkisel öğrenme, dikkat sürdürme.",
+  clin:"En düşük özgüllüğe sahip alt test: DEHB, anksiyete, depresyon, ilaç yan etkisi, motor beceriksizlik ve düşük motivasyon <b>hepsi</b> düşürür. Tek başına asla yorumlamayın. Anahtara sürekli geri bakma çalışma belleği zayıflığını, düzensiz-titrek yazı grafomotor sorunu düşündürür."},
+
+ {g:G.search,tr:"Simge Arama",en:"Symbol Search",idx:"psi",iv:"PSI · temel",v:"PSI · primer",
+  task:"Hedef sembolün arama grubunda bulunup bulunmadığını süre sınırı içinde işaretleme.",
+  meas:"<strong>Görsel tarama hızı (Gs)</strong>, görsel ayırt etme, karar hızı.",
+  clin:"Şifre'den daha az motor yük taşır. <b>Simge Arama normal + Şifre düşük</b> ise sorun işlem hızında değil <em>grafomotor çıktıdadır</em> — bu ayrım okulda yazı süresi uzatması önerirken doğrudan işinize yarar. Hata sayısını mutlaka not edin: hız-doğruluk takasını gösterir."},
+
+ {g:G.cancel,tr:"Üstünü Çizme",en:"Cancellation",idx:"psi",iv:"PSI · yedek",v:"PSI · ikincil",
+  task:"Rastgele ve yapılandırılmış dizilimlerde hedef resimlerin üstünü süre içinde çizme.",
+  meas:"<strong>Seçici dikkat ve tarama hızı (Gs)</strong>, dikkat dağıtıcıyı bastırma.",
+  clin:"El kitabında <b>Çizme</b> olarak da geçer. Rastgele ve yapılandırılmış koşullar arasındaki fark, çocuğun <b>kendi arama stratejisini kurabilme</b> becerisini gösterir — DEHB'de yapılandırılmamış koşulda belirgin düşüş beklenir."},
+
+ {g:G.missing,tr:"Resim Tamamlama",en:"Picture Completion",idx:"vsi",iv:"PRI · yedek",gone:1,
+  task:"Resimde eksik olan önemli ayrıntıyı 20 saniye içinde bulma.",
+  meas:"<strong>Görsel algı ve ayrıntı fark etme (Gv/Gc)</strong>, bütün içinde önemli olanı seçme.",
+  clin:"WISC-V'te <b>kaldırıldı</b>; yerini Görsel Bulmacalar aldı. WISC-IV kullanırken Gv kümesinde Küplerle Desen'e ikinci ölçüm olarak yararlıdır, ancak kültürel ve bilgi bileşeni taşıdığı için saf Gv sayılmaz."},
+
+ {g:G.speed,tr:"Tamamlayıcı alt testler",en:"Naming Speed & Symbol Translation",idx:"cmp",v:"Tamamlayıcı",isnew:1,
+  task:"Hızlı otomatik isimlendirme ve görsel-sözel eşleştirmeli öğrenme görevleri.",
+  meas:"<strong>İsimlendirme hızı ve depolama-geri çağırma</strong> — okuma akıcılığı ve öğrenme güçlüğüne özgü göstergeler.",
+  clin:"Beş primer indeksin dışında, ÖÖG değerlendirmesi için tasarlandı. Türkiye'de karşılığı olmadığı için okuma akıcılığı ve RAN ölçümlerini <b>bataryanıza ayrıca eklemeniz</b> gerekir. <b>Türkiye'de mevcut değil.</b>"}
+];
+
+// legend
+document.getElementById('legend').innerHTML = Object.entries(IDX).filter(([k])=>k!=='cmp')
+  .map(([k,o])=>`<span class="chip"><span class="dot" style="background:${o.c}"></span>${o.n} <code>${o.code}</code></span>`).join('');
+
+const grid=document.getElementById('grid'), cnt=document.getElementById('count');
+grid.innerHTML = D.map((d,i)=>{
+  const o=IDX[d.idx], o2=d.idx2?IDX[d.idx2]:null;
+  const badges=[];
+  if(d.iv) badges.push(`<span class="b b-idx">WISC-IV · ${d.iv}</span>`);
+  if(d.v) badges.push(`<span class="b ${o2?'b-idx2':'b-idx'}">WISC-V · ${d.v}</span>`);
+  if(d.isnew) badges.push(`<span class="b b-new">V'TE YENİ</span>`);
+  if(d.gone) badges.push(`<span class="b b-gone">WISC-V'te yok</span>`);
+  badges.push(`<span class="b b-out">${o.code.trim()}</span>`);
+  return `<article data-i="${i}" data-idx="${d.idx}${d.idx2?' '+d.idx2:''}" data-iv="${d.iv?1:0}" data-v="${d.v?1:0}" data-new="${d.isnew?1:0}" data-gone="${d.gone?1:0}"
+   style="--accent:${o.c};--accent2:${o2?o2.c:o.c};--tint:${o.t}">
+    <div class="top">
+      <div class="glyph" style="color:${o.c}">${d.g}</div>
+      <div class="titles"><p class="tr">${d.tr}</p><p class="en">${d.en}</p></div>
+    </div>
+    <div class="badges">${badges.join('')}</div>
+    <dl>
+      <dt>Görev</dt><dd>${d.task}</dd>
+      <dt>Ne ölçer</dt><dd>${d.meas}</dd>
+    </dl>
+    <div class="clin">${d.clin}</div>
+  </article>`;
+}).join('');
+
+let f={src:'all',idx:'all'};
+function apply(){
+  let n=0;
+  document.querySelectorAll('#grid article').forEach(a=>{
+    let ok=true;
+    if(f.src==='iv') ok = a.dataset.iv==='1';
+    else if(f.src==='v') ok = a.dataset.v==='1';
+    else if(f.src==='new') ok = a.dataset.new==='1';
+    else if(f.src==='gone') ok = a.dataset.gone==='1';
+    if(ok && f.idx!=='all') ok = a.dataset.idx.split(' ').includes(f.idx);
+    a.classList.toggle('hidden',!ok);
+    if(ok) n++;
+  });
+  cnt.textContent = n + ' alt test';
+}
+document.querySelectorAll('button.f').forEach(b=>b.addEventListener('click',()=>{
+  const g=b.dataset.g;
+  document.querySelectorAll(`button.f[data-g="${g}"]`).forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');
+  f[g]=b.dataset.v; apply();
+}));
+apply();
+</script>
+</body>
+</html>
