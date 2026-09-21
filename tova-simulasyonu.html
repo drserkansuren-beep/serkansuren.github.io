@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOVA Simülasyonu — Dikkat Değişkenleri Testi</title>
+<style>
+  :root{
+    --ink:#17181F; --ink2:#262836; --paper:#FFFFFF; --mist:#EEEFF4;
+    --cy:#2FA8B9; --amb:#F2A93B; --rose:#E06CA8; --vio:#7B6CF6;
+    --ok:#3FA060; --no:#D95050; --mid:#C98A1B; --txt:#1D1F2A; --sub:#6F7488;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito','Segoe UI',system-ui,-apple-system,sans-serif;
+    background:linear-gradient(160deg,var(--ink) 0%,var(--ink2) 100%);
+    min-height:100vh;color:var(--txt);padding:16px}
+  .shell{max-width:790px;margin:0 auto}
+  .brand{color:#fff;text-align:center;margin:8px 0 18px}
+  .brand h1{font-size:1.3rem;font-weight:800}
+  .brand p{color:#C7CAD9;font-size:.85rem;margin-top:4px}
+  .card{background:var(--paper);border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(5,6,15,.5);margin-bottom:16px}
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:800;color:#fff;letter-spacing:.4px}
+  .b-cy{background:var(--cy)}.b-amb{background:var(--amb)}.b-rose{background:var(--rose)}.b-vio{background:var(--vio)}.b-ink{background:var(--ink)}
+  .menu-item{display:flex;align-items:center;gap:14px;border:2px solid var(--mist);border-radius:14px;padding:14px;margin-top:12px;cursor:pointer;transition:.15s;background:#fff;width:100%;text-align:left;font-family:inherit}
+  .menu-item:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(5,6,15,.12)}
+  .menu-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.7rem;background:var(--mist)}
+  .menu-item h3{font-size:1rem;font-weight:800}
+  .menu-item p{font-size:.8rem;color:var(--sub);margin-top:2px}
+  .note{background:#FFF3E6;border-left:4px solid var(--amb);border-radius:8px;padding:10px 12px;font-size:.78rem;color:#7A4E1E;margin-top:14px;line-height:1.45}
+  .gapnote{background:#E7F4F6;border-left:4px solid var(--cy);border-radius:8px;padding:10px 12px;font-size:.8rem;color:#155A66;margin-top:10px;line-height:1.5}
+  .btn{background:var(--ink);color:#fff;border:none;border-radius:12px;padding:12px 22px;font-size:.95rem;font-weight:800;cursor:pointer;font-family:inherit}
+  .btn:hover{opacity:.9}
+  .btn-ghost{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+  .progress{font-size:.78rem;font-weight:800;color:var(--sub)}
+  .instr{font-size:.9rem;color:var(--sub);line-height:1.55;margin-bottom:14px}
+  .stim{background:var(--mist);border-radius:14px;padding:16px;margin-bottom:14px}
+  .obs{font-size:.92rem;line-height:1.65;background:#fff;border-radius:10px;padding:12px;border-left:4px solid var(--ink)}
+  .obs .t{color:var(--sub);font-size:.72rem;font-weight:800;letter-spacing:.4px}
+  .goal{font-weight:800;font-size:1rem;margin:2px 0 8px}
+  .arena{background:#111218;border-radius:16px;height:280px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+  .fix{color:#3A3D4D;font-size:1.4rem;font-weight:800}
+  .tovabox{width:120px;height:150px;border:6px solid #ECEDF4;border-radius:8px;position:relative;background:#111218}
+  .inner{position:absolute;left:50%;transform:translateX(-50%);width:44px;height:44px;background:#ECEDF4;border-radius:4px}
+  .inner.top{top:12px}.inner.bot{bottom:12px}
+  .respbtn{width:100%;margin-top:12px;padding:18px;border-radius:16px;border:none;background:var(--cy);color:#fff;font-family:inherit;font-size:1.1rem;font-weight:800;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+  .respbtn:active{transform:scale(.98);background:#25909F}
+  .opts{display:grid;grid-template-columns:1fr;gap:10px}
+  .opt{border:3px solid var(--mist);border-radius:12px;background:#fff;padding:12px;cursor:pointer;text-align:left;font-family:inherit;font-size:.88rem;transition:.12s;line-height:1.45}
+  .opt:hover{border-color:#CBCEDC}
+  .opt.ok{border-color:var(--ok);background:#EAF6EE}
+  .opt.no{border-color:var(--no);background:#FBEBEB}
+  .pearl{background:#E7F4F6;border-left:4px solid var(--cy);border-radius:8px;padding:10px 12px;margin-top:12px;font-size:.82rem;line-height:1.55;color:#155A66}
+  .feedback{border-radius:12px;padding:12px 14px;margin-top:14px;font-size:.88rem;font-weight:700;display:none;line-height:1.55}
+  .fb-ok{background:#EAF6EE;color:#20603A;display:block}
+  .fb-no{background:#FBEBEB;color:#8C2626;display:block}
+  .actionrow{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+  .dom{border:2px solid var(--mist);border-radius:12px;padding:12px 14px;margin-top:10px}
+  .dom b.t{font-size:.88rem}
+  .dom p{font-size:.82rem;line-height:1.55;margin-top:4px;color:#3A3D4D}
+  .infocard h4{margin:16px 0 6px;font-size:.92rem}
+  .infocard p,.infocard li{font-size:.84rem;color:#3A3D4D;line-height:1.55}
+  .infocard ul{padding-left:18px;margin-top:4px}
+  .profpat{border:2px solid var(--mist);border-radius:12px;padding:12px 14px;margin-top:10px}
+  .profpat b.t{font-size:.85rem}
+  .profpat p{font-size:.82rem;color:#3A3D4D;line-height:1.5;margin-top:4px}
+  .casebox{background:var(--mist);border-radius:14px;padding:16px;font-size:.9rem;line-height:1.65}
+  .statchip{display:inline-block;background:#fff;border:2px solid var(--mist);border-radius:10px;padding:6px 12px;margin:4px 4px 0 0;font-size:.8rem;font-weight:800}
+  table.cmp{width:100%;border-collapse:collapse;margin-top:8px}
+  table.cmp td,table.cmp th{padding:8px 6px;border-bottom:1px solid var(--mist);font-size:.78rem;text-align:left;vertical-align:top;line-height:1.45}
+  table.cmp th{color:var(--sub);font-size:.68rem;letter-spacing:.5px;text-transform:uppercase}
+  .res{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+  .resbox{border:2px solid var(--mist);border-radius:12px;padding:12px}
+  .resbox h5{font-size:.8rem;color:var(--sub);letter-spacing:.4px}
+  .resbox .row{display:flex;justify-content:space-between;font-size:.82rem;font-weight:700;margin-top:6px}
+  .flag{border-radius:8px;padding:8px 10px;font-size:.78rem;font-weight:800;margin-top:8px}
+  .flag.ok{background:#EAF6EE;color:#20603A}
+  .flag.warn{background:#FFF3DC;color:#7A5A1E}
+  .flag.bad{background:#FBEBEB;color:#8C2626}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="brand">
+    <h1>TOVA • Dikkat Değişkenleri Testi Simülasyonu</h1>
+    <p>Çeldiricisiz, dile dayanmayan CPT • İki yarılı tasarım • Titrasyon geleneği</p>
+  </div>
+
+  <!-- ANA MENÜ -->
+  <div id="scr-home" class="card">
+    <span class="badge b-ink">ANA MENÜ</span>
+    <p class="instr" style="margin-top:10px">
+      TOVA, dikkatin <b>en yalın laboratuvar ölçümüdür</b>: tek geometrik uyaran (kare içinde kare — üstte hedef,
+      altta hedef-değil), <b>sabit 2 saniyelik ritim</b> (100 ms sunum), milisaniye hassasiyetli el düğmesi ve
+      kasıtlı olarak sıkıcı ~21,6 dakika (4-5 yaşta yarısı). İki yarısı iki ayrı soruyu sorar:
+      <b>Yarı 1</b> hedef seyrektir → sürdürülebilir dikkat/vijilans; <b>Yarı 2</b> hedef sıktır → basma alışkanlığı
+      kurulur, seyrek hedef-değile <b>basmamak</b> gerekir → inhibisyon.
+    </p>
+    <div class="gapnote">🧩 <b>Klinik konum:</b> MOXO'nun aynadaki tersi — MOXO çeldirici ekleyerek gerçek hayatı taklit
+      eder, TOVA çeldiriciyi soyarak dikkatin saf halini ölçer. En ünlü kullanımı <b>stimülan doz titrasyonudur</b>:
+      dile-kültüre dayanmayan uyaran ve sabit ritim, ilaç etkisini tekrar ölçümle izlemeye çok uygundur. Tanıyı tek
+      başına koymaz.</div>
+
+    <button class="menu-item" onclick="show('scr-map')">
+      <div class="menu-icon">🗺️</div>
+      <div><h3>1 • Yapı Haritası</h3><p>Uyaran tasarımı, iki yarı mantığı, değişkenler (RT değişkenliği yıldız), geçerlik</p></div>
+    </button>
+    <button class="menu-item" onclick="startTask()">
+      <div class="menu-icon">🎮</div>
+      <div><h3>2 • Oynanabilir Mini-TOVA</h3><p>İki yarı × 20 uyaran: gerçek RT, omisyon, komisyon, erken basış ve RT-SS ölçümü</p></div>
+    </button>
+    <button class="menu-item" onclick="startInterp()">
+      <div class="menu-icon">🎯</div>
+      <div><h3>3 • Profil Yorumu Antrenmanı</h3><p>6 profil: yarı farkları, RT değişkenliği, erken basış geçerliği, TOVA↔MOXO ayrışması</p></div>
+    </button>
+    <button class="menu-item" onclick="startCase()">
+      <div class="menu-icon">💊</div>
+      <div><h3>4 • Vaka: "Deniz, 10 yaş — doz gezisi"</h3><p>TOVA'nın imza kullanımı: bazal → 18 mg → 36 mg titrasyon kararları</p></div>
+    </button>
+    <button class="menu-item" onclick="show('scr-info')">
+      <div class="menu-icon">📚</div>
+      <div><h3>Bilgi Merkezi</h3><p>Dört CPT karşılaştırması (TOVA-MOXO-CNSVS-klinik), norm dürüstlüğü, sınırlar</p></div>
+    </button>
+
+    <div class="note">⚠️ Bu simülasyon TOVA'nın mantığını öğreten <b>özgün eğitim içeriğidir</b>; gerçek TOVA donanımı
+      (mikrosaniye düğmesi), tam süresi ve ABD normları burada temsil edilmez. Tarayıcı zamanlaması yaklaşıktır; gerçek
+      testin en önemli bileşeni olan <b>uzun sıkıcılık</b> demoda üretilemez — bunu bilerek yorumlayın.</div>
+  </div>
+
+  <!-- YAPI HARİTASI -->
+  <div id="scr-map" class="card infocard hidden">
+    <div class="topbar"><span class="badge b-ink">YAPI HARİTASI</span></div>
+    <h4>⬜ Uyaran ve Ritim</h4>
+    <div class="dom"><b class="t">Dile dayanmayan tek uyaran</b>
+      <p>Kare içinde küçük kare: <b>üstte → HEDEF (bas)</b>, <b>altta → HEDEF-DEĞİL (basma)</b>. Harf, sayı, renk,
+      kültürel içerik yok — okuma bilmeyen 4 yaş çocuğuyla da çalışır; görsel ayırt etme yükü minimumdur.
+      Her uyaran 100 ms görünür, uyaranlar arası süre sabit 2 sn: ritim hiç değişmez, beklenti kurulamaz — dalgalanma
+      tamamen çocuğun dikkatinden gelir.</p></div>
+    <h4>➗ İki Yarı Mantığı — testin ruhu</h4>
+    <div class="dom"><b class="t"><span class="badge b-cy">YARI 1</span> Hedef seyrek (~%22,5)</b>
+      <p>Uyaranların çoğu "basma"dır; hedef nadir gelir. Görev sıkıcıdır ve tetikte kalmayı ister →
+      <b>omisyonlar ve RT yavaşlaması-dalgalanması</b> burada konuşur: sürdürülebilir dikkat/vijilans yarısı.</p></div>
+    <div class="dom"><b class="t"><span class="badge b-amb">YARI 2</span> Hedef sık (~%77,5)</b>
+      <p>Artık neredeyse her uyarana basılır; el otomatiğe bağlar. Nadir gelen hedef-değilde <b>durabilmek</b> gerekir →
+      <b>komisyonlar</b> burada konuşur: yanıt inhibisyonu yarısı. Aynı çocukta iki yarının ayrışması, "dikkat mi
+      dürtü mü baskın?" sorusunun ölçümsel karşılığıdır.</p></div>
+    <h4>📊 Değişkenler</h4>
+    <ul>
+      <li><b>RT Değişkenliği (SS)</b> — TOVA'nın yıldızı: DEHB'de en duyarlı tek gösterge; dikkatin saniye-saniye mikro-dalgalanması.</li>
+      <li><b>Yanıt Süresi (ort. RT)</b> — işlem hızı/uyarılmışlık.</li>
+      <li><b>Omisyon</b> — kaçırılan hedef → dikkatsizlik.</li>
+      <li><b>Komisyon</b> — hedef-değile basış → dürtüsellik/inhibisyon.</li>
+      <li><b>Erken basışlar (&lt;~150 ms)</b> — uyaranı işlemeden tahmin: oranı yükselirse <b>geçerlik bayrağı</b> (strateji: "hepsine bas, tutturursun").</li>
+      <li><b>d′ (sinyal ayırt etme)</b> ve çoklu basışlar — performansın bozulma eğrisi ve motor taşma.</li>
+      <li><b>Dikkat Karşılaştırma Puanı</b> — profilin DEHB norm örüntüsüne benzerliği: destekleyici endeks, tanı değil.</li>
+    </ul>
+    <div class="pearl">💎 Puanlar yaş-cinsiyet normlu standart puanlardır (ort 100, SS 15) ve <b>çeyrek çeyrek</b> izlenir:
+      son çeyrekte çöküş "zaman-görev etkisi"dir (MOXO'daki son temel sahne dersiyle aynı). Yorum daima çeyrek eğrisiyle yapılır, tek toplamla değil.</div>
+    <div class="actionrow"><button class="btn btn-ghost" onclick="show('scr-home')">Menü</button></div>
+  </div>
+
+  <!-- GÖREV -->
+  <div id="scr-task" class="card hidden">
+    <div class="topbar">
+      <div><span class="badge b-ink" id="task-badge">MİNİ-TOVA</span> <span class="progress" id="task-prog"></span></div>
+    </div>
+    <p class="instr" id="task-instr"></p>
+    <div class="arena" id="arena"><div class="fix">+</div></div>
+    <button class="respbtn" id="resp" style="display:none">BAS</button>
+    <div id="task-out"></div>
+    <div class="actionrow">
+      <button class="btn btn-ghost" onclick="abortTask()">Menü</button>
+      <span id="task-actions" style="display:flex;gap:10px"></span>
+    </div>
+  </div>
+
+  <!-- KOŞU (MC) -->
+  <div id="scr-run" class="card hidden">
+    <div class="topbar"><div><span class="badge b-ink" id="run-badge"></span> <span class="progress" id="run-prog"></span></div></div>
+    <p class="instr" id="run-instr"></p>
+    <div id="run-body"></div>
+    <div class="feedback" id="run-fb"></div>
+    <div class="actionrow">
+      <button class="btn btn-ghost" onclick="show('scr-home')">Menü</button>
+      <span id="run-actions" style="display:flex;gap:10px;flex-wrap:wrap"></span>
+    </div>
+  </div>
+
+  <!-- VAKA RAPORU -->
+  <div id="scr-case" class="card infocard hidden">
+    <span class="badge b-ink">VAKA RAPORU — DENİZ, 10 YAŞ • TOVA TİTRASYON</span>
+    <div id="case-body"></div>
+    <div class="actionrow"><button class="btn btn-ghost" onclick="show('scr-home')">Menü</button></div>
+  </div>
+
+  <!-- BİLGİ MERKEZİ -->
+  <div id="scr-info" class="card infocard hidden">
+    <span class="badge b-ink">BİLGİ MERKEZİ</span>
+    <div id="score-summary" style="margin-top:10px"></div>
+    <h4>🔺 Dikkat Ölçüm Dörtgeni</h4>
+    <table class="cmp">
+      <tr><th></th><th>TOVA</th><th>MOXO</th><th>CNSVS-CPT</th><th>Klinik/Ölçek</th></tr>
+      <tr><td><b>Çeldirici</b></td><td>Yok (bilinçli)</td><td>Var (görsel+işitsel)</td><td>Yok</td><td>Gerçek hayat</td></tr>
+      <tr><td><b>Uyaran</b></td><td>Dile dayanmayan geometri</td><td>Yüz/nesne görselleri</td><td>Harf</td><td>—</td></tr>
+      <tr><td><b>Süre/ritim</b></td><td>~21,6 dk, sabit 2 sn</td><td>~18 dk, sahneli</td><td>Kısa modül</td><td>—</td></tr>
+      <tr><td><b>En iyi sorusu</b></td><td>Saf vijilans + inhibisyon; <b>titrasyon</b></td><td>Çeldirici altında dikkat; ortam reçetesi</td><td>Batarya içi hız-RT bağlamı</td><td>İşlev ve yaygınlık</td></tr>
+    </table>
+    <div class="pearl">💎 <b>Ayrışma okuma reçetesi:</b> TOVA (çeldiricisiz) normal + MOXO (çeldiricili) bozuk →
+      sorun sürdürmede değil <b>filtrelemede</b>; ikisi de bozuk → çekirdek dikkat-inhibisyon zayıflığı; TOVA bozuk +
+      MOXO görece iyi → uyarılma/monotoni sorunu (ilgi çekici ortamda toparlanan tip) — üçü de klinik ve ölçeklerle
+      birleştirilerek anlam kazanır.</div>
+    <h4>💊 Titrasyon Geleneği</h4>
+    <div class="profpat"><p>TOVA literatürünün ayırt edici katkısı, stimülan doz optimizasyonunda tekrar ölçüm kullanımıdır:
+      bazal → doz basamaklarında aynı saatte (etki penceresinde) tekrar → RT değişkenliğinin ve komisyonların
+      normalleşmesi hedef. Kural: TOVA <b>destekler</b>, kararı klinik + ev-okul geri bildirimi verir; tek oturumluk
+      laboratuvar kazancı, günlük işlev kazancının yerine yazılmaz. MOXO simülasyonundaki 8 hafta izlem protokolüyle birlikte kullanın.</p></div>
+    <h4>🇹🇷 Norm Dürüstlüğü</h4>
+    <div class="profpat"><p>Normlar ABD örneklemindendir; Türkçe standardizasyon yoktur. Uyaranın dile dayanmaması kültürel
+      yükü azaltır (bu, TOVA'nın bilinçli tasarım avantajıdır) ama norm uyarısını kaldırmaz — raporda araç ve norm kaynağı
+      açıkça yazılır, yorum profil düzeyinde ve klinikle birlikte yapılır.</p></div>
+    <h4>⚠️ Sınırlar</h4>
+    <ul>
+      <li>Sıkıcılık tasarımın parçasıdır: motivasyon düşüklüğü ile dikkat eksikliğini ayırmak için gözlem notu şarttır.</li>
+      <li>Normal TOVA DEHB'yi dışlamaz; bozuk TOVA tek başına koymaz (uyku, kaygı, ilaç, ekran alışkanlıkları hepsi iz bırakır).</li>
+      <li>Erken basış oranı yükselen kayıt yorumlanmaz — önce geçerlik.</li>
+      <li>4-5 yaş yarı-süre sürümünde beklentiler farklıdır; yaş bandı kuralları izlenir.</li>
+    </ul>
+    <div class="actionrow"><button class="btn" onclick="show('scr-home')">Menü</button></div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let TOK=0;
+function show(id){['scr-home','scr-map','scr-task','scr-run','scr-case','scr-info'].forEach(s=>$(s).classList.add('hidden'));$(id).classList.remove('hidden');window.scrollTo(0,0)}
+function shuffle(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(v=>v[1])}
+function setActions(box,arr){const b=$(box);b.innerHTML='';arr.forEach(a=>{const x=document.createElement('button');x.className='btn'+(a.ghost?' btn-ghost':'');x.textContent=a.label;x.onclick=a.fn;b.appendChild(x)})}
+function clearFB(){$('run-fb').className='feedback';$('run-fb').textContent=''}
+function setFB(t,cls){const f=$('run-fb');f.className='feedback '+cls;f.innerHTML=t}
+const STATS={task:null,interp:null,caseAgree:null};
+function updateInfo(){const c=[];
+  if(STATS.task)c.push(`<span class="statchip">🎮 Mini-TOVA: ${STATS.task}</span>`);
+  if(STATS.interp)c.push(`<span class="statchip">🎯 Profil: ${STATS.interp}</span>`);
+  if(STATS.caseAgree)c.push(`<span class="statchip">💊 Vaka: ${STATS.caseAgree}</span>`);
+  $('score-summary').innerHTML=c.join('')}
+const _s=show;show=function(id){if(id==='scr-info')updateInfo();_s(id)};
+
+/* ============ MİNİ-TOVA GÖREVİ ============ */
+const ISI=2000, DUR=180, N=20;
+let T=null;
+function abortTask(){TOK++;document.onkeydown=null;show('scr-home')}
+function startTask(){
+  T={half:1,data:{1:mkHalf(),2:mkHalf()}};
+  show('scr-task');
+  $('task-prog').textContent='';
+  $('task-instr').innerHTML='Kural basit ve hiç değişmez: küçük kare <b>ÜSTTEyse BAS</b>, <b>ALTTAysa BASMA</b>. Uyaran çok kısa görünür (~0,2 sn), ritim sabittir. Bilgisayarda <b>boşluk tuşu</b>, telefonda <b>BAS düğmesi</b>. Önce Yarı 1: hedef SEYREK — uyanık kalın.';
+  $('arena').innerHTML='<div class="fix">+</div>';$('resp').style.display='none';$('task-out').innerHTML='';
+  setActions('task-actions',[{label:'Yarı 1\'i Başlat →',fn:()=>runHalf(1)}])}
+function mkHalf(){return {om:0,com:0,ant:0,rts:[],targets:0,nont:0}}
+function mkSeq(half){
+  const nT=half===1?5:15, nN=N-nT;
+  let arr=Array(nT).fill('T').concat(Array(nN).fill('N'));
+  return shuffle(arr)}
+function runHalf(half){
+  const tok=++TOK;const seq=mkSeq(half);const D=T.data[half];
+  let i=0,stimOn=0,responded=false,cur=null;
+  $('task-badge').textContent='MİNİ-TOVA • YARI '+half+(half===1?' (hedef seyrek)':' (hedef sık)');
+  $('task-instr').innerHTML=half===1?'Hedef SEYREK: çoğu uyaranda basmayacaksınız. Kaçırmayın.':'Hedef SIK: neredeyse hep basacaksınız. Nadir gelen ALTTAKİ karede <b>durabilin</b>.';
+  $('resp').style.display='block';$('task-out').innerHTML='';setActions('task-actions',[]);
+  const press=()=>{
+    if(cur===null)return;
+    const rt=performance.now()-stimOn;
+    if(responded)return; responded=true;
+    if(rt<150){D.ant++;return}
+    if(cur==='T'){D.rts.push(rt)}else{D.com++}};
+  $('resp').onpointerdown=press;
+  document.onkeydown=e=>{if(e.code==='Space'){e.preventDefault();press()}};
+  (function next(){
+    if(tok!==TOK)return;
+    if(i>=seq.length){finishHalf(half,tok);return}
+    $('task-prog').textContent=`Uyaran ${i+1}/${seq.length}`;
+    cur=seq[i];responded=false;
+    if(cur==='T')D.targets++;else D.nont++;
+    $('arena').innerHTML=`<div class="tovabox"><div class="inner ${cur==='T'?'top':'bot'}"></div></div>`;
+    stimOn=performance.now();
+    setTimeout(()=>{if(tok!==TOK)return;$('arena').innerHTML='<div class="fix">+</div>'},DUR);
+    setTimeout(()=>{if(tok!==TOK)return;
+      if(cur==='T'&&!responded)D.om++;
+      cur=null;i++;next()},ISI)})()}
+function finishHalf(half,tok){
+  document.onkeydown=null;$('resp').style.display='none';
+  if(half===1){
+    $('arena').innerHTML='<div class="fix">✓</div>';
+    $('task-instr').innerHTML='Yarı 1 bitti. Şimdi Yarı 2: hedef SIK — el otomatiğe bağlanacak, fren sizde.';
+    setActions('task-actions',[{label:'Yarı 2\'yi Başlat →',fn:()=>runHalf(2)}]);return}
+  showTaskResults()}
+function stats(rts){if(!rts.length)return{m:0,sd:0};
+  const m=rts.reduce((a,b)=>a+b,0)/rts.length;
+  const sd=Math.sqrt(rts.reduce((a,b)=>a+(b-m)*(b-m),0)/rts.length);
+  return{m:Math.round(m),sd:Math.round(sd)}}
+function showTaskResults(){
+  const d1=T.data[1],d2=T.data[2],s1=stats(d1.rts),s2=stats(d2.rts);
+  const antTot=d1.ant+d2.ant;
+  STATS.task=`Y1 om ${d1.om}/${d1.targets}, Y2 kom ${d2.com}/${d2.nont}`;
+  let interp='';
+  if(antTot>=3)interp+=`<div class="flag bad">🚩 Erken basış ${antTot} — gerçek testte bu oran geçerlik bayrağıdır: tahmin stratejisi, profil yorumlanmaz.</div>`;
+  if(d1.om>0)interp+=`<div class="flag warn">Yarı 1'de ${d1.om} omisyon → seyrek-hedef koşulunda tetikte kalma maliyeti (vijilans).</div>`;
+  else interp+=`<div class="flag ok">Yarı 1 omisyonsuz → sürdürme sağlam.</div>`;
+  if(d2.com>0)interp+=`<div class="flag warn">Yarı 2'de ${d2.com} komisyon → basma alışkanlığı kurulunca fren maliyeti (inhibisyon). Yarı farkı TOVA'nın ana dersidir.</div>`;
+  else interp+=`<div class="flag ok">Yarı 2 komisyonsuz → inhibisyon sağlam.</div>`;
+  if(s1.sd&&s2.sd)interp+=`<div class="flag ${Math.max(s1.sd,s2.sd)>120?'warn':'ok'}">RT değişkenliği Y1 ${s1.sd} ms / Y2 ${s2.sd} ms — gerçek TOVA'da bu sayı (SS) en duyarlı DEHB göstergesidir; yüksekse dikkat "dalgalanıyor" demektir, ortalama RT normal olsa bile.</div>`;
+  $('task-out').innerHTML=`
+    <div class="res">
+      <div class="resbox"><h5>YARI 1 — hedef seyrek</h5>
+        <div class="row"><span>Omisyon</span><b>${d1.om}/${d1.targets}</b></div>
+        <div class="row"><span>Komisyon</span><b>${d1.com}/${d1.nont}</b></div>
+        <div class="row"><span>Ort. RT</span><b>${s1.m} ms</b></div>
+        <div class="row"><span>RT SS</span><b>${s1.sd} ms</b></div>
+        <div class="row"><span>Erken basış</span><b>${d1.ant}</b></div></div>
+      <div class="resbox"><h5>YARI 2 — hedef sık</h5>
+        <div class="row"><span>Omisyon</span><b>${d2.om}/${d2.targets}</b></div>
+        <div class="row"><span>Komisyon</span><b>${d2.com}/${d2.nont}</b></div>
+        <div class="row"><span>Ort. RT</span><b>${s2.m} ms</b></div>
+        <div class="row"><span>RT SS</span><b>${s2.sd} ms</b></div>
+        <div class="row"><span>Erken basış</span><b>${d2.ant}</b></div></div>
+    </div>${interp}
+    <div class="pearl">💎 Demo 40 uyaranlıktır; gerçek TOVA ~650 uyaran ve 21,6 dakikadır. Fark kozmetik değil, ÖZDÜR:
+      TOVA'nın ölçtüğü şey tam olarak "bu kadar uzun sıkıcılıkta ne olur?" sorusudur — kısa demolar herkeste iyi çıkar.
+      Bu yüzden gerçek uygulamada süre asla kısaltılmaz.</div>`;
+  setActions('task-actions',[{label:'Tekrar',ghost:true,fn:startTask},{label:'Profil Antrenmanı →',fn:startInterp}])}
+
+/* ============ PROFİL YORUMU ============ */
+const INTERP=[
+ {q:'Yarı 1 temiz (omisyon yok, RT stabil); Yarı 2\'de komisyonlar belirgin, RT hızlanmış. Okumanız?',
+  opts:[{h:'Dürtüsellik-baskın profil: sürdürme sağlam, basma alışkanlığı kurulunca fren zayıf — DEHB\'nin hiperaktif-dürtüsel yüzüyle uyumlu desen',ok:1},{h:'Dikkatsizlik-baskın profil',ok:0},{h:'Geçersiz kayıt',ok:0},{h:'Normal profil',ok:0}],
+  why:'İki yarı tasarımının amacı tam bu ayrımdır: Yarı 2 inhibisyonun laboratuvarıdır. Hızlanmış RT + komisyon birlikteliği "hız uğruna doğruluk" takasının ölçümsel imzasıdır.'},
+ {q:'Yarı 1\'de omisyonlar ve yavaş-değişken RT; Yarı 2 görece toparlamış. Okumanız?',
+  opts:[{h:'Vijilans/uyarılmışlık tipi: uyaran seyrek ve ortam boşken sistem "kapanıyor"; uyaran sıklaşınca tempo onu taşıyor — dikkatsizlik-baskın görünüm',ok:1},{h:'Dürtüsellik-baskın',ok:0},{h:'Motor sorun',ok:0},{h:'Kaygı profili kesin',ok:0}],
+  why:'Hedef sıklaştığında düzelen performans, sorunun kapasiteden çok uyarılmışlık-monotoni yönetiminde olduğunu düşündürür — okulda "boş derste kopuyor, ilgi çekicide iyi" anlatısının CPT karşılığı.'},
+ {q:'Omisyon ve komisyon sayıları normal bantta; ama RT değişkenliği (SS) çok yüksek. "Hata yok, o zaman sorun yok" denebilir mi?',
+  opts:[{h:'Hayır: RT değişkenliği tek başına en duyarlı göstergedir — dikkat saniye saniye dalgalanıyor, çocuk hataları son anda kurtarıyor; günlük yaşamda bu "tutarsızlık" olarak görünür',ok:1},{h:'Evet, hata yoksa profil temizdir',ok:0},{h:'SS önemsiz bir istatistiktir',ok:0},{h:'Cihaz hatasıdır',ok:0}],
+  why:'DEHB literatüründe ortalama performans korunurken tutarlılığın bozulması klasik bulgudur; "bazen çok iyi bazen çok kötü" anlatısının sayısal karşılığı RT-SS\'dir.'},
+ {q:'Kayıtta erken basış (%150 ms altı) oranı belirgin yüksek; toplam doğruluk şaşırtıcı iyi. Ne yaparsınız?',
+  opts:[{h:'Önce geçerlik: erken basışlar uyaran işlenmeden verilen tahminlerdir — "hepsine bas" stratejisi doğruluğu şişirir; profil yorumlanmaz, gözlem notuyla birlikte tekrar planlanır',ok:1},{h:'Doğruluk iyiyse sorun yok',ok:0},{h:'Çocuk çok hızlı, üstün yetenekli',ok:0},{h:'Erken basışlar RT ortalamasına katılır',ok:0}],
+  why:'CNSVS bayrağı ve MOXO temel sahnesiyle aynı ilke: geçerlik kapısından geçmeyen veri, veri değildir.'},
+ {q:'TOVA tüm alanlarda normal; ama anne-öğretmen ölçekleri ve klinik gözlem güçlü DEHB anlatıyor. Sonuç?',
+  opts:[{h:'Normal CPT DEHB\'yi dışlamaz: bire-bir, yapılandırılmış, yeni ortam performansı taşıyabilir — tanı klinik ölçütlerle konur, TOVA dosyaya "laboratuvar koşulunda telafi edebiliyor" bilgisini ekler',ok:1},{h:'DEHB dışlandı',ok:0},{h:'Aile abartıyor',ok:0},{h:'Test tekrarlanana kadar tanı konamaz',ok:0}],
+  why:'CPT\'lerin duyarlılığı sınırlıdır; DSM-5 tanısı işlev ve yaygınlık ölçütleriyle kliniktir. Bu cümle MOXO ve CNSVS modüllerindekiyle aynıdır — üç araçta da aynı ilkeyi görmek, ekibe ilkenin araç-üstü olduğunu öğretir.'},
+ {q:'Aynı çocukta TOVA (çeldiricisiz) normal, MOXO (çeldiricili) belirgin bozuk. Okumanız?',
+  opts:[{h:'Sürdürme kapasitesi sağlam, sorun filtrelemede: çeldirici eklenince sistem çöküyor — ortam düzenlemesi (ön sıra, sade masa, kulaklık) ve çeldirici yönetimi planın merkezine oturur',ok:1},{h:'Testlerden biri bozuk',ok:0},{h:'Çocuk MOXO\'da kasıtlı kötü yapmış',ok:0},{h:'İkisinin ortalaması alınır',ok:0}],
+  why:'İki CPT\'nin tasarım farkı (çeldirici var/yok) tam bu ayrıştırma içindir; ayrışma çelişki değil, mekanizma bilgisidir — TOVA+MOXO çifti birlikte, tek başlarına veremeyecekleri cümleyi kurar.'}];
+function startInterp(){
+  show('scr-run');clearFB();let idx=0,score=0;
+  function load(){
+    if(idx>=INTERP.length){STATS.interp=`${score}/${INTERP.length}`;
+      $('run-badge').textContent='SONUÇ';$('run-prog').textContent='';$('run-instr').textContent='';
+      $('run-body').innerHTML=`<div class="stim"><div class="goal">Profil Yorumu tamamlandı</div><p style="font-size:1rem"><b>${score}/${INTERP.length}</b> doğru</p><p style="font-size:.85rem;color:var(--sub);margin-top:8px">Dört refleks: yarı farkını oku (dikkat mi fren mi), SS'e bak (dalgalanma), önce geçerlik (erken basış), normal CPT dışlamaz. Beşincisi dörtgenin kendisi: TOVA↔MOXO ayrışması mekanizma bilgisidir.</p></div>`;
+      clearFB();setActions('run-actions',[{label:'Menü',fn:()=>show('scr-home')},{label:'Bilgi Merkezi →',fn:()=>show('scr-info')}]);return}
+    const it=INTERP[idx];
+    $('run-badge').textContent='PROFİL YORUMU';$('run-prog').textContent=`Profil ${idx+1}/${INTERP.length}`;
+    $('run-instr').innerHTML='Profili okuyun; en doğru klinik yorumu seçin.';
+    $('run-body').innerHTML=`<div class="stim"><div class="obs"><span class="t">📊 PROFİL</span><br>${it.q}</div></div>
+      <div class="opts" id="qo">${shuffle(it.opts.map(o=>({...o}))).map(o=>`<button class="opt" data-ok="${o.ok}">${o.h}</button>`).join('')}</div>`;
+    document.querySelectorAll('#qo .opt').forEach(b=>b.onclick=()=>{
+      document.querySelectorAll('#qo .opt').forEach(x=>{if(x.dataset.ok==='1')x.classList.add('ok');x.onclick=null});
+      if(b.dataset.ok==='1'){score++;setFB('✔ '+it.why,'fb-ok')}else{b.classList.add('no');setFB('✘ '+it.why,'fb-no')}
+      setActions('run-actions',[{label:'Sonraki →',fn:()=>{idx++;clearFB();load()}}])});
+    clearFB();setActions('run-actions',[])}
+  load()}
+
+/* ============ VAKA — TİTRASYON ============ */
+const CASE_INTRO=`<div class="casebox">
+  <b>💊 Deniz, 10 yaş — DEHB (birleşik görünüm), tanı klinik + ölçekler + MOXO ile konmuş.</b><br><br>
+  OROS-metilfenidat başlanacak; doz optimizasyonu için TOVA ile <b>titrasyon protokolü</b> kuruldu:
+  tüm ölçümler aynı koşulda — sabah 08:00 ilaç, test 10:30 (etki penceresi), aynı oda, aynı uygulayıcı,
+  uykusuz gece yoksa. Ev-okul geri bildirimi her basamakta toplanıyor.<br><br>
+  <b>Göreviniz:</b> Üç ölçümün profillerini okuyup doz kararlarını vermek.<br><br>
+  <small>Değerler temsilî standart puanlardır (ort 100, SS 15; düşük puan = kötü performans); kurgu eğitim amaçlıdır.</small></div>`;
+const CASE_Q=[
+ {q:'BAZAL (ilaçsız): Omisyon SP 72, Komisyon SP 75, RT SP 80, RT Değişkenliği SP 65; erken basış normal; çeyrek eğrisi: 3. çeyrekten itibaren çöküş. Okumanız?',
+  opts:[{h:'Geçerli ve yaygın bozulma: hem dikkat hem inhibisyon etkilenmiş, en derin çukur RT değişkenliğinde; zaman-görev etkisi belirgin — farmakoterapi hedefleri net, bazal referans kaydedildi',ok:1},{h:'Geçersiz kayıt',ok:0},{h:'Sadece dürtüsellik var',ok:0},{h:'Normal profil',ok:0}],
+  why:'Bazal ölçüm titrasyonun cetvelidir: hangi değişkenin ne kadar düzeldiğini bu referansa göre okuyacağız. RT-SS\'nin en düşük puan olması tipiktir — ve ilaç yanıtını en iyi gösterecek değişken de odur.'},
+ {q:'18 mg: Omisyon 85, Komisyon 82, RT 90, RT Değişkenliği 78. Ev: "biraz sakin." Okul: "ilk derslerde fark var, öğleden sonra eskisi gibi." Karar?',
+  opts:[{h:'Kısmi yanıt: tüm değişkenler düzelmiş ama normalin altında; klinik geri bildirim de kısmi → tolerabilite sorunu yoksa bir üst basamağa (27/36 mg) çıkılır, aynı protokolle yeniden ölçülür',ok:1},{h:'Yanıt var, bu dozda kalınır',ok:0},{h:'İlaç etkisiz, kesilir',ok:0},{h:'Doz ikiye katlanır, ölçüme gerek yok',ok:0}],
+  why:'Titrasyonun mantığı basamaklı ve ölçümlüdür: kısmi laboratuvar + kısmi klinik yanıt = doz optimizasyonu tamamlanmamış. "Öğleden sonra eskisi gibi" notu ayrıca etki süresi sorusunu açar — ama önce doz oturmalı.'},
+ {q:'36 mg: Omisyon 98, Komisyon 96, RT 94 (bazalden hafif yavaş!), RT Değişkenliği 95. Ev-okul: belirgin düzelme. Ama RT\'nin "yavaşlaması" aileyi endişelendirdi. Yanıtınız?',
+  opts:[{h:'Optimal profil: hatalar ve değişkenlik normalleşti; hafif RT yavaşlaması hız-doğruluk dengesinin sağlıklıya dönmesidir (dürtüsel hız gitti) — sorun işareti, ancak belirgin yavaşlama + donukluk + duygusal küntlük birlikteliğinde aranır',ok:1},{h:'Yavaşlama = doz fazla, hemen düşülür',ok:0},{h:'RT en önemli değişkendir, 18 mg\'a dönülür',ok:0},{h:'Doz daha da artırılır',ok:0}],
+  why:'"Daha hızlı = daha iyi" CPT\'de geçerli değildir: dürtüsel profillerin RT\'si zaten hızlıdır. Stabil, hafif yavaş, hatasız RT sağlıklı kontroldür. Aşırı doz şüphesi davranışsal işaretlerle (donukluk, iştah, affekt) birlikte değerlendirilir.'},
+ {q:'Okulun "öğleden sonra düşüyor" geri bildirimi 36 mg\'da da sürerse ne yaparsınız?',
+  opts:[{h:'Etki süresi analizi: veriliş saati, formülasyonun süre profili, okul çıkış saatiyle çakışma değerlendirilir; gerekirse veriliş saatini kaydırma ya da formülasyon/ek doz düzenlemesi klinik kararla yapılır — öğleden sonra ikinci bir TOVA (etki penceresi dışı) bilgilendirici olabilir',ok:1},{h:'Sabah dozu ikiye katlanır',ok:0},{h:'Geri bildirim önemsenmez, sabah TOVA normal',ok:0},{h:'İlaç kesilir',ok:0}],
+  why:'Tek saat diliminde normal TOVA, günün tamamını temsil etmez; "etki penceresi" kavramı hem ölçümün hem tedavinin planlanmasında merkezîdir. Zamanlı ikinci ölçüm, kapanış saatini görünür kılar.'},
+ {q:'Titrasyon dosyasını kapatma cümleniz?',
+  opts:[{h:'"36 mg OROS-MPH ile TOVA profili normalleşti (özellikle RT değişkenliği 65→95) ve ev-okul işlev kazancı doğrulandı; idame bu dozla, 8 haftalık klinik kontrol ve dönemsel yeniden ölçümle sürdürülecek" — laboratuvar + işlev birlikte',ok:1},{h:'"TOVA normal, tedavi tamam, kontrol gereksiz"',ok:0},{h:'"Sadece aile memnuniyetiyle karar verildi"',ok:0},{h:'"TOVA tek başına dozu belirledi"',ok:0}],
+  why:'Kapanış cümlesi iki kaynağı birlikte anmalıdır: ölçüm (hangi değişken, ne kadar) ve işlev (ev-okul). MOXO modülündeki izlem protokolüyle aynı iskelet: doz oturdu + etki penceresi + aynı koşul + planlı kontrol.'}];
+function startCase(){
+  show('scr-run');
+  $('run-badge').textContent='VAKA';$('run-prog').textContent='';$('run-instr').textContent='';
+  $('run-body').innerHTML=CASE_INTRO;clearFB();
+  setActions('run-actions',[{label:'Titrasyona Başla →',fn:()=>{
+    let idx=0,score=0;
+    function load(){
+      if(idx>=CASE_Q.length){STATS.caseAgree=`${score}/${CASE_Q.length}`;showCaseReport();return}
+      const it=CASE_Q[idx];
+      $('run-badge').textContent='VAKA — DENİZ';$('run-prog').textContent=`Karar ${idx+1}/${CASE_Q.length}`;
+      $('run-instr').innerHTML='Ölçümü okuyun, doz kararını verin.';
+      $('run-body').innerHTML=`<div class="stim"><div class="obs"><span class="t">💊 ÖLÇÜM / SORU</span><br>${it.q}</div></div>
+        <div class="opts" id="qo">${shuffle(it.opts.map(o=>({...o}))).map(o=>`<button class="opt" data-ok="${o.ok}">${o.h}</button>`).join('')}</div>`;
+      document.querySelectorAll('#qo .opt').forEach(b=>b.onclick=()=>{
+        document.querySelectorAll('#qo .opt').forEach(x=>{if(x.dataset.ok==='1')x.classList.add('ok');x.onclick=null});
+        if(b.dataset.ok==='1'){score++;setFB('✔ '+it.why,'fb-ok')}else{b.classList.add('no');setFB('✘ '+it.why,'fb-no')}
+        setActions('run-actions',[{label:idx+1>=CASE_Q.length?'Vaka Raporu →':'Sonraki →',fn:()=>{idx++;clearFB();load()}}])});
+      clearFB();setActions('run-actions',[])}
+    load()}}])}
+function showCaseReport(){
+  $('case-body').innerHTML=`
+    <p style="margin-top:10px;font-size:.85rem;color:var(--sub)">Karar uyumunuz: <b>${STATS.caseAgree}</b>.</p>
+    <h4>📈 Titrasyon Eğrisi (temsilî standart puanlar)</h4>
+    <table class="cmp">
+      <tr><th>Değişken</th><th>Bazal</th><th>18 mg</th><th>36 mg</th></tr>
+      <tr><td>Omisyon</td><td>72</td><td>85</td><td><b>98</b></td></tr>
+      <tr><td>Komisyon</td><td>75</td><td>82</td><td><b>96</b></td></tr>
+      <tr><td>Yanıt Süresi</td><td>80</td><td>90</td><td><b>94</b></td></tr>
+      <tr><td>RT Değişkenliği ⭐</td><td>65</td><td>78</td><td><b>95</b></td></tr>
+    </table>
+    <h4>🧠 Kapanış Formülasyonu</h4>
+    <p>Basamaklı titrasyon, sabit ölçüm koşulu ve çift kaynak (TOVA + ev-okul işlevi) ile 36 mg'da optimal yanıt
+    belgelendi; en büyük kazanç, bazalde en derin çukur olan <b>RT değişkenliğinde</b> (65→95). Hafif RT yavaşlaması
+    hız-doğruluk dengesinin normalleşmesi olarak okundu, aşırı doz işaretleri tarandı (yok). Öğleden sonra sorusu etki
+    penceresi analiziyle ayrıca izlenecek. İdame: 8 haftalık klinik kontrol + dönemsel yeniden ölçüm.</p>
+    <div class="pearl">💎 <b>Kütüphane incisi:</b> Kerem (MOXO) tanının, Deniz (TOVA) dozun vakasıdır. İkisini art arda
+    çalışan ekip üyesi, CPT'nin klinikteki iki ayrı işini — <b>tanıya destek</b> ve <b>tedaviyi ölçme</b> — birbirine
+    karıştırmadan öğrenir. Ve iki modülün ortak nakaratı: laboratuvar kazancı, işlev kazancıyla doğrulanmadan karar olmaz.</div>`;
+  show('scr-case')}
+</script>
+</body>
+</html>
