@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klinik Test Akademisi — Ekip Eğitim Platformu</title>
+<style>
+  :root{
+    --ink:#101A33; --ink2:#1C2B52; --paper:#FFFFFF; --mist:#EEF1F8;
+    --gold:#E8B44C; --blue:#4D7FE0; --teal:#2BA69A; --rose:#E06CA8; --vio:#7B6CF6; --amber:#F2953B;
+    --ok:#3FA060; --txt:#1B2337; --sub:#6B7590;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito','Segoe UI',system-ui,-apple-system,sans-serif;
+    background:linear-gradient(160deg,var(--ink) 0%,var(--ink2) 100%);
+    min-height:100vh;color:var(--txt);padding:16px}
+  .shell{max-width:820px;margin:0 auto}
+  .hero{color:#fff;text-align:center;margin:14px 0 20px}
+  .hero .crest{font-size:2.4rem}
+  .hero h1{font-size:1.55rem;font-weight:800;letter-spacing:.4px;margin-top:4px}
+  .hero p{color:#C6CFE8;font-size:.88rem;margin-top:6px;line-height:1.5}
+  .hero .sub{color:var(--gold);font-weight:800;font-size:.78rem;letter-spacing:1.5px;margin-top:2px}
+  .navrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
+  .navb{border:2px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 16px;font-size:.8rem;
+    font-weight:800;background:rgba(255,255,255,.06);color:#DDE4F5;cursor:pointer;font-family:inherit;transition:.15s}
+  .navb:hover{background:rgba(255,255,255,.14)}
+  .navb.on{background:var(--gold);border-color:var(--gold);color:#3A2A05}
+  .card{background:var(--paper);border-radius:18px;padding:22px;
+    box-shadow:0 10px 30px rgba(6,12,30,.45);margin-bottom:16px}
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.7rem;font-weight:800;color:#fff;letter-spacing:.4px}
+  h2.sec{font-size:1.1rem;margin-bottom:4px}
+  p.lead{font-size:.86rem;color:var(--sub);line-height:1.55;margin-bottom:14px}
+  .ageband{display:flex;align-items:center;gap:8px;margin:16px 0 6px}
+  .ageband .line{flex:1;height:3px;border-radius:2px}
+  .ageband b{font-size:.78rem;letter-spacing:.6px;color:var(--sub)}
+  .tcard{display:flex;gap:13px;border:2px solid var(--mist);border-radius:14px;padding:13px;margin-top:10px;
+    background:#fff;transition:.15s;position:relative}
+  .tcard:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(6,12,30,.1)}
+  .ticon{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;font-size:1.55rem;color:#fff}
+  .tinfo{flex:1;min-width:0}
+  .tinfo h3{font-size:.95rem;font-weight:800}
+  .tinfo .meta{font-size:.72rem;color:var(--sub);font-weight:800;margin-top:1px}
+  .tinfo p{font-size:.78rem;color:#48506B;line-height:1.45;margin-top:4px}
+  .trow{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center}
+  .open{display:inline-block;background:var(--ink);color:#fff;border-radius:9px;padding:7px 14px;
+    font-size:.76rem;font-weight:800;text-decoration:none}
+  .open:hover{opacity:.9}
+  .donebtn{border:2px solid var(--mist);background:#fff;border-radius:9px;padding:6px 12px;font-size:.74rem;
+    font-weight:800;color:var(--sub);cursor:pointer;font-family:inherit}
+  .donebtn.on{background:#EAF6EE;border-color:var(--ok);color:#20603A}
+  .fname{font-size:.66rem;color:#9AA3BC;font-weight:700}
+  .rolewrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:12px}
+  .rolecard{border:2px solid var(--mist);border-radius:14px;padding:14px;cursor:pointer;transition:.15s;background:#fff;font-family:inherit;text-align:left}
+  .rolecard:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(6,12,30,.1)}
+  .rolecard.on{border-color:var(--gold);background:#FFFBF0}
+  .rolecard .rname{font-weight:800;font-size:.92rem}
+  .rolecard .rrole{font-size:.74rem;color:var(--sub);font-weight:800}
+  .pathbox{margin-top:14px;border:2px solid var(--mist);border-radius:14px;padding:16px}
+  .pathbox h3{font-size:1rem;margin-bottom:2px}
+  .pathbox .why{font-size:.8rem;color:var(--sub);line-height:1.5;margin-bottom:10px}
+  .step{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--mist)}
+  .step:last-child{border-bottom:none}
+  .stepnum{width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;display:flex;
+    align-items:center;justify-content:center;font-weight:800;font-size:.8rem;flex-shrink:0;margin-top:1px}
+  .step.done .stepnum{background:var(--ok)}
+  .step b{font-size:.86rem}
+  .step p{font-size:.76rem;color:#48506B;line-height:1.45;margin-top:2px}
+  .step a{font-size:.74rem;font-weight:800;color:var(--blue);text-decoration:none}
+  .pbarwrap{background:var(--mist);border-radius:8px;height:12px;margin-top:10px;overflow:hidden}
+  .pbar{height:100%;background:linear-gradient(90deg,var(--gold),#F2CE85);border-radius:8px;transition:width .4s}
+  .ptext{font-size:.74rem;font-weight:800;color:var(--sub);margin-top:4px}
+  .routecard{border:2px solid var(--mist);border-radius:14px;padding:16px;margin-top:12px}
+  .routecard h3{font-size:1rem}
+  .routecard .rdesc{font-size:.8rem;color:var(--sub);line-height:1.5;margin:4px 0 10px}
+  .timeline{position:relative;padding-left:22px}
+  .timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:3px;border-radius:2px;background:var(--mist)}
+  .tstop{position:relative;padding:8px 0}
+  .tstop::before{content:'';position:absolute;left:-21px;top:14px;width:13px;height:13px;border-radius:50%;
+    background:#fff;border:3px solid var(--ink)}
+  .tstop b{font-size:.86rem}
+  .tstop .age{font-size:.7rem;font-weight:800;color:var(--gold)}
+  .tstop p{font-size:.77rem;color:#48506B;line-height:1.45;margin-top:2px}
+  .tstop a{font-size:.74rem;font-weight:800;color:var(--blue);text-decoration:none}
+  .bridge{border:2px solid var(--mist);border-radius:14px;padding:14px 16px;margin-top:12px}
+  .bridge h3{font-size:.95rem;margin-bottom:6px}
+  .bridge p,.bridge li{font-size:.8rem;color:#48506B;line-height:1.55}
+  .bridge ul{padding-left:18px;margin-top:4px}
+  .axis{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+  .axchip{border-radius:10px;padding:8px 12px;font-size:.74rem;font-weight:800;color:#fff}
+  table.mini{width:100%;border-collapse:collapse;margin-top:8px}
+  table.mini td,table.mini th{padding:7px 6px;border-bottom:1px solid var(--mist);font-size:.76rem;text-align:left;vertical-align:top;line-height:1.4}
+  table.mini th{color:var(--sub);font-size:.66rem;letter-spacing:.5px;text-transform:uppercase}
+  .tablewrap{overflow-x:auto}
+  .note{background:#FFF7E4;border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;font-size:.78rem;color:#6B520F;margin-top:14px;line-height:1.5}
+  .pearl{background:#EAF0FD;border-left:4px solid var(--blue);border-radius:8px;padding:10px 12px;margin-top:12px;font-size:.8rem;line-height:1.55;color:#22386B}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="hero">
+    <div class="crest">🎓</div>
+    <h1>Klinik Test Akademisi</h1>
+    <div class="sub">SERKAN SÜREN ÇOCUK VE ERGEN PSİKİYATRİSİ KLİNİĞİ</div>
+    <p>17 interaktif test simülasyonu • Rol bazlı eğitim yolları • 4 vaka rotası • Ekip kalibrasyonu</p>
+  </div>
+
+  <div class="navrow">
+    <button class="navb on" data-t="lib" onclick="tab('lib',this)">📚 Kütüphane</button>
+    <button class="navb" data-t="paths" onclick="tab('paths',this)">🧑‍⚕️ Eğitim Yolları</button>
+    <button class="navb" data-t="routes" onclick="tab('routes',this)">🧭 Vaka Rotaları</button>
+    <button class="navb" data-t="bridges" onclick="tab('bridges',this)">🌉 Köprüler</button>
+    <button class="navb" data-t="calib" onclick="tab('calib',this)">⚖️ Kalibrasyon</button>
+  </div>
+
+  <!-- ============ KÜTÜPHANE ============ -->
+  <div id="tab-lib" class="card">
+    <h2 class="sec">Test Kütüphanesi</h2>
+    <p class="lead">Yaş hattına ve klinik hatlara göre dizilidir. Her kart ilgili simülasyonu yeni sekmede açar; "Tamamladım" işaretiniz bu cihazın tarayıcısında saklanır (aynı tarayıcıdan açıldığı sürece korunur).
+      Genel ilerleme: <span id="lib-prog" style="font-weight:800;color:var(--ink)">—</span></p>
+    <div id="libbody"></div>
+    <div class="note">📁 <b>Kurulum:</b> Bu dosya ile 17 simülasyon dosyası <b>aynı klasörde</b> olmalıdır (bağlantılar bu varsayımla kuruludur).
+      Klinik web sitesinde yayınlamak isterseniz hepsini bir <code>/egitim/</code> alt klasörüne koymak yeterlidir.
+      Bir bağlantı açılmıyorsa dosya adını kontrol edin — her kartın altında yazılıdır.<br>
+      🔒 İlerleme kaydı cihaza ve tarayıcıya özeldir: gizli pencerede, tarayıcı verisi silindiğinde veya başka bilgisayarda işaretler görünmez.</div>
+  </div>
+
+  <!-- ============ EĞİTİM YOLLARI ============ -->
+  <div id="tab-paths" class="card hidden">
+    <h2 class="sec">Rol Bazlı Eğitim Yolları</h2>
+    <p class="lead">Ekip üyesini seçin; önerilen sıralı müfredat, gerekçesi ve ilerleme çubuğu açılır.
+      "Tamamladım" işaretleri kütüphaneyle ortaktır.</p>
+    <div class="rolewrap" id="roles"></div>
+    <div id="pathbody"></div>
+    <div class="pearl">💎 <b>Oryantasyon takvimi (Tuğba koordinasyonunda):</b> Yeni üye için ilk ay "ortak çekirdek" (Vineland puanlama + görüşme tekniği,
+      CARS normal-tanıma vinyetleri), ikinci ay rol modülleri, üçüncü ay vaka rotası + ilk kalibrasyon oturumu.
+      Her modül ~30-45 dk sürer; haftada bir modül gerçekçi bir tempodur. Takvim ve modül takibi koordinasyon tarafından yürütülür.</div>
+  </div>
+
+  <!-- ============ VAKA ROTALARI ============ -->
+  <div id="tab-routes" class="card hidden">
+    <h2 class="sec">Vaka Rotaları</h2>
+    <p class="lead">Simülasyonlara dağılmış dört vaka, kliniğin dört ana değerlendirme zincirinin uçtan uca provasıdır.
+      Rotayı sırasıyla yürüyün — her durak, önceki durağın verisini devralır.</p>
+
+    <div class="routecard">
+      <h3>👦 Demir Rotası — OSB Zinciri (klasik erken tablo)</h3>
+      <p class="rdesc">Konuşmuyor, seslenince bakmıyor. 3;2'den 3;6'ya: gelişim zemini → gözlem → öykü → uyum →
+        şiddet → duyusal harita. Multidisipliner zincirin kendisi; ADOS + ADI-R çiftiyle araştırma standardında olgu.</p>
+      <div class="timeline">
+        <div class="tstop"><span class="age">ZEMİN</span><br><b>Bayley-4 — gelişim düzeyi kavramı</b>
+          <p>Uygulayıcı-puanlama mantığı ve gelişim basamakları (vaka: Ege). Demir'in "dil bileşimi düşük" ön verisinin kaynağı.</p>
+          <a href="bayley4-uygulayici-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">3;2</span><br><b>ADOS-2 — gözlem</b>
+          <p>Modül 1, 8 gözlemin kodlanması → otizm aralığı.</p>
+          <a href="ados2-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">3;3</span><br><b>ADI-R — öykü kazısı</b>
+          <p>Anne ile araştırmacı-temelli görüşme: 36 ay ölçütü, regresyon sorgusu, koklama bulgusunun yalnız öyküden gelmesi — kesitin kör noktası kapanır.</p>
+          <a href="adir-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">3;4</span><br><b>Vineland-3 — uyum ve hedefler</b>
+          <p>"Yapabilir ≠ yapıyor", v-puanı profili ve 1'lerden hedef havuzu.</p>
+          <a href="vineland3-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">3;5</span><br><b>CARS-2 — çok kaynaklı şiddet</b>
+          <p>Tüm kaynaklar tek derecelendirmede → 42/60, şiddetli bant.</p>
+          <a href="cars2-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">3;6</span><br><b>Duyu Profili-2 — duyusal harita</b>
+          <p>Çok çeyrekli örüntü, çeyrek-temelli ergoterapi planı, ağrı kaydı → güvenlik planı.</p>
+          <a href="duyu-profili-2-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+      </div>
+    </div>
+
+    <div class="routecard">
+      <h3>👧 Zeynep Rotası — Kamuflaj (Demir'in aynası)</h3>
+      <p class="rdesc">9 yaş kız; okulda "örnek öğrenci", evde patlamalar; ADOS eşik altı. Araçların ayrıştığı,
+        boyutsal okumanın kazandığı tablo — kız otizminin en sık atlandığı nokta.</p>
+      <div class="timeline">
+        <div class="tstop"><span class="age">1</span><br><b>ADOS-2 — eşik altı sonucun okunması</b>
+          <p>Yanlış negatif kaynakları bölümü: yapılandırılmış ortam + öğrenilmiş kalıplar + yüksek biliş.</p>
+          <a href="ados2-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">2</span><br><b>3di — boyutsal profil + komorbidite</b>
+          <p>Zeynep vakasının tamamı: görüşme-gözlem ayrışması, ince RRB'lerle B ölçütü, kaygının kamuflaj motoru olması → OSB düzey 1 + kaygı.</p>
+          <a href="3di-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">3</span><br><b>Duyu Profili-2 — duyusal kanıt</b>
+          <p>B4 ölçütünün duyusal ayağı (dikiş/etiket, kıvam seçiciliği) ve ev düzenlemeleri.</p>
+          <a href="duyu-profili-2-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+      </div>
+    </div>
+
+    <div class="routecard">
+      <h3>🧒 Kerem Rotası — DEHB Üçgeni</h3>
+      <p class="rdesc">9 yaş, "derste kopuyor, duramıyor". Omurga tarama → kapasite → milisaniye işleme → çeldirici altında davranış → tedavi izlemi.</p>
+      <div class="timeline">
+        <div class="tstop"><span class="age">0</span><br><b>CBCL + TRF — omurga giriş</b>
+          <p>Üç kaynaklı profil: dikkat yaygın (DSM yaygınlık belgesi), dışsallaştırma ev-özgül, annede sınır kaygı satırı — sorulmayanı yakalama.</p>
+          <a href="cbcl-aseba-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">1</span><br><b>WISC-IV / WISC-V — kapasite ve endeks profili</b>
+          <p>ÇBE-İHE düşüklüğü, GYİ/GAİ&gt;TZÖ makası. Klinikte rutin uygulama WISC-IV'tür; simülasyon WISC-V üzerinden kuruludur —
+            endeks karşılıkları için Köprüler sekmesindeki "WISC-IV ↔ WISC-V" kartına bakın.</p>
+          <a href="wisc5-tam-simulasyon.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">2</span><br><b>CNSVS — işleme performansı</b>
+          <p>RT değişkenliği, geçerlik bayrakları.</p>
+          <a href="cnsvs-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">3</span><br><b>MOXO — çeldirici altında dikkat</b>
+          <p>Sahne × indeks matrisi, okul dili, metilfenidat izlem protokolü.</p>
+          <a href="moxo-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">4</span><br><b>TOVA — tedaviyi ölçmek (Deniz vakası)</b>
+          <p>Tanıdan doza: bazal → 18 → 36 mg titrasyon kararları; RT değişkenliğinin normalleşmesi hedef; "laboratuvar kazancı işlev kazancıyla doğrulanmadan karar olmaz."</p>
+          <a href="tova-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+      </div>
+    </div>
+
+    <div class="routecard">
+      <h3>👧 Ela Rotası — Dil &amp; Okuryazarlık (DLD + disleksi)</h3>
+      <p class="rdesc">10 yaş; "uzun cümlelerde kayboluyor, okuduğunu anlamıyor, aptal hissediyorum." TODİL yaş üstü —
+        Türkçe boşlukta ölçüt-temelli değerlendirmenin ders vakası; iki mercek tek çocukta birleşir.</p>
+      <div class="timeline">
+        <div class="tstop"><span class="age">1</span><br><b>CELF-5 — dil merceği</b>
+          <p>Dört düzeyli model: yapı + bellek yüklü görevler düşük, içerik-edimbilim korunmuş → DLD; CATALISE çerçevesi; dürüst rapor dili.</p>
+          <a href="celf5-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">2</span><br><b>TILLS — okuryazarlık merceği</b>
+          <p>Dört çeyrek profili: "doğru ama yavaş" çözümleme, fonolojik bellek → DLD + ÖÖG (okuma/yazılı anlatım); Türkçe saydam ortografi notu.</p>
+          <a href="tills-simulasyonu.html" target="_blank">→ Simülasyonu aç</a></div>
+        <div class="tstop"><span class="age">3</span><br><b>WISC-IV / WISC-V — çapraz doğrulama</b>
+          <p>SKE/SÖİ ↔ dil bulguları, ÇBE ↔ bellek yükü; ÖÖG profil örüntüleri bölümü. Rutinde WISC-IV endeksleriyle okunur.</p>
+          <a href="wisc5-tam-simulasyon.html" target="_blank">→ Simülasyonu aç</a></div>
+      </div>
+    </div>
+    <div class="pearl">💎 Dört rota = kliniğin dört karar zinciri: klasik OSB, kamufle OSB, DEHB, dil-ÖÖG.
+      Yeni ekip üyesine kliniğin felsefesini anlatmanın en hızlı yolu bu rotaları sırayla yürütmektir.</div>
+  </div>
+
+  <!-- ============ KÖPRÜLER ============ -->
+  <div id="tab-bridges" class="card hidden">
+    <h2 class="sec">Köprü Kartları — Testler Arası Referans</h2>
+    <p class="lead">Simülasyonlara serpiştirilmiş çapraz karşılaştırmaların tek sayfalık özeti.</p>
+
+    <div class="bridge">
+      <h3>🗓️ Yaş × Araç Haritası</h3>
+      <div class="tablewrap">
+      <table class="mini">
+        <tr><th>Yaş bandı</th><th>Bilişsel/Gelişim</th><th>Dil &amp; Okuryazarlık</th><th>OSB</th><th>Dikkat</th><th>Uyum/Duyu</th></tr>
+        <tr><td><b>0–3</b></td><td>Bayley-4 (≤42 ay)</td><td>Bayley dil</td><td>ADOS Toddler/M1, ADI-R (zihinsel yaş ≥2), CARS-ST</td><td>—</td><td>Vineland, Duyu Profili (Toddler)</td></tr>
+        <tr><td><b>3;5–6</b></td><td>WPPSI-IV (2:6–7:7) • GEÇDA</td><td>TODİL (4;0+), CELF-5 (5+)</td><td>ADOS M1-2, ADI-R/3di, CARS-ST</td><td>davranışsal gözlem</td><td>Vineland, Duyu Profili (Çocuk)</td></tr>
+        <tr><td><b>6–8;11</b></td><td>WISC-IV (rutin) / WISC-V</td><td>TODİL • TILLS (6+)</td><td>ADOS M2-3, ADI-R/3di, CARS ST/HF</td><td>CNSVS (8+), MOXO (6+)</td><td>Vineland, Duyu Profili</td></tr>
+        <tr><td><b>9+</b></td><td>WISC-IV (rutin) / WISC-V</td><td>⚠️ TR normlu araç yok → CELF-5/TILLS mantığıyla ölçüt-temelli</td><td>ADOS M3-4, ADI-R/3di, CARS-HF</td><td>CNSVS, MOXO</td><td>Vineland, Duyu Profili</td></tr>
+      </table>
+      </div>
+      <p style="margin-top:6px">⚠️ İki yapısal boşluk: <b>3;5–6 bilişsel köprü</b> (WPPSI-IV ana köprü) ve <b>9+ Türkçe dil boşluğu</b>
+        (ölçüt-temelli değerlendirme + dürüst rapor dili; docentlik dosyası için yayın alanı).</p>
+    </div>
+
+    <div class="bridge">
+      <h3>🔁 WISC-IV ↔ WISC-V — Klinik Geçiş Notu</h3>
+      <p>Klinikte rutin bilişsel değerlendirme <b>WISC-IV</b> ile yapılır; simülasyonlar WISC-V üzerine kuruludur.
+        Muhakeme aynıdır, endeks yapısı farklıdır:</p>
+      <div class="tablewrap">
+      <table class="mini">
+        <tr><th>WISC-IV</th><th>WISC-V karşılığı</th><th>Okuma notu</th></tr>
+        <tr><td><b>SKİ</b> Sözel Kavrama</td><td><b>SKE</b> Sözel Kavrama</td><td>Doğrudan karşılık; dil bulgularıyla çapraz doğrulama aynı.</td></tr>
+        <tr><td><b>ADİ</b> Algısal Akıl Yürütme</td><td><b>GUE</b> Görsel-Uzamsal + <b>AUE</b> Akıcı Akıl Yürütme</td><td>WISC-V bu alanı ikiye böler; WISC-IV'te görsel-uzamsal ve akıl yürütme ayrışması alt test düzeyinde okunur.</td></tr>
+        <tr><td><b>ÇBİ</b> Çalışma Belleği</td><td><b>ÇBE</b> Çalışma Belleği</td><td>DEHB profilinde ana düşüklük odağı her iki sürümde de aynı.</td></tr>
+        <tr><td><b>İHİ</b> İşlem Hızı</td><td><b>İHE</b> İşlem Hızı</td><td>Doğrudan karşılık.</td></tr>
+        <tr><td><b>GYİ</b> Genel Yetenek İndeksi</td><td><b>GAİ</b> Genel Yetenek İndeksi</td><td>GYİ/GAİ &gt; TZÖ makası iki sürümde de "kapasite korunmuş, yürütücü yük düşürüyor" okumasının anahtarı.</td></tr>
+      </table>
+      </div>
+      <p style="margin-top:6px">WISC-V'ye özgü alt testler (Görsel Bulmacalar, Şekil Ağırlıkları, Resim Dizisi) için
+        "WISC-V yeni alt testler" modülüne bakın. Rapora her zaman <b>uygulanan sürümün</b> endeks adları yazılır.</p>
+    </div>
+
+    <div class="bridge">
+      <h3>⚡ Kapasite ↔ Performans Ekseni</h3>
+      <div class="axis">
+        <span class="axchip" style="background:var(--blue)">YAPABİLİR Mİ? — WISC • WPPSI • Bayley • TODİL • CELF-5 • TILLS • CNSVS • MOXO</span>
+        <span class="axchip" style="background:var(--teal)">YAPIYOR MU? — Vineland • Duyu Profili • CBCL • öğretmen formları</span>
+      </div>
+      <p style="margin-top:8px">İki sütun arasındaki <b>makas</b> tanı ve müdahalenin en verimli madenidir:
+        kapasite normal + günlük performans düşükse sorun beceride değil <b>aktarımda/ortamda/motivasyonda</b>dır.</p>
+    </div>
+
+    <div class="bridge">
+      <h3>🎙️ Öykü Ayağı: ADI-R ↔ 3di</h3>
+      <ul>
+        <li><b>ADI-R:</b> araştırmacı-temelli derin kazı; 36 ay ölçütü, regresyon belgeleme; araştırma altın standardı; yoğun eğitim, ~2 saat.</li>
+        <li><b>3di:</b> bilgisayar-yönlendirmeli, boyutsal puanlar + komorbidite taraması; kamuflaj/eşik altı yükte güçlü; kısa sürümle izlem.</li>
+        <li><b>Formül:</b> ADOS her olguda + rutinde 3di, derin kazı/bilirkişilik/araştırmada ADI-R. Görüşmeci disiplini zıttır: "ADI-R'de kaz, 3di'de sabit kal."</li>
+      </ul>
+    </div>
+
+    <div class="bridge">
+      <h3>💬 Dil Mercekleri: TODİL → CELF-5 ↔ TILLS</h3>
+      <ul>
+        <li><b>TODİL (4;0–8;11):</b> Türkçe standardize — bu bantta ilk tercih.</li>
+        <li><b>CELF-5 mantığı:</b> sözlü dilin yapısı-doğası; dört düzeyli karar; edimbilim araçları (OSB makası).</li>
+        <li><b>TILLS mantığı:</b> dil + okuryazarlık dört çeyrekte; anlamsız sözcük tekrarı (iki dillilikte altın görev), akıcılık (Türkçe disleksinin ana yüzü).</li>
+        <li><b>Seçim:</b> sorun sözlü yapıdaysa CELF-5 merceği; okuma-yazma/fonolojik işlemedeyse TILLS merceği; ikisi de TR normsuz → ölçüt-temelli dil.</li>
+      </ul>
+    </div>
+
+    <div class="bridge">
+      <h3>🔺 Dikkat Ölçüm Hattı: CBCL/TRF → WISC ↔ CNSVS ↔ MOXO ↔ TOVA (DEHB)</h3>
+      <ul>
+        <li><b>0. basamak — CBCL/TRF (+YSR):</b> çok kaynaklı yaygınlık belgesi; DSM'in "iki ortam" ölçütünü sayıyla gösterir,
+          ev-okul ayrışmasını ve sorulmayan komorbiditeyi (kaygı, duygudurum, ebeveyn yükü) yakalar — <i>omurga</i></li>
+        <li><b>WISC:</b> kapasite + endeks profili (ÇBE-İHE, GYİ/GAİ&gt;TZÖ makası)</li>
+        <li><b>CNSVS:</b> milisaniye çözünürlüklü hız-RT-değişkenlik; geçerlik bayrakları</li>
+        <li><b>MOXO:</b> çeldirici altında dikkat davranışı; sahne × indeks matrisi — <i>ekolojik uç</i></li>
+        <li><b>TOVA:</b> çeldiricisiz, dile dayanmayan, iki yarılı saf ölçüm; titrasyon geleneği — <i>laboratuvar ucu</i></li>
+      </ul>
+      <p>Yakınsama = sağlam bulgu. Ayrışma = bilgi: TOVA normal + MOXO bozuk → sorun filtrelemede (ortam reçetesi);
+      ikisi de bozuk → çekirdek dikkat-inhibisyon. Performans testleri bozuk ama CBCL/TRF yaygınlık göstermiyorsa → tanıdan önce ortam ve geçerlik sorgulanır.
+      İş bölümü: yaygınlıkta CBCL/TRF, tanı desteğinde MOXO/CNSVS, doz titrasyonunda TOVA.
+      Hiçbiri tek başına tanı koymaz.</p>
+    </div>
+
+    <div class="bridge">
+      <h3>⚖️ ADOS-2 ↔ CARS-2 (OSB)</h3>
+      <div class="tablewrap">
+      <table class="mini">
+        <tr><th></th><th>ADOS-2</th><th>CARS-2</th></tr>
+        <tr><td><b>Kaynak</b></td><td>Tek oturum, standart presler</td><td>Çok kaynaklı klinisyen derecelendirmesi</td></tr>
+        <tr><td><b>Çıktı</b></td><td>Sınıflama + karşılaştırma puanı</td><td>Şiddet sürekliliği (15–60)</td></tr>
+        <tr><td><b>En iyi rol</b></td><td>Tanısal gözlem ayağı</td><td>Şiddet ölçümü + izlem</td></tr>
+      </table>
+      </div>
+    </div>
+
+    <div class="bridge">
+      <h3>🛡️ Ortak Güvenlik İlkeleri (tüm araçlar)</h3>
+      <ul>
+        <li><b>Önce geçerlik:</b> CNSVS bayrağı, MOXO temel sahnesi, ADOS modül seçimi, ADI-R'de 9 kodu, işitme testi — bozuksa üst yapı yorumlanmaz.</li>
+        <li><b>Bilgi veren disiplini:</b> "yapabilir"e performans sondası, belirsize somut son örnek, ev-okul farkı = veri.</li>
+        <li><b>Yaş çapası:</b> her davranış yaşıtlara göre tartılır.</li>
+        <li><b>Norm dürüstlüğü:</b> TR normu olmayan araçta (CELF-5, TILLS, WPPSI dikkatli) standart puan yazılmaz; ölçüt-temelli dil kullanılır.</li>
+        <li><b>Sayı değil cümle:</b> rapor davranış betimiyle kurulur; puan destekler, betim ikna eder.</li>
+        <li><b>Test klinik yargının hizmetindedir</b> — tersi değil.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ KALİBRASYON ============ -->
+  <div id="tab-calib" class="card hidden">
+    <h2 class="sec">Ekip Kalibrasyon Rehberi</h2>
+    <p class="lead">Simülasyonlar bireysel çalışır; kalibrasyon oturumları ekibi <b>aynı cetvele</b> getirir.
+      Aylık 45 dakikalık şablon:</p>
+    <div class="bridge">
+      <h3>📋 Oturum Şablonu (45 dk)</h3>
+      <ul>
+        <li><b>1. Bağımsız puanlama (10 dk):</b> Seçilen simülasyonun aynı vinyet setini herkes kendi cihazında, konuşmadan tamamlar; uyum skorunu not eder.</li>
+        <li><b>2. Uyuşmazlık avı (20 dk):</b> Yalnız ayrışan maddeler tartışılır — çapa metinleri üzerinden, "kim haklı" değil "çapa ne diyor" diliyle.</li>
+        <li><b>3. Karar kaydı (10 dk):</b> Klinik defterine tek cümlelik kalibrasyon kararları yazılır ("hatırlatmayla yapılan davranış 1 puanlanır" gibi).</li>
+        <li><b>4. Sonraki ayın modülü seçilir (5 dk).</b></li>
+      </ul>
+    </div>
+    <div class="bridge">
+      <h3>🎯 Bilinen Sıcak Bölgeler (tartışma buralarda çıkar)</h3>
+      <ul>
+        <li><b>Vineland:</b> "yapabilir-yapıyor" sınırı ve "hatırlatmayla" maddeleri (2 mi 1 mi?)</li>
+        <li><b>CARS:</b> 2–3 sınırı (oran/çaba) ve normal-tanıma vinyetleri (aşırı puanlama eğilimi)</li>
+        <li><b>ADOS kodlama:</b> el çekmenin işlevi, keyif ↔ keyfin paylaşımı ayrımı</li>
+        <li><b>ADI-R:</b> "yarım davranışlar" — 0-1 ve 1-2 sınırları (niyet kırıntısı ↔ işlev)</li>
+        <li><b>Bayley:</b> "Belirmekte (1)" bandının genişliği — sınır davranışlar</li>
+        <li><b>Duyu Profili:</b> Duyarlı ↔ Kaçınan ayrımı (strateji sorusu)</li>
+        <li><b>TODİL / CELF:</b> tek ek değişiminin puanlanması; Cümle Kurma'da 1 bölgesi</li>
+        <li><b>TILLS:</b> "doğru ama yavaş" okumanın puanlanması (doğruluk + akıcılık notu ayrımı)</li>
+      </ul>
+    </div>
+    <div class="bridge">
+      <h3>🧑‍🏫 Süpervizyon Kullanımı</h3>
+      <p>Vaka rotaları yeni üyenin oryantasyonunda "önce simülasyon, sonra gölge gözlem, sonra süpervizyonlu uygulama"
+      basamağının ilk adımıdır. Simülasyon uyum skorları bir yeterlilik sınavı değil, <b>tartışma haritasıdır</b> —
+      düşük uyum "kötü klinisyen" değil "kalibre edilecek bölge" demektir; bu çerçeveyi ekibe açıkça söyleyin.</p>
+    </div>
+    <div class="note">⚠️ Tüm simülasyonlardaki ortak hatırlatma burada da geçerlidir: içerikler özgün eğitim materyalidir,
+      gerçek test maddeleri ve normlar değildir; uygulama yetkinliği ilgili el kitapları ve resmî eğitimlerle kurulur.
+      Simülasyonlar bu yapının üzerine ekip dili ve muhakeme katmanı ekler.</div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+/* ---------- Veri ---------- */
+const TESTS=[
+ {id:'bayley',file:'bayley4-uygulayici-simulasyonu.html',icon:'🧸',col:'var(--teal)',name:'Bayley-4',
+  meta:'1–42 ay • Uygulayan: Ayşegül / Tuğçe',band:0,
+  desc:'Uygulayıcı-puanlama modu: 0/1/2 sistemi, gelişim basamakları, başlama-geri dönüş kuralları, "Ege 20 ay" vakası.'},
+ {id:'duyu',file:'duyu-profili-2-simulasyonu.html',icon:'🌈',col:'var(--vio)',name:'Duyu Profili-2',
+  meta:'Doğum–14 yaş • Said (ergoterapi)',band:0,
+  desc:'Dunn dörtlü modeli, çeyrek tanıma (strateji sorusu), Demir 3;6 çok çeyrekli harita + müdahale planı.'},
+ {id:'ados',file:'ados2-simulasyonu.html',icon:'🎈',col:'var(--rose)',name:'ADOS-2',
+  meta:'12 ay+ • İrem (sertifikalı)',band:0,
+  desc:'Modül seçimi, pres anatomisi, kodlama muhakemesi, Demir 3;2 tanı vakası; yanlış negatif kaynakları (kamuflaj).'},
+ {id:'adir',file:'adir-simulasyonu.html',icon:'🎙️',col:'var(--rose)',name:'ADI-R',
+  meta:'Zihinsel yaş ≥2 • Görüşme: Serkan / İrem',band:0,
+  desc:'Araştırmacı-temelli öykü kazısı: 36 ay ölçütü, regresyon sorgusunun anatomisi, 9 kodu disiplini; Demir vakasının öykü ayağı — ADOS + ADI-R çiftiyle araştırma standardı.'},
+ {id:'3di',file:'3di-simulasyonu.html',icon:'📊',col:'var(--vio)',name:'3di',
+  meta:'Bakımveren görüşmesi • boyutsal profil',band:0,
+  desc:'Bilgisayar-yönlendirmeli görüşme: boyutsal puanlar + komorbidite taraması; ADI-R ile iş bölümü; Zeynep (kamuflaj) vakası.'},
+ {id:'vine',file:'vineland3-simulasyonu.html',icon:'🏠',col:'var(--blue)',name:'Vineland-3',
+  meta:'0–90 yaş • Tuğçe',band:0,
+  desc:'"Yapabilir ≠ yapıyor", görüşme sanatı (üç altın soru), v-puanı profili, Demir 3;4 hedef havuzu.'},
+ {id:'cars',file:'cars2-simulasyonu.html',icon:'📏',col:'var(--rose)',name:'CARS-2',
+  meta:'2 yaş+ • Klinisyen derecelendirmesi',band:0,
+  desc:'ST/HF seçimi, 15 alan, normali tanıma, Demir 3;5 → 42/60 şiddet bandı, ADOS karşılaştırması.'},
+ {id:'wppsi',file:'wppsi4-tam-simulasyon.html',icon:'🧩',col:'var(--amber)',name:'WPPSI-IV',
+  meta:'2:6–7:7 yaş • İrem',band:1,
+  desc:'15 alt test, yaş bandı yapısı, okul öncesi mekanikleri, 3;5–6 bilişsel boşluğunun köprüsü.'},
+ {id:'todil',file:'todil-simulasyonu.html',icon:'🗣️',col:'var(--teal)',name:'TODİL',
+  meta:'4;0–8;11 • Begüm (TR standardize)',band:1,
+  desc:'2×3 dil matrisi, 9 alt test, Türkçe biçimbirim tuzakları, fonolojik süreçler, DKB-ÖÖG-SSB ayrımları.'},
+ {id:'wisc',file:'wisc5-tam-simulasyon.html',icon:'🧠',col:'var(--blue)',name:'WISC-V (tam)',
+  meta:'6–16 yaş • İrem • Klinikte rutin: WISC-IV',band:2,
+  desc:'16 alt test, 5 endeks, süreli/dizi/hız motorları, DEHB-ÖÖG-OSB profil örüntüleri. Klinikte rutin uygulama WISC-IV\'tür — muhakeme aynı, endeks karşılıkları Köprüler sekmesindeki "WISC-IV ↔ WISC-V" kartında.'},
+ {id:'wisc-yeni',file:'wisc5-yeni-alt-test-simulasyonu.html',icon:'✨',col:'var(--blue)',name:'WISC-V yeni alt testler (ek)',
+  meta:'6–16 yaş • hızlı modül',band:2,
+  desc:'Görsel Bulmacalar, Şekil Ağırlıkları, Resim Dizisi — WISC-IV\'ten geçiş için odak modül.'},
+ {id:'cnsvs',file:'cnsvs-simulasyonu.html',icon:'💻',col:'var(--ink)',name:'CNSVS',
+  meta:'8 yaş+ • Bilgisayarlı batarya',band:2,
+  desc:'7 test gerçekten oynanabilir; geçerlik bayrakları, NCI uyarısı, tedavi izlemi.'},
+ {id:'moxo',file:'moxo-simulasyonu.html',icon:'🎮',col:'var(--amber)',name:'MOXO d-CPT',
+  meta:'6 yaş+ • Çeldiricili CPT',band:2,
+  desc:'Oynanabilir 4 sahne (gerçek sesli çeldiriciler), sahne × indeks matrisi, Kerem 9 yaş DEHB vakası.'},
+ {id:'tova',file:'tova-simulasyonu.html',icon:'⬜',col:'var(--ink)',name:'TOVA',
+  meta:'4 yaş+ • Çeldiricisiz CPT • Titrasyon geleneği',band:2,
+  desc:'Oynanabilir iki yarılı görev (hedef seyrek → vijilans, hedef sık → inhibisyon), RT değişkenliği yıldız değişken; Deniz 10 yaş doz titrasyonu vakası; MOXO ile ayrışma okuma.'},
+ {id:'celf5',file:'celf5-simulasyonu.html',icon:'💬',col:'var(--teal)',name:'CELF-5',
+  meta:'5–21 yaş • Begüm • TR normu YOK → ölçüt-temelli',band:3,
+  desc:'Dört düzeyli karar modeli, 7 oynanabilir alt test, endeks makasları (DLD/OSB/DEHB), CATALISE; Ela vakası (DLD) + dürüst rapor dili.'},
+ {id:'tills',file:'tills-simulasyonu.html',icon:'✏️',col:'var(--rose)',name:'TILLS',
+  meta:'6–18 yaş • Begüm + Ayşegül • TR normu YOK → ölçüt-temelli',band:3,
+  desc:'Dört çeyrek modeli (dil + okuryazarlık), anlamsız sözcük görevleri, akıcılık; CELF-5 kıyas modülü; Ela devamı → DLD + disleksi.'},
+ {id:'cbcl',file:'cbcl-aseba-simulasyonu.html',icon:'🧾',col:'var(--vio)',name:'CBCL / ASEBA Ailesi',
+  meta:'1,5–18 yaş • Anne-baba (CBCL) + öğretmen (TRF) + genç (YSR) • 🇹🇷 NORMLU',band:4,
+  desc:'Sendrom → geniş bant → toplam hiyerarşisi, T-puanı bantları (çifte eşik tuzağı!), kritik maddeler ve ⭐ çok kaynaklı okuma: ayrışma hata değil veridir. Kerem vakasında omurga rolü: yaygınlığı belgeler, sorulmayanı yakalar.'}];
+const BANDS=[
+ {label:'0–6 YAŞ HATTI — GELİŞİM, OSB (GÖZLEM + ÖYKÜ), UYUM, DUYU',col:'var(--teal)'},
+ {label:'OKUL ÖNCESİ KÖPRÜSÜ — BİLİŞ & DİL (2:6–8;11)',col:'var(--amber)'},
+ {label:'OKUL ÇAĞI — BİLİŞ & DİKKAT (6–16)',col:'var(--blue)'},
+ {label:'DİL & OKURYAZARLIK — OKUL ÇAĞI & ERGEN (5–21, ölçüt-temelli)',col:'var(--rose)'},
+ {label:'DAVRANIŞ & DUYGU ÖLÇEKLERİ — ÇOK KAYNAKLI OMURGA (1,5–18, 🇹🇷 normlu)',col:'var(--vio)'}];
+const ROLES=[
+ {id:'serkan',name:'Uzm. Dr. Serkan',role:'Süpervizör',
+  why:'Süpervizyon bakışı: dört vaka rotası + tüm araçların vaka modülleri + köprü kartları. Amaç uygulama değil, zincirin yönetimi ve rapor kalitesi.',
+  steps:[['cbcl','CBCL/ASEBA — çok kaynaklı okuma ve çifte eşik disiplini (omurga)'],['ados','ADOS-2 vaka + kodlama — süpervizyon muhakemesi'],['adir','ADI-R — öykü kazısı ve 36 ay/regresyon sorgusu'],['3di','3di — boyutsal okuma ve ADI-R ile iş bölümü'],['cars','CARS-2 — çok kaynaklı birleştirme ve şiddet dili'],['vine','Vineland-3 — İD karar mimarisi ve hedef havuzu'],['moxo','MOXO — üçgen okuma ve ilaç izlem protokolü'],['tova','TOVA — titrasyon vakası (Deniz) ve MOXO ile ayrışma okuma'],['cnsvs','CNSVS — geçerlik ve profil dili'],['wisc','WISC-V — profil örüntüleri bölümü (WISC-IV karşılıklarıyla)'],['celf5','CELF-5 — dört düzeyli model ve rapor dili'],['tills','TILLS — dört çeyrek ve ÖÖG hattı']]},
+ {id:'irem',name:'İrem',role:'Psikolog • ADOS sertifikalı',
+  why:'Gözlem-tanı hattı: sertifika alanını kalibre edip öykü araçları ve bilişsel bataryayla bütünleştirir.',
+  steps:[['ados','ADOS-2 — kodlama kalibrasyonu (Serkan ile bağımsız puanlama)'],['adir','ADI-R — görüşme tekniği + kodlama (aynadan izleme → uygulama)'],['3di','3di — standart metin disiplini ("ADI-R\'de kaz, 3di\'de sabit kal")'],['cars','CARS-2 — ADOS verisini derecelendirmeye taşıma'],['wisc','WISC-V tam batarya — WISC-IV rutin uygulamasıyla endeks karşılıkları'],['wisc-yeni','WISC-V yeni alt testler'],['wppsi','WPPSI-IV — küçük yaş köprüsü'],['cnsvs','CNSVS — bilgisayarlı batarya eşliği'],['moxo','MOXO — çeldirici profili okuma'],['tova','TOVA — iki yarı mantığı ve titrasyon ölçüm koşulları']]},
+ {id:'tugce',name:'Tuğçe',role:'Çocuk Gelişim Uzmanı',
+  why:'Gelişim-uyum hattı: Bayley zemininden Vineland görüşme sanatına; Demir rotasının omurgası.',
+  steps:[['bayley','Bayley-4 — puanlama + kurallar + Ege vakası'],['vine','Vineland-3 — görüşme tekniği modülü özellikle'],['duyu','Duyu Profili-2 — çeyrek dili (Said ile ortak dil)'],['cars','CARS-2 — derecelendirme katkısı'],['ados','ADOS-2 pres anatomisi — gözlem penceresi']]},
+ {id:'begum',name:'Begüm',role:'Dil ve Konuşma Terapisti',
+  why:'Dil hattının tamamı: TODİL (standardize çekirdek) → CELF-5 (yapı merceği) → TILLS (okuryazarlık merceği); Ela rotasının sahibi.',
+  steps:[['todil','TODİL — tam modül (biçimbirim + fonoloji)'],['celf5','CELF-5 — dört düzeyli model + alt testler + Ela vakası'],['tills','TILLS — dört çeyrek + anlamsız sözcük görevleri + Ela devamı'],['bayley','Bayley-4 — AD/İD alt testleri'],['ados','ADOS-2 — jest köprüsü ve dil düzeyi/modül mantığı'],['vine','Vineland-3 — İletişim alanı']]},
+ {id:'said',name:'Said',role:'Ergoterapist',
+  why:'Duyu-motor hattı: Dunn modeli merkezde; CARS duyusal maddeleri ve Bayley motor alanlarıyla üçgenlenir.',
+  steps:[['duyu','Duyu Profili-2 — tam modül + Demir haritası'],['bayley','Bayley-4 — İM/KM alanları'],['cars','CARS-2 — duyusal maddeler'],['vine','Vineland-3 — motor + günlük yaşam köprüsü'],['3di','3di — Zeynep vakasında duyusal kanıtın B ölçütüne taşınması']]},
+ {id:'aysegul',name:'Ayşegül',role:'Özel Eğitim Uzmanı',
+  why:'Değerlendirmeden BEP\'e: Bayley uygulaması + Vineland hedef havuzu + okuryazarlık müdahale köprüsü.',
+  steps:[['bayley','Bayley-4 — uygulayıcı modu (ana aracı)'],['vine','Vineland-3 — maddeden hedefe bölümü'],['tills','TILLS — okuryazarlık çeyreği: akıcılık, yazım, müdahale hedefleri'],['cars','CARS-2 — şiddet bandı ve izlem'],['duyu','Duyu Profili-2 — sınıf/ortam düzenlemesi kartları']]},
+ {id:'ortak',name:'Elif & Tuğba',role:'Hemşire & Koordinasyon',
+  why:'Ortak dil rotası: puanlama değil kavrayış — aile telefonlarında ve randevu planlamasında doğru dil için. Tuğba ayrıca yeni üye oryantasyon takviminin koordinasyonunu yürütür.',
+  steps:[['cbcl','CBCL/ASEBA — form toplama akışı ve KRİTİK MADDE kontrolü (işaretliyse aynı gün hekime)'],['vine','Vineland-3 — görüşme tekniği (telefon izlem becerisiyle birebir)'],['duyu','Duyu Profili-2 — dörtlü model haritası (aile diline çeviri)'],['cars','CARS-2 — bilgi merkezi (bantların anlamı)'],['moxo','MOXO — bilgi merkezi (izlem randevularının mantığı)'],['3di','3di — bilgi merkezi (randevu süreleri: tam/kısa sürüm, ADI-R farkı)']]},
+ {id:'yeni',name:'Yeni Üye / Stajyer',role:'Oryantasyon',
+  why:'Ortak çekirdek: önce "yapabilir-yapıyor" ve "normali tanıma" kasları, sonra vaka rotaları, en son rol modülleri.',
+  steps:[['vine','Vineland-3 — puanlama + görüşme tekniği'],['cars','CARS-2 — derecelendirme (normal vinyetlere dikkat)'],['bayley','Bayley-4 — puanlama mantığı'],['ados','ADOS-2 — pres anatomisi (gözlem dili)'],['adir','ADI-R — görüşme tekniği (sahne isteme, davranış kazısı)'],['duyu','Duyu Profili-2 — çeyrek tanıma']]}];
+/* ---------- Durum (kalıcı kayıt) ----------
+   Öncelik: tarayıcının localStorage'ı (dosya klinik bilgisayarında veya web sitesinde açıldığında çalışır).
+   Claude artifact ortamındaysa window.storage da ek olarak denenir. Hiçbiri yoksa sayfa yine çalışır, yalnız kayıt tutulmaz. */
+const KEY='kta-state';
+let DONE={},ROLE=null;
+function lsGet(){try{return window.localStorage.getItem(KEY)}catch(e){return null}}
+function lsSet(v){try{window.localStorage.setItem(KEY,v)}catch(e){}}
+async function loadState(){
+  let raw=lsGet();
+  if(!raw){
+    try{if(window.storage&&typeof window.storage.get==='function'){
+      const r=await window.storage.get(KEY);if(r&&r.value)raw=r.value}}catch(e){}
+  }
+  if(raw){try{const s=JSON.parse(raw);DONE=s.done||{};ROLE=s.role||null}catch(e){DONE={};ROLE=null}}
+  renderLib();renderRoles();if(ROLE)renderPath(ROLE)}
+async function saveState(){
+  const v=JSON.stringify({done:DONE,role:ROLE});
+  lsSet(v);
+  try{if(window.storage&&typeof window.storage.set==='function')await window.storage.set(KEY,v)}catch(e){}}
+/* ---------- Sekmeler ---------- */
+function tab(t,btn){
+  ['lib','paths','routes','bridges','calib'].forEach(k=>$('tab-'+k).classList.add('hidden'));
+  $('tab-'+t).classList.remove('hidden');
+  document.querySelectorAll('.navb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');window.scrollTo(0,0)}
+/* ---------- Kütüphane ---------- */
+function renderLib(){
+  let html='';
+  BANDS.forEach((b,bi)=>{
+    html+=`<div class="ageband"><b>${b.label}</b><div class="line" style="background:${b.col}"></div></div>`;
+    TESTS.filter(t=>t.band===bi).forEach(t=>{
+      const d=!!DONE[t.id];
+      html+=`<div class="tcard">
+        <div class="ticon" style="background:${t.col}">${t.icon}</div>
+        <div class="tinfo"><h3>${t.name} ${d?'✅':''}</h3>
+          <div class="meta">${t.meta}</div><p>${t.desc}</p>
+          <div class="trow">
+            <a class="open" href="${t.file}" target="_blank">Simülasyonu Aç →</a>
+            <button class="donebtn ${d?'on':''}" onclick="toggleDone('${t.id}')">${d?'✔ Tamamlandı':'Tamamladım'}</button>
+            <span class="fname">${t.file}</span>
+          </div></div></div>`})});
+  $('libbody').innerHTML=html;
+  const n=TESTS.filter(t=>DONE[t.id]).length;
+  $('lib-prog').textContent=`${n}/${TESTS.length} modül tamamlandı`}
+function toggleDone(id){DONE[id]=!DONE[id];saveState();renderLib();if(ROLE)renderPath(ROLE)}
+/* ---------- Roller ---------- */
+function renderRoles(){
+  $('roles').innerHTML=ROLES.map(r=>`<button class="rolecard ${ROLE===r.id?'on':''}" onclick="pickRole('${r.id}')">
+    <div class="rname">${r.name}</div><div class="rrole">${r.role}</div></button>`).join('')}
+function pickRole(id){ROLE=id;saveState();renderRoles();renderPath(id)}
+function renderPath(id){
+  const r=ROLES.find(x=>x.id===id);if(!r){$('pathbody').innerHTML='';return}
+  const doneCount=r.steps.filter(s=>DONE[s[0]]).length;
+  const pct=Math.round(doneCount/r.steps.length*100);
+  $('pathbody').innerHTML=`<div class="pathbox">
+    <h3>${r.name} — önerilen yol</h3>
+    <div class="why">${r.why}</div>
+    ${r.steps.map((s,i)=>{
+      const t=TESTS.find(x=>x.id===s[0]);const d=!!DONE[s[0]];
+      return `<div class="step ${d?'done':''}"><div class="stepnum">${d?'✔':i+1}</div>
+        <div><b>${t.name}</b><p>${s[1]}</p>
+        <a href="${t.file}" target="_blank">→ Aç</a> &nbsp;
+        <a href="javascript:void(0)" onclick="toggleDone('${s[0]}')" style="color:${d?'var(--ok)':'var(--sub)'}">${d?'✔ tamamlandı':'○ tamamladım işaretle'}</a></div></div>`}).join('')}
+    <div class="pbarwrap"><div class="pbar" style="width:${pct}%"></div></div>
+    <div class="ptext">${doneCount}/${r.steps.length} adım • %${pct}</div></div>`}
+loadState();
+</script>
+</body>
+</html>
