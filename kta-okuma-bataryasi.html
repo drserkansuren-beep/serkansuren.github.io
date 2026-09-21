@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KTA Okuma Bataryası — RAN • Fonolojik İşlemleme • Sesli Okuma (tek oturum)</title>
+<title>KTA Okuma Bataryası — RAN • Fonolojik İşlemleme • Sesli Okuma • Kod Çözme &amp; Yazım (tek oturum)</title>
 <style>
   :root{
     --ink:#22304D; --ink2:#334667; --paper:#FFFFFF; --mist:#EDF0F8;
     --ran:#C9483C; --fip:#4D7FE0; --sob:#8B5A2B; --bel:#7B6CF6; --psw:#D97B2B;
-    --soz:#2BA69A; --kaf:#E06CA8; --hec:#F2953B; --fon:#4D7FE0;
+    --soz:#2BA69A; --kaf:#E06CA8; --hec:#F2953B; --fon:#4D7FE0; --ort:#2E8B57;
     --cokhizli:#2E7D5B; --hizli:#3FA060; --orta:#8A96AD; --yavas:#E08A2E; --cokyavas:#D95050;
     --kaz:#3FA060; --bel2:#C98A1B; --yok:#D95050; --bag:#2E7D5B; --ogr:#3FA060; --end:#D95050;
     --ok:#3FA060; --no:#D95050; --txt:#1E2638; --sub:#6C7893;
@@ -131,6 +131,16 @@
   .ynrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
   .ynrow button{padding:22px;border-radius:16px;border:none;font-family:inherit;font-size:1.3rem;font-weight:800;color:#fff;cursor:pointer}
   .pswtimer{font-size:1.6rem;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:var(--psw)}
+  .b-ort{background:var(--ort)}
+  .wordgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .wg{border:2px solid var(--mist);border-radius:10px;padding:8px 4px;text-align:center;font-family:Georgia,serif;font-size:1.15rem;cursor:pointer;user-select:none;-webkit-user-select:none;background:#fff}
+  .wg.e{background:#FBD5D5;color:#8C2626;text-decoration:line-through}.wg.off{opacity:.3}.wg.last{outline:3px solid var(--ort);background:#E4F3EA}
+  .lvltag{grid-column:1/-1;font-size:.62rem;font-weight:800;color:var(--sub);margin-top:6px;letter-spacing:.5px}
+  .dkrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:2px solid var(--mist);border-radius:10px;padding:6px 10px;margin-top:6px}
+  .dkw{font-family:Georgia,serif;font-size:1.05rem;font-weight:800}
+  .dkb{display:flex;gap:4px}.dkb button{min-width:38px;height:34px;border-radius:8px;border:2px solid var(--mist);background:#fff;font-weight:800;cursor:pointer;font-family:inherit;font-size:.78rem;color:var(--sub)}
+  .dkb button.on{color:#fff;border-color:transparent}
+  .pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 18px;font-family:Georgia,serif;font-size:1.4rem;line-height:1.6}
   .hidden{display:none!important}
   @media print{
     @page{size:A4 portrait;margin:10mm}
@@ -141,17 +151,21 @@
     .cardwrap{border:none;padding:0;overflow:visible}
     .ptext{page-break-after:always;font-family:Georgia,serif;font-size:15pt;line-height:2;padding-top:10mm}
     .phead{font-size:10pt;color:#666;margin-bottom:8mm;font-family:Arial,sans-serif}
+    .pgrid{font-size:20pt;gap:14pt 24pt}
   }
+  @media screen{
   .printcard{--cw:min(9.2vw,2cm);--rh:min(13vw,3cm);--obj:min(7vw,1.5cm);--glyph:min(5vw,1cm);--cbox:min(5.5vw,1.2cm)}
   .ptext{font-family:Georgia,serif;font-size:1.05rem;line-height:1.9;border-top:2px dashed var(--mist);padding:14px 0}
   .phead{font-size:.72rem;font-weight:800;color:var(--sub);margin-bottom:8px}
+  }
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);max-width:min(92vw,520px);background:#16233F;color:#fff;padding:12px 18px;border-radius:12px;font-weight:800;font-size:.86rem;line-height:1.45;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:999;text-align:center}
 </style>
 </head>
 <body>
 <div class="shell">
   <div class="brand noprint">
     <h1>KTA Okuma Bataryası — Tek Oturum</h1>
-    <p>Hızlı Adlandırma → Fonolojik İşlemleme → Sesli Okuma Provası → İşlemleme Hızı &amp; Çalışma Belleği • bir çocuk, bir oturum, bir rapor</p>
+    <p>Hızlı Adlandırma → Fonolojik İşlemleme → Sesli Okuma Provası → İşlemleme Hızı &amp; Çalışma Belleği → Kod Çözme &amp; Yazım • bir çocuk, bir oturum, bir rapor</p>
   </div>
 
   <!-- ===== ANA ===== -->
@@ -165,13 +179,24 @@
       <button class="btn btn-ghost" onclick="show('scr-guide')">📖 Kılavuz</button>
       <button class="btn btn-ghost" onclick="newSession()">🆕 Yeni Oturum</button>
     </div>
-    <div class="note">🔒 Rumuz kullanın; veriler yalnız bu cihazda tutulur. Üç modül aynı oturum bilgisini paylaşır;
+    <div class="note">🔒 Rumuz kullanın; veriler yalnız bu cihazda tutulur. Beş modül aynı oturum bilgisini paylaşır;
       hangisini uygulayacağınız size kalmış — sıra zorunlu değildir.</div>
   </div>
 
   <!-- ===== OTURUM ===== -->
+  <!-- ===== YENİ OTURUM ONAY ===== -->
+  <div id="scr-newconfirm" class="card noprint hidden">
+    <span class="badge b-ink">YENİ OTURUM</span>
+    <p class="instr" style="margin-top:10px">Şu anki oturumun (<b id="nc-rumuz">—</b>) tüm verileri silinecek ve geri alınamaz.</p>
+    <div class="warn">Devam etmeden önce <b>rapor metnini kopyaladığınızdan</b> emin olun (Bütünleşik Profil &amp; Rapor → 📋 Rapor Metnini Kopyala).</div>
+    <div class="actionrow">
+      <button class="btn btn-ghost" onclick="show('scr-home')">Vazgeç, oturumda kal</button>
+      <button class="btn btn-no" onclick="doNewSession()">Evet, sil ve yeni başlat</button>
+    </div>
+  </div>
+
   <div id="scr-sess" class="card noprint hidden">
-    <span class="badge b-ink">OTURUM BİLGİSİ (üç modül için ortak)</span>
+    <span class="badge b-ink">OTURUM BİLGİSİ (tüm modüller için ortak)</span>
     <div class="field"><label>Rumuz (ad DEĞİL)</label><input id="f-rumuz" placeholder="OB-2026-012"></div>
     <div class="row3">
       <div class="field"><label>Yaş — yıl</label><input id="f-yil" type="number" placeholder="9"></div>
@@ -214,14 +239,14 @@
   <div id="scr-res" class="card infocard hidden">
     <span class="badge b-ink noprint">BÜTÜNLEŞİK PROFİL &amp; RAPOR</span>
     <div id="res-body"></div>
-    <div class="actionrow noprint"><button class="btn btn-ghost" onclick="show('scr-home')">Ana Ekran</button><button class="btn btn-ghost" onclick="window.print()">🖨️ Yazdır</button><button class="btn" onclick="copyReport()">📋 Rapor Metnini Kopyala</button></div>
+    <div class="actionrow noprint"><button class="btn btn-ghost" onclick="show('scr-home')">Ana Ekran</button><button class="btn btn-ghost" onclick="window.print()">🖨️ Yazdır</button><button class="btn btn-ghost" onclick="copyBlock()">🧭 Yalnız KTA Veri Bloğu</button><button class="btn" onclick="copyReport()">📋 Rapor Metnini Kopyala</button></div>
   </div>
 
   <!-- ===== YAZDIR ===== -->
   <div id="scr-print" class="card hidden">
     <div class="noprint"><span class="badge b-ink">YAZDIRMA MERKEZİ</span>
-      <p class="instr" style="margin-top:10px">RAN kartları gerçek ölçülerde (2 cm sembol aralığı, 3 cm satır aralığı); SOBAT provası çocuk kitapçığı sayfa başına bir metin.</p>
-      <div class="row2"><div class="field"><label>Ne yazdırılsın?</label><select id="p-what" onchange="renderPrint()"><option value="ran">RAN kartları + deneme sayfaları</option><option value="sobA">SOBAT provası kitapçığı — Form A</option><option value="sobB">SOBAT provası kitapçığı — Form B</option></select></div></div>
+      <p class="instr" style="margin-top:10px">RAN kartları gerçek ölçülerde (2 cm sembol aralığı, 3 cm satır aralığı); SOBAT provası çocuk kitapçığı sayfa başına bir metin; Modül 5 sözcük listeleri çocuk sayfası olarak, dikte uygulayıcı sayfası ayrı.</p>
+      <div class="row2"><div class="field"><label>Ne yazdırılsın?</label><select id="p-what" onchange="renderPrint()"><option value="ran">RAN kartları + deneme sayfaları</option><option value="sobA">SOBAT provası kitapçığı — Form A</option><option value="sobB">SOBAT provası kitapçığı — Form B</option><option value="ort">Modül 5 — sözcük listeleri, dikte ve yazma sayfaları</option></select></div></div>
       <div class="actionrow"><button class="btn btn-ghost" onclick="show('scr-home')">Ana Ekran</button><button class="btn" onclick="window.print()">🖨️ Yazdır</button></div></div>
     <div id="printarea"></div>
   </div>
@@ -254,10 +279,18 @@
     <ul><li>Delphi'de bu iki alan "disleksinin etkisine katkıda bulunabilen" bağlam değişkenleridir; tanı ölçütü değil, hipotez-test çerçevesinin parçasıdır.</li>
       <li><b>Kodlama</b> (rakam→sembol, 120 sn, dokunarak) ve <b>Simge Arama</b> (iki hedef beşin arasında var mı, 120 sn; puan = doğru − yanlış) gerçek zamanlı ve süreli çalışır; <b>Harf-Rakam Dizisi</b> (rakamlar küçükten büyüğe, sonra harfler alfabetik; iki deneme/uzunluk, ikisi de yanlışsa durur) uygulayıcı aracılığıyla; <b>Sayı Dizisi</b> Modül 2 ile ortaktır, çocuk iki kez test edilmez.</li>
       <li>Görevler WISC-IV maddeleri değildir ve ölçekli puan üretmez; hız-doğruluk takası ve dürtüsel yanıt stili gibi <b>gözlem</b> bulguları verir. Klinik karar için <b>normlu panele</b> WISC-IV İHE/ÇBE (ve varsa CNSVS) puanlarını girin — Delphi özeti ve rapor normlu puanı ölçüt-temelli gözlemin önüne koyar.</li></ul>
+    <h4>🟢 Modül 5 — Kod Çözme &amp; Yazım (sözcük düzeyi)</h4>
+    <ul><li><b>Neden:</b> Delphi uzlaşısında ve yanıt yazısında (Carroll ve ark., 2026) tanının çekirdeği sözcük ve anlamsız sözcük okuma doğruluğu-akıcılığı ile yazımdır; Metsala ve ark. (2026) müdahalenin bilişsel profile değil bu beceri profiline dayanmasını savunur. Batarya bu çekirdeği metin okumanın (Modül 3) yanına koyar.</li>
+      <li><b>Anlamsız sözcük okuma:</b> Türkçe fonotaktiği ve ünlü uyumuna uygun, TDK sözlüğünde karşılığı olmayan 40 sözcük; 5 uzunluk düzeyi × 8 madde (1 hece → 4 hece/ünsüz kümesi). Zamanlı; ölçüm doğruluk ve dakikada doğru sözcük. Hataların uzunluk düzeyine dağılımı harf-ses (kısa) ↔ hece birleştirme (uzun) ayrımını verir.</li>
+      <li><b>Gerçek sözcük okuma:</b> aynı uzunluk yapısında 40 sık sözcük. Gerçek–anlamsız ayrışması (doğruluk farkı ≥15 puan ya da hız oranı &lt;0,5, gerçek sözcük korunmuşken) fonolojik yolun zayıf, sözcüksel yolun telafi edici olduğunu düşündürür.</li>
+      <li><b>Dikte:</b> 15 sözcük + 3 cümle; her sözcük D / F (fonolojik) / O (ortografik-kural) / B (biçim) / — olarak sınıflanır; cümlede büyük harf, noktalama, "de/mü" ayrı yazımı. Fonolojik baskın profil ses-harf/hece çalışmasına, ortografik baskın profil kural ve biçimbilgisi çalışmasına yönlendirir.</li>
+      <li><b>Yazma akıcılığı:</b> 60 sn model cümle kopyalama; harf/dk ham, okunaklılık ve hız uygulayıcı yargısıdır (disgrafi hattı için bayrak).</li>
+      <li>Doğruluk bantları sınıf düzeyine göre <b>kaba klinik beklentidir</b> (Türkçede kod çözme doğruluğu 1. sınıf sonunda büyük ölçüde tavana yaklaşır; Öney &amp; Durgunoğlu, 1997). Norm değildir; hız ham kaydedilir ve listeler arası / metinle karşılaştırılır.</li>
+      <li><b>KTA veri bloğu:</b> Rapor metninin sonuna eklenen <code>===KTA-VERI-1===</code> bloğu, ÖÖG Müdahale Yönlendirme sayfasına yapıştırıldığında bulguları otomatik doldurur.</li></ul>
     <h4>🔲 Bütünleşik okuma</h4>
     <p>Profil ekranı üç bileşeni, ek yürütücü ölçümü, okuma düzeyini ve <b>çift yetersizlik haritasını</b> (farkındalık × adlandırma hızı) tek bakışta verir. Rapor metni bileşen bileşen yazar; hiçbir bulgu tek başına tanı koydurmaz — DSM-5 ÖÖG kararı öykü, okul verisi ve klinik yargıyla verilir.</p>
     <h4>📚 Kaynaklar</h4>
-    <div class="refbox">Carroll ve ark. (2025) JCPP 66(7):1065-1076 • Holden ve ark. (2025) Dyslexia • Kazanoğlu, Doğan &amp; Ünal Logacev (2020) Türkiye Klinikleri J Health Sci 5(1):22-37 • Wagner, Torgesen, Rashotte &amp; Pearson (2013) CTOPP-2 • Ergül &amp; Demir (2022) Trakya Eğitim Dergisi 12(1):176-192 • Bakır &amp; Babür (2018) Boğaziçi Üniv. Eğitim Dergisi 35(2):35-50 • Denckla &amp; Rudel (1974) Cortex 10:186-202 • Melekoğlu, Erden &amp; Çakıroğlu (2019) J Educational Issues 5(2):135-149 • Wolf &amp; Bowers (1999) J Educ Psychol 91:415-438</div>
+    <div class="refbox">Carroll ve ark. (2025) JCPP 66(7):1065-1076 • Holden ve ark. (2025) Dyslexia • Kazanoğlu, Doğan &amp; Ünal Logacev (2020) Türkiye Klinikleri J Health Sci 5(1):22-37 • Wagner, Torgesen, Rashotte &amp; Pearson (2013) CTOPP-2 • Ergül &amp; Demir (2022) Trakya Eğitim Dergisi 12(1):176-192 • Bakır &amp; Babür (2018) Boğaziçi Üniv. Eğitim Dergisi 35(2):35-50 • Denckla &amp; Rudel (1974) Cortex 10:186-202 • Melekoğlu, Erden &amp; Çakıroğlu (2019) J Educational Issues 5(2):135-149 • Wolf &amp; Bowers (1999) J Educ Psychol 91:415-438 • Öney &amp; Durgunoğlu (1997) Applied Psycholinguistics 18:1-15 • Carroll, Holden, Kirby, Snowling &amp; Thompson (2026) Dyslexia 32:e70042 • Metsala ve ark. (2026) Dyslexia 32:e70019 • Morsanyi ve ark. (2026) Dyslexia</div>
     <div class="actionrow"><button class="btn" onclick="show('scr-home')">Ana Ekran</button></div>
   </div>
 </div>
@@ -265,7 +298,8 @@
 <script>
 const $=id=>document.getElementById(id);
 let TOK=0;
-function show(id){['scr-home','scr-sess','scr-mod','scr-task','scr-res','scr-print','scr-guide'].forEach(s=>$(s).classList.add('hidden'));$(id).classList.remove('hidden');window.scrollTo(0,0)}
+function toast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.className='noprint';document.body.appendChild(t)}t.textContent=msg;t.style.display='block';clearTimeout(toast._h);toast._h=setTimeout(()=>{t.style.display='none'},3500)}
+function show(id){['scr-home','scr-sess','scr-mod','scr-task','scr-res','scr-print','scr-guide','scr-newconfirm'].forEach(s=>$(s).classList.add('hidden'));$(id).classList.remove('hidden');window.scrollTo(0,0)}
 function abortTask(){TOK++;stopTimer();if(CURMOD)openMod(CURMOD);else show('scr-home')}
 function setActions(arr){const b=$('t-actions');b.innerHTML='';arr.forEach(a=>{const x=document.createElement('button');x.className='btn'+(a.cls?' '+a.cls:'')+(a.ghost?' btn-ghost':'');x.textContent=a.label;x.onclick=a.fn;b.appendChild(x)})}
 function head(badge,prog,top,cls){$('t-badge').textContent=badge;$('t-badge').className='badge '+(cls||'b-ink');$('t-prog').textContent=prog||'';$('t-top').innerHTML=top||'';$('t-timer').textContent=''}
@@ -278,12 +312,20 @@ let CURMOD=null;
 
 /* ======================= OTURUM ======================= */
 let S=null;
-function blank(){return {info:null,date:new Date().toLocaleDateString('tr-TR'),ran:{cards:{},results:{},objStyle:'renkli'},fip:{ff:{},mem:{}},sobat:{results:{A:{},B:{}}},psw:{kod:null,sim:null,hrd:null,wisc:{},cnsvs:{}}}}
-async function loadS(){try{const r=await window.storage.get('kta-ob');if(r&&r.value)S=JSON.parse(r.value)}catch(e){}if(!S)S=blank();if(!S.psw)S.psw={kod:null,sim:null,hrd:null,wisc:{},cnsvs:{}};ensureCards();renderHome()}
-async function persist(){try{await window.storage.set('kta-ob',JSON.stringify(S))}catch(e){}}
-function newSession(){if(S&&S.info&&!confirm('Mevcut oturum silinecek. Rapor metnini kopyaladınız mı?'))return;
-  const cards=S?S.ran.cards:null,st=S?S.ran.objStyle:'renkli';S=blank();if(cards)S.ran.cards=cards;S.ran.objStyle=st;ensureCards();persist();show('scr-sess')}
+function blank(){return {info:null,date:new Date().toLocaleDateString('tr-TR'),ran:{cards:{},results:{},objStyle:'renkli'},fip:{ff:{},mem:{}},sobat:{results:{A:{},B:{}}},psw:{kod:null,sim:null,hrd:null,wisc:{},cnsvs:{}},ort:{nw:null,rw:null,dik:null,yaz:null}}}
+async function loadS(){try{const r=await window.storage.get('kta-ob');if(r&&r.value)S=JSON.parse(r.value)}catch(e){}if(!S){try{const v=localStorage.getItem('kta-ob');if(v)S=JSON.parse(v)}catch(e){}}if(!S)S=blank();if(!S.psw)S.psw={kod:null,sim:null,hrd:null,wisc:{},cnsvs:{}};if(!S.ort)S.ort={nw:null,rw:null,dik:null,yaz:null};ensureCards();renderHome()}
+async function persist(){const v=JSON.stringify(S);try{localStorage.setItem('kta-ob',v)}catch(e){}try{await window.storage.set('kta-ob',v)}catch(e){}}
+function newSession(){
+  if(S&&S.info){$('nc-rumuz').textContent=S.info.rumuz||'—';show('scr-newconfirm');return}
+  doNewSession()}
+function doNewSession(){const cards=S?S.ran.cards:null,st=S?S.ran.objStyle:'renkli';S=blank();if(cards)S.ran.cards=cards;S.ran.objStyle=st;ensureCards();persist();fillSessForm(null);show('scr-sess')}
+function fillSessForm(I){$('f-rumuz').value=I?(I.rumuz==='—'?'':I.rumuz):'';$('f-yil').value=I?I.yil:'';$('f-ay').value=I?I.ay:'';$('f-sinif').value=I?String(I.sinif):'4';$('f-uyg').value=I?(I.uyg==='—'?'':I.uyg):'';
+  if(I){$('f-kart').value=I.kart;$('f-isitme').value=I.isitme;$('f-gorme').value=I.gorme;$('f-ksb').value=I.ksb;$('f-form').value=I.form;$('f-mode').value=I.mode}
+  else{['f-kart','f-isitme','f-gorme','f-ksb','f-form','f-mode'].forEach(id=>{$(id).selectedIndex=0})}}
+function editSess(){fillSessForm(S.info);show('scr-sess')}
 function saveSess(){const y=Number($('f-yil').value||0),m=Number($('f-ay').value||0);
+  if(!$('f-rumuz').value.trim()){toast('Rumuz girin.');return}
+  if(!(y>=3&&y<=18)||m<0||m>11){toast('Yaşı kontrol edin: yıl 3–18, ay 0–11 olmalı. Yaş, fonolojik görev beklentilerini ve bellek ölçütlerini belirler.');return}
   S.info={rumuz:$('f-rumuz').value||'—',yil:y,ay:m,age:y+m/12,ayToplam:y*12+m,sinif:Number($('f-sinif').value),uyg:$('f-uyg').value||'—',
     kart:$('f-kart').value,isitme:$('f-isitme').value,gorme:$('f-gorme').value,ksb:$('f-ksb').value,form:$('f-form').value,mode:$('f-mode').value};
   persist();renderHome();show('scr-home')}
@@ -292,7 +334,7 @@ function gradeName(g){return g===0?'Anasınıfı':g+'. sınıf'}
 function renderHome(){
   const I=S&&S.info;
   $('sessbar').innerHTML=I?`<div style="background:var(--mist);border-radius:12px;padding:12px;margin-top:10px;font-size:.84rem;line-height:1.6">
-    <b>${I.rumuz}</b> • ${ageStr()} yaş (${I.ayToplam} ay) • ${gradeName(I.sinif)} • ${I.uyg} • ${S.date}
+    <b>${I.rumuz}</b> • ${ageStr()} yaş (${I.ayToplam} ay) • ${gradeName(I.sinif)} • ${I.uyg} • ${S.date} <a href="#" onclick="editSess();return false" style="color:var(--ink);font-weight:800;margin-left:6px">✏️ düzenle</a>
     ${I.isitme.includes('edilmedi')||I.gorme.includes('edilmedi')?'<br><span style="color:var(--no);font-weight:800">⚠ Görme/işitme kontrolü eksik.</span>':''}
     ${I.ksb.includes('Var')?'<br><span style="color:var(--no);font-weight:800">⚠ KSB: fonem görevlerinde üretim ↔ farkındalık ayrımı.</span>':''}</div>`
     :`<div class="warn" style="margin-top:10px">Önce oturum bilgisi girin → <b>Yeni Oturum</b></div>`;
@@ -307,10 +349,12 @@ function renderHome(){
     <button class="modcard" onclick="openMod('sob')"><div class="mi" style="background:var(--sob)">📖</div><h3>3 • Sesli Okuma Provası</h3><p>SOBAT-II yapısı: düzeyli metinler, kayıt formu, 5 soru, düzey kararı</p>
       <div class="st" style="color:var(--sob)">${I?(sDone?sDone+' metin • Form '+I.form:'başlanmadı • Form '+I.form):'—'}</div></button>
     <button class="modcard" onclick="openMod('psw')"><div class="mi" style="background:var(--psw)">⚙️</div><h3>4 • İşlemleme Hızı &amp; Çalışma Belleği</h3><p>WISC-IV paradigması: Kodlama • Simge Arama • Sayı Dizisi • Harf-Rakam Dizisi + normlu WISC-IV/CNSVS paneli</p>
-      <div class="st" style="color:var(--psw)">${pswProgress()}</div></button>`}
+      <div class="st" style="color:var(--psw)">${pswProgress()}</div></button>
+    <button class="modcard" onclick="openMod('ort')"><div class="mi" style="background:var(--ort)">✍️</div><h3>5 • Kod Çözme &amp; Yazım</h3><p>Anlamsız / gerçek sözcük okuma (zamanlı) • dikte (hata türü) • yazma akıcılığı — uzlaşının çekirdeği</p>
+      <div class="st" style="color:var(--ort)">${ortProgress()}</div></button>`}
 function pswProgress(){const p=S.psw;if(!p)return '—';const n=[p.kod,p.sim,p.hrd,S.fip.mem.ds].filter(x=>x).length;const w=p.wisc&&(p.wisc.ihe||p.wisc.cbe);return (n?n+'/4 görev':'başlanmadı')+(w?' • WISC-IV puanları girildi':'')}
 function openMod(m){if(!S||!S.info){show('scr-sess');return}CURMOD=m;show('scr-mod');
-  if(m==='ran')renderRanMenu();if(m==='fip')renderFipMenu();if(m==='sob')renderSobMenu();if(m==='psw')renderPswMenu()}
+  if(m==='ran')renderRanMenu();if(m==='fip')renderFipMenu();if(m==='sob')renderSobMenu();if(m==='psw')renderPswMenu();if(m==='ort')renderOrtMenu()}
 
 /* ======================= MODÜL 1: RAN ======================= */
 const OBJ={
@@ -359,7 +403,7 @@ function renderRanMenu(){
       return `<button class="menu-item${kapali?' dim':''}" onclick="runRan('${t.key}')"><div class="menu-icon" style="background:var(--ran)">${t.icon}</div>
         <div><h3>${t.name}</h3><p>deneme sayfası → kart (50 madde) → kronometre</p></div>${tag}</button>`}).join('')}
 function runRan(key){
-  const g=S.info.sinif;if(g===0&&(key==='harf'||key==='rakam')){alert('Protokol: anasınıfında harf ve rakam kartları uygulanmaz.');return}
+  const g=S.info.sinif;if(g===0&&(key==='harf'||key==='rakam')){toast('Protokol: anasınıfında harf ve rakam kartları uygulanmaz.');return}
   TOK++;const tok=TOK;const T=RTASKS.find(t=>t.key===key);show('scr-task');
   function step1(){head(T.name.toUpperCase(),'Adım 1/3 — Deneme sayfası',`<div class="yonerge"><div class="yt">📢 DENEME — SÜRE TUTULMAZ</div><p>"Şimdi sana birkaç ${key==='nesne'?'resim':key==='renk'?'renk':key==='harf'?'harf':'rakam'} göstereceğim. Bunların ne olduğunu bana tek tek söyle."</p></div>
       <p class="instr">Cihazı çocuğa çevirin. Bir sembol bile bilinmiyor/yanlışsa bu alt test <b>uygulanmaz</b>.</p>`,'b-ran');
@@ -382,7 +426,7 @@ function runRan(key){
     const esik=S.info.kart==='hoti'?5:6,gecersiz=err>esik;S.ran.results[key]={sure:sec,hata:err,duzeltme:corr,gecersiz,esik};persist();
     head(T.name.toUpperCase(),'Adım 3/3 — Sonuç','','b-ran');const N=normFor(key,g);
     let h=`<div class="stim" style="text-align:center"><div style="font-size:.72rem;font-weight:800;color:var(--sub)">TOPLAM İSİMLENDİRME SÜRESİ</div><div style="font-size:2.4rem;font-weight:800">${sec.toFixed(1)} <span style="font-size:1rem">sn</span></div><div style="font-size:.82rem;font-weight:800;color:var(--sub)">${err} hata • ${corr} kendini düzeltme</div></div>`;
-    if(gecersiz)h+=`<div class="warn"><b>⚠ Ölçme sonucu dikkate alınmaz:</b> ${esik}'dan fazla hata (${err}). Protokol gereği bu alt testin süresi değerlendirmeye alınmaz.</div>`;
+    if(gecersiz)h+=`<div class="warn"><b>⚠ Ölçme sonucu dikkate alınmaz:</b> ${esik}'${esik===5?'ten':'dan'} fazla hata (${err}). Protokol gereği bu alt testin süresi değerlendirmeye alınmaz.</div>`;
     else if(N){const b=bandOf(sec,N.M,N.SD);
       h+=`<div class="bandcard" style="background:var(--${RBANDS[b].k})"><div class="bt">${gradeName(g).toUpperCase()} KARŞILAŞTIRMASI</div><div class="bn">${RBANDS[b].n}</div>
         <div class="bd">Sınıf ortalaması ${N.M.toFixed(1)} sn (SS ${N.SD.toFixed(2)}).${S.info.kart==='app'?' Uygulama kartı: sınıflandırma yönlendiricidir.':''}</div>
@@ -428,8 +472,8 @@ const FF=[
  {id:'fondeg',lvl:'fon',n:'Fonem Değiştirme',exp:8,y:'Sözcükteki bir sesi başka bir sesle değiştireceğiz. Yeni sözcüğü sen söyle.',ex:['"bal"daki /b/ yerine /d/','dal'],
   it:[['"kaş"taki /k/ yerine /b/','baş'],['"top"taki /t/ yerine /h/','hop'],['"kedi"deki /k/ yerine /d/','dedi'],['"masa"daki /m/ yerine /k/','kasa'],['"kar"daki /r/ yerine /ş/','kaş'],['"dil"deki /d/ yerine /g/','gil (sesçe doğru yanıt kabul)']]}];
 const NWR=['tibo','maku','pelsin','dortak','bakidon','tülemsik','şekimduz','boratlıker','gölfetirmen','sarvındalaşko'];
-const DS_F=[[4,7,2],[6,1,9],[3,8,5,2],[7,2,9,4],[8,3,6,1,9],[2,9,4,7,5],[5,1,8,3,9,2],[9,4,2,7,1,6],[6,2,9,5,1,8,3]];
-const DS_B=[[5,2],[8,3],[4,9,1],[6,2,7],[3,8,5,1],[9,2,6,4],[7,1,9,3,6],[2,8,4,9,5]];
+const DS_F=[[4,7,2],[6,1,9],[3,8,5,2],[7,2,9,4],[8,3,6,1,9],[2,9,4,7,5],[5,1,8,3,9,2],[9,4,2,7,1,6],[6,2,9,5,1,8,3],[4,8,1,7,3,9,2],[3,7,1,9,4,6,2,8],[8,2,5,1,7,3,9,6]];
+const DS_B=[[5,2],[8,3],[4,9,1],[6,2,7],[3,8,5,1],[9,2,6,4],[7,1,9,3,6],[2,8,4,9,5],[5,9,1,7,4,2],[8,3,6,2,9,5],[1,7,4,9,2,6,3],[6,2,8,5,1,9,4]];
 function coreSet(age){return age<6?['sayma','kafayirt','kafuret','hecebol','hecesil','bastaki']:['hecesil','bastaki','fonbirl','fonbol','fonsil','fondeg']}
 function kazanim(sc){return sc>=5?['Kazanılmış','var(--kaz)']:sc>=3?['Belirmekte','var(--bel2)']:['Kazanılmamış','var(--yok)']}
 function expected(t){return S.info.age>=t.exp}
@@ -449,7 +493,7 @@ function renderFipMenu(){
   html+=`<button class="menu-item" onclick="runNWR()"><div class="menu-icon" style="background:var(--bel)">ASt</div><div><h3>Anlamsız Sözcük Tekrarı</h3><p>10 madde, 2–5 hece — depolama (bileşene dahil)</p></div>${n?`<span class="done-tag" style="color:var(--kaz)">${n.sc}/10</span>`:''}</button>
     <button class="menu-item" onclick="runDS()"><div class="menu-icon" style="background:var(--bel)">SD</div><div><h3>Sayı Dizisi (İleri / Geri)</h3><p>İleri = depolama (bileşene dahil) • Geri = ek yürütücü ölçüm (dahil değil)</p></div>${d?`<span class="done-tag" style="color:var(--kaz)">ileri ${d.f} / geri ${d.b}</span>`:''}</button>`;
   const rb=ranBands();html+=`<div class="lvlhead"><span class="ln">ADLANDIRMA HIZI</span><div class="lb" style="background:var(--ran)"></div></div>
-    <div class="${rb.done?'good':'note'}">${rb.done?`Modül 1'den otomatik aktarıldı: ${rb.done} alt test, ${rb.slow} tanesi yavaş/çok yavaş bantta.`:'Modül 1 uygulandığında adlandırma hızı buraya kendiliğinden akar.'}</div>`;
+    <div class="${rb.done?'good':'note'}">${rb.done?`Modül 1'den otomatik aktarıldı: ${rb.done} alt test, ${rb.slow} tanesi yavaş/çok yavaş bantta.`:Object.keys(S.ran.results).length&&!normFor('nesne',S.info.sinif)?`Modül 1 uygulandı ancak ${gradeName(S.info.sinif)} için HİT normu yok; süreler ham kaydedildi, bileşen durumu otomatik hesaplanmaz.`:'Modül 1 uygulandığında adlandırma hızı buraya kendiliğinden akar.'}</div>`;
   $('m-body').innerHTML=html}
 function runFF(id){TOK++;const tok=TOK;const t=FF.find(x=>x.id===id);let i=-1,sc=0;const det=[];show('scr-task');
   function load(){if(tok!==TOK)return;if(i>=6){fin();return}
@@ -471,7 +515,7 @@ function runNWR(){TOK++;const tok=TOK;let i=-1,sc=0;const det=[];show('scr-task'
       $('t-body').innerHTML=`<div class="compcard" style="background:${sc>=8?'var(--kaz)':sc>=6?'var(--bel2)':'var(--yok)'}"><div class="ct">FONOLOJİK DEPOLAMA</div><div class="cn">${sc}/10</div><div class="cd">2 heceliler ${kisa}/4 • 4–5 heceliler ${uzun}/3. Hece sayısıyla düşüş kapasiteyi, kısa sözcükte sıra hatası fonolojik işlemlemeyi işaret eder.</div></div>`;
       setActions([{label:'Modül Menüsü',fn:()=>{renderFipMenu();show('scr-mod')}},{label:'Profil →',fn:showResults}]);return}
     head('ANLAMSIZ SÖZCÜK TEKRARI',i<0?'Örnek':`Madde ${i+1}/10`,i<0?`<div class="yonerge"><div class="yt">📢 YÖNERGE</div><p>"Şimdi sana uydurma kelimeler söyleyeceğim; bunlar gerçek kelime değil. Her birini benden sonra aynen tekrar et."</p></div>`:'','b-fip');
-    const w=i<0?'pota':NWR[i];
+    const w=i<0?'pöta':NWR[i];
     $('t-body').innerHTML=`<div class="stim"><div class="exam"><span class="xt">🎧 BİR KEZ, NORMAL HIZDA</span><div class="bigword">${w}</div></div>
       <div class="dots">${NWR.map((_,k)=>`<div class="dot ${det[k]===1?'k':det[k]===0?'y':''}"></div>`).join('')}</div><div class="markrow" id="mk"></div></div>`;
     const mk=$('mk');if(i<0){const b=document.createElement('button');b.className='btn';b.style.gridColumn='1 / -1';b.textContent='Örnek yapıldı → Maddelere geç';b.onclick=()=>{i=0;load()};mk.appendChild(b)}
@@ -484,10 +528,10 @@ function runDS(){TOK++;const tok=TOK;let mode='f',i=0,fails=0,spanF=0,spanB=0;sh
       S.fip.mem.ds={f:spanF,b:spanB};persist();const bek=S.info.age<6?3:S.info.age<8?4:S.info.age<11?5:6;head('SAYI DİZİSİ','','','b-fip');
       $('t-body').innerHTML=`<div class="compcard" style="background:${spanF>=bek?'var(--kaz)':spanF>=bek-1?'var(--bel2)':'var(--yok)'}"><div class="ct">İLERİ — FONOLOJİK DEPOLAMA (bileşene dahil)</div><div class="cn">İleri uzunluk: ${spanF}</div><div class="cd">Kaba klinik beklenti ≈ ${bek} basamak (norm değil). CTOPP-2 Memory for Digits gibi depolama kapasitesini ölçer.</div></div>
         <div class="compcard" style="background:var(--ink)"><div class="ct">GERİ — EK YÜRÜTÜCÜ ÖLÇÜM (bileşene dahil DEĞİL)</div><div class="cn">Geri ${spanB} • makas ${spanF-spanB}</div><div class="cd">Manipülasyon ve merkezi yürütücü yükü; raporda "sözel çalışma belleği / yürütücü yük altında ek performans göstergesi". Makas ≥3 → WISC ÇBE ve dikkat hattıyla üçgenleyin.</div></div>`;
-      setActions([{label:'Modül Menüsü',fn:()=>{renderFipMenu();show('scr-mod')}},{label:'Profil →',fn:showResults}]);return}
+      setActions([{label:'Modül Menüsü',fn:()=>openMod(CURMOD||'fip')},{label:'Profil →',fn:showResults}]);return}
     const seq=list[i];head('SAYI DİZİSİ — '+(mode==='f'?'İLERİ':'GERİ'),`${i+1}/${list.length} • uzunluk ${seq.length}`,i===0?`<div class="yonerge"><div class="yt">📢 YÖNERGE</div><p>"${mode==='f'?'Sana sayılar söyleyeceğim. Ben bitirince sen de aynı sırayla söyle.':'Şimdi tersini yapacağız: ben bitirince sayıları SONDAN BAŞA söyle. Ben 2-5 dersem sen 5-2 dersin.'}"</p></div>`:'','b-fip');
     $('t-body').innerHTML=`<div class="stim"><div class="exam"><span class="xt">🎧 SANİYEDE BİR, TEK TEK</span><div class="bigword">${seq.join(' – ')}</div>${mode==='b'?`<div class="itema">Beklenen (ters): ${seq.slice().reverse().join(' ')}</div>`:''}</div><div class="markrow" id="mk"></div></div>`;
-    [['Doğru','btn-ok',1],['Yanlış','btn-no',0]].forEach(m=>{const b=document.createElement('button');b.className='btn '+m[1];b.textContent=m[0];b.onclick=()=>{if(m[2]){fails=0;if(mode==='f')spanF=Math.max(spanF,seq.length);else spanB=Math.max(spanB,seq.length)}else fails++;i++;load()};$('mk').appendChild(b)});
+    [['Doğru','btn-ok',1],['Yanlış','btn-no',0]].forEach(m=>{const b=document.createElement('button');b.className='btn '+m[1];b.textContent=m[0];b.onclick=()=>{if(m[2]){fails=0;if(mode==='f')spanF=Math.max(spanF,seq.length);else spanB=Math.max(spanB,seq.length)}else fails++;i++;const nx=list[i];if(!nx||nx.length!==seq.length){if(fails>=2)i=list.length;fails=0}load()};$('mk').appendChild(b)});
     setActions([])}
   load()}
 function ffSummary(){const done=FF.filter(t=>S.fip.ff[t.id]),bek=done.filter(t=>expected(t)),alt=bek.filter(t=>S.fip.ff[t.id].sc<5),agir=bek.filter(t=>S.fip.ff[t.id].sc<3);
@@ -504,8 +548,8 @@ function memSummary(){const n=S.fip.mem.nwr,d=S.fip.mem.ds;if(!n&&!d)return null
 const T={A:{},B:{}};
 T.A[2]={ty:'Hikâye',tt:'Ali\'nin Bisikleti',tx:'Ali\'nin kırmızı bir bisikleti var. Her sabah okula bisikletiyle gider. Bir gün bisikletin lastiği patladı. Ali çok üzüldü. Babası akşam eve gelince lastiği tamir etti. Ertesi sabah Ali yine bisikletine bindi. Yolda arkadaşı Ayşe\'yi gördü. Ona el salladı. Birlikte okula gittiler.',
  q:[['Metin en çok neyi anlatıyor?',['Ali\'nin bisikletinin bozulup tamir edilmesini','Ayşe\'nin okulunu','Ali\'nin babasının işini','Bir bisiklet yarışını'],'ana fikir'],['Ali\'nin bisikleti ne renktir?',['Kırmızı','Mavi','Yeşil','Sarı'],'ayrıntı'],['Lastiği kim tamir etti?',['Babası','Ayşe','Öğretmeni','Ali'],'ayrıntı'],['Ali neden üzüldü?',['Bisikletinin lastiği patladığı için','Okula geç kaldığı için','Ayşe\'yi görmediği için','Yağmur yağdığı için'],'çıkarım'],['"Tamir etmek" ne demektir?',['Onarmak, düzeltmek','Satmak','Boyamak','Saklamak'],'sözcük']]};
-T.B[2]={ty:'Bilgi',tt:'Kediler',tx:'Kediler evcil hayvanlardır. Süt ve balık severler. Tırnaklarını sık sık bilerler. Gece çok iyi görürler. Kediler günde uzun saatler uyur. Bıyıkları sayesinde dar yerlerden geçebilirler. Mutlu olduklarında mırıldarlar. Kızdıklarında tüylerini kabartırlar.',
- q:[['Metin ne hakkında?',['Kedilerin özellikleri','Köpeklerin bakımı','Balık tutma','Süt yapımı'],'ana fikir'],['Kediler ne zaman mırıldar?',['Mutlu olduklarında','Acıktıklarında','Uyurken','Kızdıklarında'],'ayrıntı'],['Kediler dar yerlerden nasıl geçer?',['Bıyıkları sayesinde','Kuyrukları sayesinde','Gözleri sayesinde','Tırnakları sayesinde'],'ayrıntı'],['Kızan bir kedinin tüyleri nasıl olur?',['Kabarır','Dökülür','Islanır','Kısalır'],'ayrıntı'],['Metne göre kediler gece nasıl görür?',['Çok iyi','Hiç görmez','Bulanık','Sadece ışıkta'],'çıkarım']]};
+T.B[2]={ty:'Bilgi',tt:'Kediler',tx:'Kediler evcil hayvanlardır. Süt ve balık severler. Tırnaklarını sık sık bilerler. Gece çok iyi görürler. Kediler günde uzun saatler uyur. Bıyıkları sayesinde dar yerlerden geçebilirler. Mutlu olduklarında mırlarlar. Kızdıklarında tüylerini kabartırlar.',
+ q:[['Metin ne hakkında?',['Kedilerin özellikleri','Köpeklerin bakımı','Balık tutma','Süt yapımı'],'ana fikir'],['Kediler ne zaman mırlar?',['Mutlu olduklarında','Acıktıklarında','Uyurken','Kızdıklarında'],'ayrıntı'],['Kediler dar yerlerden nasıl geçer?',['Bıyıkları sayesinde','Kuyrukları sayesinde','Gözleri sayesinde','Tırnakları sayesinde'],'ayrıntı'],['Kızan bir kedinin tüyleri nasıl olur?',['Kabarır','Dökülür','Islanır','Kısalır'],'ayrıntı'],['Metne göre kediler gece nasıl görür?',['Çok iyi','Hiç görmez','Bulanık','Sadece ışıkta'],'çıkarım']]};
 T.A[3]={ty:'Hikâye',tt:'Karlı Sabah',tx:'Deniz, sabah uyandığında pencereden dışarı baktı. Her yer bembeyazdı. Gece boyunca kar yağmıştı. Hemen kalın montunu giydi ve bahçeye koştu. Kardeşi Ece de peşinden geldi. İkisi birlikte büyük bir kardan adam yaptılar. Gözlerine iki taş, burnuna bir havuç koydular. Anneleri onları görünce güldü ve içeri sıcak süt içmeye çağırdı. O gün Deniz için kışın en güzel günüydü.',
  q:[['Metnin ana fikri nedir?',['İki kardeşin karlı bir günde eğlenmesi','Kışın tehlikeleri','Süt içmenin faydası','Okula gidiş'],'ana fikir'],['Deniz\'in kardeşinin adı nedir?',['Ece','Ayşe','Elif','Zeynep'],'ayrıntı'],['Kardan adamın burnuna ne koydular?',['Havuç','Taş','Şapka','Kalem'],'ayrıntı'],['Deniz neden bahçeye koştu?',['Kar yağdığını görüp oynamak istediği için','Okula geç kaldığı için','Annesi çağırdığı için','Kardeşini aradığı için'],'çıkarım'],['"Bembeyaz" sözcüğü neyi anlatır?',['Her yerin karla kaplı olduğunu','Havanın sıcak olduğunu','Gece olduğunu','Bahçenin boş olduğunu'],'sözcük']]};
 T.B[3]={ty:'Bilgi',tt:'Çalışkan Arılar',tx:'Arılar küçük ama çok çalışkan böceklerdir. Bir kovanda binlerce arı yaşar. Kraliçe arı yumurtaları bırakır. İşçi arılar çiçeklerden bal özü toplar. Bu özü kovana taşıyıp bala çevirirler. Arılar, çiçekleri dolaşırken bitkilerin tozlaşmasına yardım eder. Bu sayede meyveler ve sebzeler yetişir. Arılar tehlike hissettiğinde iğneleriyle kendilerini korur. Bal, arıların kış boyunca yiyeceği yiyecektir.',
@@ -566,14 +610,18 @@ function runLevel(l){TOK++;const tok=TOK;const F=S.info.form,t=T[F][l],words=t.t
     loadQ()}
   function fin(sec,err,corr,errWords,c,det){const n=words.length,acc=Math.round((n-err)/n*1000)/10,wpm=Math.round(n/sec*60),cwpm=Math.round((n-err)/sec*60),lv=levelOf(acc,c);
     S.sobat.results[F][l]={sec:+sec.toFixed(1),err,corr,ekleme,tekrar,errWords,comp:c,det,words:n,acc,wpm,cwpm};persist();head(`FORM ${F} • ${l}. SINIF DÜZEYİ`,'Sonuç','','b-sob');
-    const first=Object.keys(S.sobat.results[F]).length===1;let next='';
-    if(lv.k==='end')next=first&&l>2?`<div class="info">İlk metin endişe düzeyinde → <b>bir alt düzeye</b> (${l-1}) inin.</div>`:`<div class="info">Endişe düzeyine ulaşıldı → uygulama burada durdurulur.</div>`;
-    else next=l<8?`<div class="info">${lv.n} → <b>bir üst düzeye</b> (${l+1}) geçin.</div>`:`<div class="info">En üst düzey tamamlandı.</div>`;
+    const RR=S.sobat.results[F],isEnd=x=>RR[x]&&levelOf(RR[x].acc,RR[x].comp).k==='end',isPass=x=>RR[x]&&!isEnd(x);
+    const passBelow=LV.some(x=>x<l&&isPass(x)),endAbove=LV.some(x=>x>l&&isEnd(x));let go=null,next='';
+    if(lv.k==='end'){if(!passBelow&&l>2&&!RR[l-1]){go=l-1;next=`<div class="info">Endişe düzeyi, altında geçilen düzey yok → <b>bir alt düzeye</b> (${l-1}) inin.</div>`}
+      else next=`<div class="info">${passBelow?'Tavan belirlendi':'En düşük düzeye ulaşıldı'} → uygulama burada durdurulur.</div>`}
+    else{if(endAbove)next=`<div class="info">Üst düzey zaten endişe düzeyinde → tavan belirlendi, uygulama burada durdurulur.</div>`;
+      else if(l<8&&!RR[l+1]){go=l+1;next=`<div class="info">${lv.n} → <b>bir üst düzeye</b> (${l+1}) geçin.</div>`}
+      else next=`<div class="info">${l<8?'Üst düzey zaten uygulandı.':'En üst düzey tamamlandı.'}</div>`}
     $('t-body').innerHTML=`<div class="compcard" style="background:var(--${lv.k})"><div class="ct">"${t.tt}"</div><div class="cn">${lv.n} düzey</div><div class="cd">Doğruluk %${acc} • Anlama ${c}/5 • ${cwpm} doğru sözcük/dk</div></div>
       <div class="metrics"><div class="met"><div class="ml">SÜRE</div><div class="mv">${sec.toFixed(0)} sn</div></div><div class="met"><div class="ml">HIZ</div><div class="mv">${wpm}</div></div><div class="met"><div class="ml">HATA</div><div class="mv">${err}</div><div class="ml">${corr} düzeltme</div></div><div class="met"><div class="ml">ANLAMA</div><div class="mv">${c}/5</div></div></div>
       ${errWords.length?`<div class="note">Hatalı sözcükler: <b>${errWords.join(', ')}</b>${ekleme?` • ${ekleme} ekleme`:''}${tekrar?` • ${tekrar} tekrar`:''}</div>`:''}${next}`;
     const acts=[{label:'Modül Menüsü',ghost:true,fn:()=>{renderSobMenu();show('scr-mod')}}];
-    if(lv.k==='end'&&first&&l>2)acts.push({label:`${l-1}. düzeye in →`,fn:()=>runLevel(l-1)});else if(lv.k!=='end'&&l<8)acts.push({label:`${l+1}. düzeye çık →`,fn:()=>runLevel(l+1)});
+    if(go!==null)acts.push({label:go<l?`${go}. düzeye in →`:`${go}. düzeye çık →`,fn:()=>runLevel(go)});
     acts.push({label:'Profil →',fn:showResults});setActions(acts)}}
 function decide(F){const R=S.sobat.results[F],done=LV.filter(l=>R[l]);let best=null,bestBag=null;done.forEach(l=>{const lv=levelOf(R[l].acc,R[l].comp);if(lv.k!=='end')best=l;if(lv.k==='bag')bestBag=l});return {done,best,bestBag}}
 
@@ -603,15 +651,16 @@ function renderPswMenu(){
 /* ---- Kodlama ---- */
 function runKodlama(){TOK++;const tok=TOK;show('scr-task');
   const items=[];let prev=0;for(let i=0;i<130;i++){let d;do{d=1+Math.floor(Math.random()*9)}while(d===prev);items.push(d);prev=d}
+  const PORD=(()=>{let o;do{o=shuffle([0,1,2,3,4,5,6,7,8])}while(o.some((v,k)=>v===k));return o})(); /* palet, anahtardan farklı sırada: konum eşleme değil sembol eşleme */
   const PR=[2,5,1,7,4,9];let phase='pr',idx=0,correct=0,errors=0,prIdx=0,t0k=0,iv=null;
   const keyHtml=()=>`<div class="codekey">${[1,2,3,4,5,6,7,8,9].map(d=>`<div class="kcell"><div class="kd">${d}</div>${sym(KM[d-1],28)}</div>`).join('')}</div>`;
-  const palHtml=()=>`<div class="palette">${[0,1,2,3,4,5,6,7,8].map(i=>`<div class="pal" data-i="${i}">${sym(KM[i],30)}</div>`).join('')}</div>`;
+  const palHtml=()=>`<div class="palette">${PORD.map(i=>`<div class="pal" data-i="${i}">${sym(KM[i],30)}</div>`).join('')}</div>`;
   function strip(list,cur){const a=Math.max(0,cur-3),b=Math.min(list.length,a+9);return `<div class="codestrip">${list.slice(a,b).map((d,k)=>`<div class="cs ${a+k===cur?'cur':a+k<cur?'done':''}">${d}</div>`).join('')}</div>`}
   function draw(){const list=phase==='pr'?PR:items,cur=phase==='pr'?prIdx:idx;
     $('t-body').innerHTML=`${keyHtml()}${strip(list,cur)}<div class="pswtimer" id="pt">${phase==='pr'?'ALIŞTIRMA':((PSW_T-((performance.now()-t0k)/1000)).toFixed(0)+' sn')}</div>${palHtml()}`;
     document.querySelectorAll('.pal').forEach(el=>el.onclick=()=>tap(+el.dataset.i))}
   function tap(i){if(tok!==TOK)return;
-    if(phase==='pr'){const d=PR[prIdx];const ok=KM[d-1]===KM[i];if(!ok){alert('Doğru sembol bu: bak, anahtarda '+d+' rakamının altındaki sembol. Tekrar dene.');return}
+    if(phase==='pr'){const d=PR[prIdx];const ok=KM[d-1]===KM[i];if(!ok){toast('Doğru sembol bu: bak, anahtarda '+d+' rakamının altındaki sembol. Tekrar dene.');return}
       prIdx++;if(prIdx>=PR.length){phase='ready';head('KODLAMA','Alıştırma tamam',`<div class="yonerge"><div class="yt">📢 ÇOCUĞA</div><p>"Çok güzel. Şimdi aynısını mümkün olduğunca hızlı ve hiç atlamadan yapacaksın. Ben 'başla' deyince başla, 'dur' deyince dur."</p></div>`,'b-psw');
         $('t-body').innerHTML=keyHtml();setActions([{label:'▶ Başla (120 sn)',cls:'btn-ok',fn:startMain}]);return}
       draw();return}
@@ -638,7 +687,7 @@ function runSimge(){TOK++;const tok=TOK;show('scr-task');
     <div class="ynrow"><button style="background:var(--ok)" id="yb">EVET</button><button style="background:var(--no)" id="nb">HAYIR</button></div>`;
     $('yb').onclick=()=>ans(true);$('nb').onclick=()=>ans(false)}
   function ans(v){if(tok!==TOK)return;const ok=v===cur.yes;
-    if(phase==='pr'){if(!ok){alert(cur.yes?'Bak: soldaki şekillerden biri sağda VAR — EVET olmalıydı.':'Soldaki şekillerin hiçbiri sağda yok — HAYIR olmalıydı.')}prN++;
+    if(phase==='pr'){if(!ok){toast(cur.yes?'Bak: soldaki şekillerden biri sağda VAR — EVET olmalıydı.':'Soldaki şekillerin hiçbiri sağda yok — HAYIR olmalıydı.')}prN++;
       if(prN>=3){phase='ready';head('SİMGE ARAMA','Alıştırma tamam',`<div class="yonerge"><div class="yt">📢 ÇOCUĞA</div><p>"Çok güzel. Şimdi mümkün olduğunca hızlı ve doğru yapacaksın. Emin olmadığında en iyi tahminini söyle, atlama."</p></div>`,'b-psw');$('t-body').innerHTML='';setActions([{label:'▶ Başla (120 sn)',cls:'btn-ok',fn:startMain}]);return}
       draw();return}
     if(phase!=='main')return;attempted++;if(ok)correct++;else incorrect++;draw()}
@@ -693,7 +742,7 @@ function wmStatus(){const w=S.psw.wisc||{},c=S.psw.cnsvs||{},p=S.psw,ds=S.fip.me
   if(p.hrd||ds)return {src:'ÖLÇÜT-TEMELLİ',lab:`gözlem: ${ds?'geri sayı dizisi '+ds.b:''}${ds&&p.hrd?' • ':''}${p.hrd?'Harf-Rakam '+p.hrd.score+'/12':''}`,renk:'var(--sub)',level:'Gözlendi'};
   return null}
 function phonStatus(){const Fs=ffSummary(),M=memSummary(),rb=ranBands();const ranD=!rb.done?null:rb.slow>=2?'Yetersiz':rb.slow===1?'Sınırda':'Yeterli';
-  const parts=[];if(Fs.durum!=='Değerlendirilmedi')parts.push('farkındalık '+Fs.durum.toLowerCase());if(M)parts.push('kısa süreli bellek '+M.durum.toLowerCase());if(ranD)parts.push('adlandırma hızı '+ranD.toLowerCase());
+  const parts=[];if(Fs.durum!=='Değerlendirilmedi')parts.push('farkındalık '+Fs.durum.toLocaleLowerCase('tr-TR'));if(M)parts.push('kısa süreli bellek '+M.durum.toLocaleLowerCase('tr-TR'));if(ranD)parts.push('adlandırma hızı '+ranD.toLocaleLowerCase('tr-TR'));
   if(!parts.length)return null;const lv=[Fs.durum,M?M.durum:'',ranD||''];const level=lv.includes('Yetersiz')||lv.includes('Zayıf')?'Yetersiz':lv.includes('Sınırda')?'Sınırda':'Yeterli';
   return {src:'KARMA (RAN normlu • FF/bellek ölçüt-temelli)',lab:parts.join(' • '),renk:level==='Yetersiz'?'var(--yok)':level==='Sınırda'?'var(--bel2)':'var(--kaz)',level}}
 function delphiCard(t,s){return `<div class="compcard" style="background:${s?s.renk:'var(--sub)'}"><div class="ct">${t} <span class="badge" style="background:rgba(255,255,255,.25);font-size:.58rem">${s?s.src:'—'}</span></div><div class="cn">${s?s.level:'Değerlendirilmedi'}</div><div class="cd">${s?s.lab:'Bu alanda veri yok.'}</div></div>`}
@@ -705,8 +754,166 @@ function pswSection(){const p=S.psw,w=p.wisc||{},ds=S.fip.mem.ds;let rows='';
   if(w.ihe||w.cbe)rows+=`<div class="resrow"><span class="badge" style="background:var(--kaz)">N</span><span class="rn">WISC-IV (normlu)</span><span style="font-weight:800;font-size:.84rem">${w.ihe?'İHE '+w.ihe+' ('+ssBand(w.ihe)[0]+')':''}${w.ihe&&w.cbe?' • ':''}${w.cbe?'ÇBE '+w.cbe+' ('+ssBand(w.cbe)[0]+')':''}</span></div>`;
   const c=p.cnsvs||{};if(c.ps||c.pms||c.wm)rows+=`<div class="resrow"><span class="badge" style="background:var(--kaz)">N</span><span class="rn">CNSVS (normlu)</span><span style="font-weight:800;font-size:.84rem">${[c.ps?'İH '+c.ps:'',c.pms?'PMH '+c.pms:'',c.wm?'ÇB '+c.wm:''].filter(x=>x).join(' • ')}</span></div>`;
   return `<h4>🟠 4 • İşlemleme Hızı &amp; Çalışma Belleği</h4>${rows||'<div class="note">Modül 4 uygulanmadı / normlu puan girilmedi.</div>'}
-    <h4>🧭 Delphi Hipotez-Test Özeti</h4><p style="font-size:.78rem;color:var(--sub)">Holden ve ark. (2025): tanısal değerlendirme fonolojik beceriler, ortografik beceriler, işlemleme hızı ve çalışma belleğinin rolünü dikkate almalıdır. Kaynak rozeti, durumun normlu mu ölçüt-temelli mi olduğunu gösterir.</p>
-    ${delphiCard('FONOLOJİK BECERİLER',phonStatus())}${delphiCard('ORTOGRAFİK BECERİLER',null)}${delphiCard('İŞLEMLEME HIZI',psStatus())}${delphiCard('ÇALIŞMA BELLEĞİ',wmStatus())}`}
+    <h4>🧭 Uzlaşı Hipotez-Test Özeti</h4><p style="font-size:.78rem;color:var(--sub)">Çekirdek, sözcük ve anlamsız sözcük okuma doğruluğu-akıcılığı ile yazımdır (Carroll ve ark., 2025). Holden ve ark. (2025): tanısal değerlendirme fonolojik beceriler, ortografik beceriler, işlemleme hızı ve çalışma belleğinin rolünü dikkate almalıdır. Kaynak rozeti, durumun normlu mu ölçüt-temelli mi olduğunu gösterir.</p>
+    ${delphiCard('ÇEKİRDEK — SÖZCÜK DÜZEYİ OKUMA',coreStatus())}${delphiCard('FONOLOJİK BECERİLER',phonStatus())}${delphiCard('ORTOGRAFİK BECERİLER (YAZIM)',ortStatus())}${delphiCard('İŞLEMLEME HIZI',psStatus())}${delphiCard('ÇALIŞMA BELLEĞİ',wmStatus())}`}
+
+/* ======================= MODÜL 5: SÖZCÜK DÜZEYİ KOD ÇÖZME & YAZIM ======================= */
+const NW_L=[['fom','nak','düp','cüs','pav','gom','vez','züp'],['tebi','fize','kıba','zuka','sölü','möle','nuşa','vüde'],['tarmuk','keslin','bordak','zümlet','fintar','gölsük','paşnık','seftin'],['bolamık','senikter','kaduşlam','türemsek','zarbıdak','melinkez','gövelşit','sopurdak'],['kalabırt','gelimsedek','tarvıdanık','bölemişker','topurşanak','gürdelimenk','kaşımıdalt','nöbelişkenç']];
+const RW_L=[['el','top','kuş','süt','renk','dört','kalp','yurt'],['masa','kedi','kapı','para','gemi','koku','ütü','dede'],['bardak','yastık','sandık','kartal','bülbül','mendil','zincir','yorgun'],['kelebek','araba','portakal','öğretmen','pencere','domates','sinema','kamyonet'],['bilgisayar','kütüphane','kaplumbağa','salatalık','çikolata','televizyon','ayakkabı','matematik']];
+const LVL_NAMES=['1 hece','2 hece açık','2 hece kapalı','3 hece','4 hece / küme'];
+const LISTS={nw:{name:'Anlamsız Sözcük Okuma',list:NW_L,ex:['pöta','kudal'],y:'Şimdi sana uydurma sözcükler göstereceğim. Bunlar gerçek sözcük değil, anlamları yok. Hepsini sırayla, soldan sağa, olabildiğince doğru ve hızlı oku. Emin olmadığın yerde en iyi tahminini söyle, atlama.'},
+ rw:{name:'Gerçek Sözcük Okuma',list:RW_L,ex:['kalem','pencere'],y:'Şimdi sana sözcükler göstereceğim. Hepsini sırayla, soldan sağa, olabildiğince doğru ve hızlı oku. Bilmediğin yerde en iyi tahminini söyle, atlama.'}};
+const DIK_W=['masa','kalem','yağmur','ağaç','dört','çiçek','üzüm','ördek','kırmızı','kelebek','gözlük','sınıf','renk','öğretmen','kütüphane'];
+const DIK_S=[{tx:'Ali kırmızı topu aldı.',r:'büyük harf, nokta'},{tx:'Kitabı çantasına koydu.',r:'ünsüz yumuşaması (kitap → kitabı)'},{tx:'Ağaçta bir kuş vardı, sen de gördün mü?',r:'benzeşme (ağaçta), "de" ve "mü" ayrı, virgül, soru işareti'}];
+const DK_ST=[['D','Doğru','var(--kaz)'],['F','Fonolojik','var(--fip)'],['O','Ortografik / kural','var(--hec)'],['B','Biçim','var(--kaf)'],['—','Yazmadı','var(--sub)']];
+const YAZ_S='Kırmızı balık suda hızla yüzdü.';
+function flatList(k){return LISTS[k].list.flat()}
+function listBand(kind,acc,g){if(g===0)return ['Uygulanmaz','var(--sub)'];const th=kind==='nw'?(g===1?[80,65]:[90,80]):(g===1?[85,70]:[95,85]);return acc>=th[0]?['Yeterli','var(--kaz)']:acc>=th[1]?['Sınırda','var(--bel2)']:['Yetersiz','var(--yok)']}
+function dikBand(acc,g){if(g===0)return ['Uygulanmaz','var(--sub)'];const th=g===1?[70,50]:g===2?[80,65]:[88,75];return acc>=th[0]?['Yeterli','var(--kaz)']:acc>=th[1]?['Sınırda','var(--bel2)']:['Yetersiz','var(--yok)']}
+function ortGap(){const n=S.ort.nw,r=S.ort.rw;if(!n||!r||!n.attempted||!r.attempted)return null;
+  const accGap=r.acc-n.acc,ratio=r.cpm?n.cpm/r.cpm:null;const flag=(r.acc>=85&&accGap>=15)||(r.acc>=85&&ratio!==null&&ratio<0.5);
+  return {flag,accGap:Math.round(accGap*10)/10,ratio:ratio===null?null:Math.round(ratio*100)/100}}
+function renderOrtMenu(){
+  $('m-badge').className='badge b-ort';$('m-badge').textContent='MODÜL 5 • KOD ÇÖZME & YAZIM (SÖZCÜK DÜZEYİ)';
+  const g=S.info.sinif;$('m-sub').textContent=g===0?'Anasınıfı: liste ve dikte uygulanmaz':'Ölçüt-temelli • çocuk basılı sayfadan okur, siz cihazda işaretlersiniz';
+  const o=S.ort,tag=(d,k)=>d?`<span class="done-tag" style="color:${listBand(k,d.acc,g)[1]}">${d.correct}/${d.attempted} • %${d.acc}<br>${d.cpm} doğru/dk</span>`:'';
+  $('m-body').innerHTML=`<div class="info">Güncel uzlaşıda tanının <b>çekirdeği</b> sözcük ve anlamsız sözcük okuma doğruluğu-akıcılığı ile yazımdır (Carroll ve ark., 2025; Metsala ve ark., 2026). Bu modül o çekirdeği ölçer. Listeler <b>Yazdırma Merkezi</b>'nden basılır; çocuk kâğıttan okur, siz cihazda hataya dokunursunuz.${S.info.ksb.includes('Var')?' <b>KSB var:</b> okuma hatalarını üretim hatasından ayırın; dikte, sesletimden bağımsız yazımı gösterir.':''}</div>
+    <div class="lvlhead"><span class="ln">OKUMA — ZAMANLI LİSTELER (40 madde, 5 uzunluk düzeyi)</span><div class="lb" style="background:var(--ort)"></div></div>
+    <button class="menu-item${g===0?' dim':''}" onclick="runList('nw')"><div class="menu-icon" style="background:var(--ort)">ASO</div><div><h3>Anlamsız Sözcük Okuma</h3><p>Fonolojik kod çözme: Türkçe fonotaktiğine uygun, hece sayısına göre kademeli 40 sözcük</p></div>${tag(o.nw,'nw')}</button>
+    <button class="menu-item${g===0?' dim':''}" onclick="runList('rw')"><div class="menu-icon" style="background:var(--ort)">GSO</div><div><h3>Gerçek Sözcük Okuma (eşleştirilmiş)</h3><p>Aynı uzunluk yapısında 40 sık sözcük; anlamsız sözcükle ayrışma (sözcüksel yol) analizi</p></div>${tag(o.rw,'rw')}</button>
+    <div class="lvlhead"><span class="ln">YAZIM</span><div class="lb" style="background:var(--ort)"></div></div>
+    <button class="menu-item${g===0?' dim':''}" onclick="runDikte()"><div class="menu-icon" style="background:var(--ort)">Dk</div><div><h3>Dikte — 15 sözcük + 3 cümle</h3><p>Hata türü sınıflaması: fonolojik / ortografik-kural / biçim; cümlede büyük harf, noktalama, ayrı yazım</p></div>${o.dik?`<span class="done-tag" style="color:${dikBand(o.dik.acc,g)[1]}">%${o.dik.acc} doğru<br>${o.dik.profil} profil</span>`:''}</button>
+    <button class="menu-item" onclick="runYaz()"><div class="menu-icon" style="background:var(--ort)">Yz</div><div><h3>Yazma Akıcılığı — 60 sn kopyalama</h3><p>Model cümle tekrar tekrar kopyalanır; harf/dk, okunaklılık, uygulayıcı yargısı (disgrafi hattı)</p></div>${o.yaz?`<span class="done-tag" style="color:var(--ort)">${o.yaz.harf} harf/dk<br>${o.yaz.okunak} okunaklılık</span>`:''}</button>`}
+function runList(kind){const g=S.info.sinif;if(g===0){toast('Protokol: anasınıfında sözcük listeleri uygulanmaz.');return}
+  TOK++;const tok=TOK;const M=LISTS[kind],words=flatList(kind);show('scr-task');
+  function step1(){head(M.name.toUpperCase(),'Adım 1/3 — Yönerge ve örnek',`<div class="yonerge"><div class="yt">📢 YÖNERGE — AYNEN OKUYUN</div><p>"${M.y}"</p></div>
+      <p class="instr">Çocuğa <b>basılı listeyi</b> verin (Yazdırma Merkezi → Modül 5). Örnek sözcükleri önce okutun; ${kind==='nw'?'"uydurma" olduğunu anladığından emin olun':'bildiğinden emin olun'}. Örnek puanlanmaz.</p>`,'b-ort');
+    $('t-body').innerHTML=`<div class="stim"><div class="exam"><span class="xt">ÖRNEK — ÇOCUK OKUR</span><div class="bigword">${M.ex.join('  •  ')}</div></div></div>`;
+    setActions([{label:'İptal',ghost:true,fn:()=>{renderOrtMenu();show('scr-mod')}},{label:'Örnek anlaşıldı → Uygulama',cls:'btn-ok',fn:step2}])}
+  function step2(){if(tok!==TOK)return;
+    head(M.name.toUpperCase(),'Adım 2/3 — Uygulama',`<p class="instr">Kronometre çocuk ilk sözcüğe başlarken başlar, son sözcükle durur. Hatalı okunan sözcüğe <b>dokunun</b> (ikinci dokunuş kaldırır). Kendini düzelten sözcük hata sayılmaz. 60 sn dolunca sayaç kırmızıya döner; isterseniz orada durdurup son okunan sözcüğü işaretleyebilirsiniz.</p>`,'b-ort');
+    const states=new Array(words.length).fill(0);let started=false,reach=words.length-1,mode='err';
+    function draw(){let h='';LISTS[kind].list.forEach((row,li)=>{h+=`<div class="lvltag">${LVL_NAMES[li].toUpperCase()}</div>`;row.forEach((w,wi)=>{const i=li*8+wi;h+=`<div class="wg ${states[i]?'e':''} ${i>reach?'off':''} ${mode==='reach'&&i===reach?'last':''}" data-i="${i}">${w}</div>`})});
+      $('wgrid').innerHTML=h;document.querySelectorAll('.wg').forEach(el=>el.onclick=()=>{const i=+el.dataset.i;if(mode==='reach'){reach=i}else{states[i]=states[i]?0:1}draw()})}
+    $('t-body').innerHTML=`<div class="wordgrid" id="wgrid"></div><div class="legend"><span>◻ doğru</span><span style="color:#8C2626">▬ hata (dokun)</span></div>
+      <div class="stopwrap"><div class="bigtime" id="bigtime">0.0</div><button class="btn btn-big" id="mainbtn" style="margin-top:10px;background:var(--ok)">▶ BAŞLAT</button></div>`;
+    draw();let warn=null;
+    $('mainbtn').onclick=()=>{if(!started){started=true;startTimer();$('mainbtn').textContent='■ DURDUR';$('mainbtn').style.background='var(--no)';warn=setInterval(()=>{if(tok!==TOK){clearInterval(warn);return}if(elapsed()>=60){const e=$('bigtime');if(e)e.style.color='var(--no)'}},250)}
+      else{stopTimer();if(warn)clearInterval(warn);const sec=elapsed();
+        head(M.name.toUpperCase(),'Adım 3/3 — Bitiş',`<p class="instr">Liste tamamen okundu mu? Okunmadıysa <b>en son okunan sözcüğe dokunun</b>; sonrası "denenmedi" sayılır.</p>`,'b-ort');
+        mode='none';$('mainbtn').remove();$('bigtime').textContent=sec.toFixed(1)+' sn';
+        setActions([{label:'Hepsi okundu → Kaydet',cls:'btn-ok',fn:()=>fin(sec,states,words.length-1)},{label:'Yarım kaldı → son sözcüğü işaretle',cls:'btn-mid',fn:()=>{mode='reach';reach=words.length-1;draw();setActions([{label:'Son sözcük işaretlendi → Kaydet',cls:'btn-ok',fn:()=>fin(sec,states,reach)}])}}])}};
+    setActions([{label:'İptal',ghost:true,fn:()=>{stopTimer();if(warn)clearInterval(warn);renderOrtMenu();show('scr-mod')}}])}
+  function fin(sec,states,reach){if(tok!==TOK)return;const attempted=reach+1,errLvl=[0,0,0,0,0],errWords=[];let errors=0;
+    for(let i=0;i<attempted;i++)if(states[i]){errors++;errLvl[Math.floor(i/8)]++;errWords.push(words[i])}
+    const correct=attempted-errors,acc=Math.round(correct/attempted*1000)/10,cpm=Math.round(correct/sec*60);
+    S.ort[kind]={sec:+sec.toFixed(1),attempted,errors,correct,acc,cpm,errLvl,errWords,complete:attempted===words.length};persist();
+    const b=listBand(kind,acc,g),gap=ortGap();head(M.name.toUpperCase(),'Sonuç','','b-ort');
+    $('t-body').innerHTML=`<div class="compcard" style="background:${b[1]}"><div class="ct">${kind==='nw'?'FONOLOJİK KOD ÇÖZME':'SÖZCÜK OKUMA'} — ÖLÇÜT-TEMELLİ (normsuz)</div><div class="cn">${correct}/${attempted} doğru (%${acc}) — ${b[0]}</div>
+        <div class="cd">${sec.toFixed(1)} sn • ${cpm} doğru sözcük/dk${attempted<words.length?` • ${words.length-attempted} sözcük denenmedi`:''}. Doğruluk bandı ${gradeName(g)} için kaba klinik beklentidir; hız ham kaydedilir, karşılaştırma ${kind==='nw'?'gerçek sözcük listesi':'anlamsız sözcük listesi'} ve metin okumayla yapılır.</div></div>
+      <div class="metrics" style="grid-template-columns:repeat(5,1fr)">${errLvl.map((e,i)=>`<div class="met"><div class="ml">${LVL_NAMES[i].toUpperCase()}</div><div class="mv" style="color:${e?'var(--no)':'var(--ok)'}">${e}</div><div class="ml">hata</div></div>`).join('')}</div>
+      ${errWords.length?`<div class="note">Hatalı sözcükler: <b>${errWords.join(', ')}</b>. ${errLvl[0]+errLvl[1]>=3?'Kısa sözcüklerde hata → harf-ses eşleme düzeyinde zayıflık. ':''}${errLvl[3]+errLvl[4]>=4&&errLvl[0]+errLvl[1]<=1?'Hatalar uzun sözcüklerde yoğun → hece birleştirme / ardışık işlem yükü. ':''}</div>`:''}
+      ${gap?`<div class="${gap.flag?'warn':'good'}"><b>Sözcük–anlamsız sözcük ayrışması:</b> doğruluk farkı ${gap.accGap} puan${gap.ratio!==null?`, hız oranı ${gap.ratio}`:''}. ${gap.flag?'Gerçek sözcükler görece korunmuş, anlamsız sözcüklerde belirgin düşüş: fonolojik kod çözme yolu zayıf; tanıdık sözcükler sözcüksel/görsel yoldan okunuyor olabilir.':'Belirgin ayrışma yok.'}</div>`:''}`;
+    setActions([{label:'Tekrar',ghost:true,fn:step2},{label:'Modül Menüsü',fn:()=>{renderOrtMenu();show('scr-mod')}},{label:'Profil →',fn:showResults}])}
+  step1()}
+function runDikte(){const g=S.info.sinif;if(g===0){toast('Protokol: anasınıfında dikte uygulanmaz.');return}
+  TOK++;const tok=TOK;show('scr-task');let i=0;
+  function present(){if(tok!==TOK)return;
+    if(i<DIK_W.length){head('DİKTE — SÖZCÜKLER',`Sözcük ${i+1}/${DIK_W.length}`,i===0?`<div class="yonerge"><div class="yt">📢 YÖNERGE — AYNEN OKUYUN</div><p>"Şimdi sana bazı sözcükler söyleyeceğim; sen kâğıda yazacaksın. Her sözcüğü iki kez söyleyeceğim. Emin olmadığında sana en doğru gelen biçimde yaz."</p></div><p class="instr">Çocuk çizgili kâğıda yazar. Sözcüğü iki kez, normal hızda, hecelemeden söyleyin.</p>`:'','b-ort');
+      $('t-body').innerHTML=`<div class="stim"><div class="exam"><span class="xt">🎧 İKİ KEZ, NORMAL HIZDA — ÇOCUK YAZAR</span><div class="bigword">${DIK_W[i]}</div></div></div>`;
+      setActions([{label:'İptal',ghost:true,fn:()=>{renderOrtMenu();show('scr-mod')}},{label:'Yazdı → Sonraki',cls:'btn-ok',fn:()=>{i++;present()}}]);return}
+    const si=i-DIK_W.length;if(si<DIK_S.length){head('DİKTE — CÜMLELER',`Cümle ${si+1}/${DIK_S.length}`,si===0?`<div class="yonerge"><div class="yt">📢 GEÇİŞ</div><p>"Şimdi cümleler söyleyeceğim. Cümleyi iki kez söyleyeceğim; sen tamamını yaz. Noktalama işaretlerini de koy."</p></div><p class="instr">Cümleyi bütün olarak iki kez söyleyin; ardından gerekirse öbek öbek tekrar edin. Hedeflenen kural bilgisi yalnız sizin ekranınızda görünür.</p>`:'','b-ort');
+      $('t-body').innerHTML=`<div class="stim"><div class="exam"><span class="xt">🎧 İKİ KEZ, BÜTÜN CÜMLE — ÇOCUK YAZAR</span><div class="medword">${DIK_S[si].tx}</div><div class="itema" style="color:var(--sub)">Hedef: ${DIK_S[si].r}</div></div></div>`;
+      setActions([{label:'İptal',ghost:true,fn:()=>{renderOrtMenu();show('scr-mod')}},{label:'Yazdı → Sonraki',cls:'btn-ok',fn:()=>{i++;present()}}]);return}
+    score()}
+  function score(){if(tok!==TOK)return;
+    const wst=DIK_W.map(()=>0),sst=DIK_S.map(s=>({w:s.tx.replace(/[.,?]/g,'').split(' ').map(()=>0),buyuk:1,nokta:1,ayri:1}));
+    head('DİKTE — PUANLAMA','Kâğıdı alın, her sözcüğü işaretleyin',`<p class="instr">Varsayılan <b>Doğru</b>; yalnız hataları işaretleyin. <b>F</b> fonolojik: ses eksik/fazla/yer değişmiş, yazılan okunduğunda hedeften farklı (kelbek, ketebek). <b>O</b> ortografik/kural: sesçe doğru ama yazım kuralına aykırı (yaamur, kitapı, ağaçda, sende → sen de). <b>B</b> biçim: ayna yazımı, b/d-p/b karışması, harf biçimi. <b>—</b> yazmadı/okunamaz.</p>`,'b-ort');
+    const row=(w,cur,fn)=>`<div class="dkrow"><span class="dkw">${w}</span><div class="dkb">${DK_ST.map((s,k)=>`<button class="${cur===k?'on':''}" style="${cur===k?`background:${s[2]}`:''}" title="${s[1]}" onclick="${fn}(${k})">${s[0]}</button>`).join('')}</div></div>`;
+    window.__dkw=(wi,k)=>{wst[wi]=k;draw()};window.__dks=(si,wi,k)=>{sst[si].w[wi]=k;draw()};window.__dkt=(si,f)=>{sst[si][f]=sst[si][f]?0:1;draw()};
+    function draw(){let h=`<div class="lvlhead"><span class="ln">SÖZCÜKLER (15)</span><div class="lb" style="background:var(--ort)"></div></div>`;
+      DIK_W.forEach((w,wi)=>{h+=row(w,wst[wi],`__dkw.bind(null,${wi})`)});
+      DIK_S.forEach((s,si)=>{h+=`<div class="lvlhead"><span class="ln">CÜMLE ${si+1}: "${s.tx}"</span><div class="lb" style="background:var(--ort)"></div></div>`;
+        s.tx.replace(/[.,?]/g,'').split(' ').forEach((w,wi)=>{h+=row(w,sst[si].w[wi],`__dks.bind(null,${si},${wi})`)});
+        h+=`<div class="dkb" style="margin-top:8px;flex-wrap:wrap">${[['buyuk','Büyük harf'],['nokta','Noktalama'],['ayri','Ayrı yazım (de / mü)']].map(t=>`<button class="${sst[si][t[0]]?'on':''}" style="min-width:auto;padding:0 12px;${sst[si][t[0]]?'background:var(--kaz)':'background:#FBD5D5;color:#8C2626;border-color:#F09595'}" onclick="__dkt(${si},'${t[0]}')">${sst[si][t[0]]?'✓':'✖'} ${t[1]}</button>`).join('')}</div>`});
+      $('t-body').innerHTML=h}
+    draw();setActions([{label:'İptal',ghost:true,fn:()=>{renderOrtMenu();show('scr-mod')}},{label:'Kaydet →',cls:'btn-ok',fn:()=>fin(wst,sst)}])}
+  function fin(wst,sst){if(tok!==TOK)return;const all=wst.concat(...sst.map(s=>s.w)),n=all.length,cnt=k=>all.filter(x=>x===k).length;
+    const dogru=cnt(0),fon=cnt(1),ort=cnt(2),bic=cnt(3),yok=cnt(4),acc=Math.round(dogru/n*1000)/10;
+    const profil=fon+ort===0?'hata yok':ort===0?'fonolojik':fon===0?'ortografik':fon>ort+1?'fonolojik':ort>fon+1?'ortografik':'karma';
+    const rule={buyuk:sst.filter(s=>!s.buyuk).length,nokta:sst.filter(s=>!s.nokta).length,ayri:sst.filter(s=>!s.ayri).length};
+    S.ort.dik={sozDogru:wst.filter(x=>x===0).length,sozN:DIK_W.length,cumDogru:sst.reduce((a,s)=>a+s.w.filter(x=>x===0).length,0),cumN:n-DIK_W.length,n,dogru,fon,ort,bic,yok,acc,profil,rule,wst,sst:sst.map(s=>({w:s.w,buyuk:s.buyuk,nokta:s.nokta,ayri:s.ayri}))};persist();
+    const b=dikBand(acc,g);head('DİKTE','Sonuç','','b-ort');
+    $('t-body').innerHTML=`<div class="compcard" style="background:${b[1]}"><div class="ct">YAZIM — ÖLÇÜT-TEMELLİ (normsuz)</div><div class="cn">${dogru}/${n} doğru (%${acc}) — ${b[0]}</div><div class="cd">Sözcükler ${S.ort.dik.sozDogru}/${DIK_W.length} • cümle sözcükleri ${S.ort.dik.cumDogru}/${S.ort.dik.cumN}. Band ${gradeName(g)} için kaba klinik beklentidir.</div></div>
+      <div class="metrics"><div class="met"><div class="ml">FONOLOJİK</div><div class="mv">${fon}</div></div><div class="met"><div class="ml">ORTOGRAFİK/KURAL</div><div class="mv">${ort}</div></div><div class="met"><div class="ml">BİÇİM</div><div class="mv">${bic}</div></div><div class="met"><div class="ml">YAZMADI</div><div class="mv">${yok}</div></div></div>
+      <div class="compcard" style="background:var(--ort)"><div class="ct">HATA PROFİLİ</div><div class="cn">${profil.charAt(0).toUpperCase()+profil.slice(1)}</div><div class="cd">${profil==='fonolojik'?'Ses-harf eşleme ve ses dizisi zayıf: yazım çalışması hece/fonem bölme ile harf-ses eşlemeden başlar.':profil==='ortografik'?'Sesler doğru, sözcüğe özgü yazım bilgisi ve kurallar zayıf: yumuşama, benzeşme, ğ, ayrı-birleşik yazım ve biçimbilgisi hedeflenir.':profil==='karma'?'Her iki tür hata birlikte: ses-harf eşleme ve yazım kuralları eşzamanlı çalışılır.':bic?'Fonolojik ve ortografik hata yok; biçim hataları ayrıca değerlendirilir.':'Sözcük düzeyinde yazım korunmuş.'} Cümle düzeyi: büyük harf ${rule.buyuk}/3, noktalama ${rule.nokta}/3, ayrı yazım ${rule.ayri}/3 cümlede hatalı.${bic>=3?' Biçim hataları ≥3 → görsel-motor / ergoterapi hattı.':''}</div></div>`;
+    setActions([{label:'Modül Menüsü',fn:()=>{renderOrtMenu();show('scr-mod')}},{label:'Profil →',fn:showResults}])}
+  present()}
+function runYaz(){TOK++;const tok=TOK;show('scr-task');let iv=null,t0y=0;
+  head('YAZMA AKICILIĞI — 60 SN KOPYALAMA','Hazırlık',`<div class="yonerge"><div class="yt">📢 YÖNERGE — AYNEN OKUYUN</div><p>"Bu cümleyi kâğıda, alt alta, olabildiğince hızlı ama okunaklı yazarak kopyala. Ben 'dur' deyince kalemi bırak. Cümle bitince yeniden başla."</p></div><p class="instr">Model cümle çocuğun önünde durur (basılı sayfa ya da bu ekran). 60 sn otomatik biter; sonra yazılan harfleri sayıp girin.</p>`,'b-ort');
+  $('t-body').innerHTML=`<div class="stim"><div class="exam"><span class="xt">MODEL CÜMLE</span><div class="medword" style="font-family:Georgia,serif;font-size:1.5rem">${YAZ_S}</div></div><div class="pswtimer" id="pt" style="margin-top:10px">60 sn</div></div>`;
+  function start(){if(tok!==TOK)return;t0y=performance.now();setActions([]);iv=setInterval(()=>{if(tok!==TOK){clearInterval(iv);return}const left=60-(performance.now()-t0y)/1000;const e=$('pt');if(e)e.textContent=Math.max(0,left).toFixed(0)+' sn';if(left<=0){clearInterval(iv);entry()}},200)}
+  function entry(){head('YAZMA AKICILIĞI','Puanlama','<p class="instr">Yazılan tüm harfleri sayın (boşluk ve noktalama sayılmaz; tamamlanmamış son sözcüğün harfleri sayılır). Okunaklılık ve hız için uygulayıcı yargısı girin; bu görev normsuzdur.</p>','b-ort');
+    $('t-body').innerHTML=`<div class="row3"><div class="field"><label>Yazılan harf sayısı</label><input id="y-harf" type="number" placeholder="ör. 48"></div>
+      <div class="field"><label>Okunaklılık</label><select id="y-ok"><option>iyi</option><option>orta</option><option>zayıf</option></select></div>
+      <div class="field"><label>Hız (uygulayıcı yargısı, sınıfa göre)</label><select id="y-hiz"><option>yeterli</option><option>yavaş</option><option>çok yavaş</option></select></div></div>
+      <div class="field"><label>Gözlem (kalem tutuş, baskı, boşluk, satır takibi)</label><input id="y-not" placeholder="isteğe bağlı"></div>`;
+    setActions([{label:'Kaydet',cls:'btn-ok',fn:()=>{const h=Number($('y-harf').value||0);S.ort.yaz={harf:h,okunak:$('y-ok').value,hiz:$('y-hiz').value,not:$('y-not').value||''};persist();
+      head('YAZMA AKICILIĞI','Sonuç','','b-ort');$('t-body').innerHTML=`<div class="compcard" style="background:var(--ort)"><div class="ct">YAZMA AKICILIĞI — GÖZLEM (normsuz)</div><div class="cn">${h} harf/dk</div><div class="cd">Okunaklılık ${$('y-ok').value} • hız yargısı ${$('y-hiz').value}. ${$('y-hiz').value!=='yeterli'||$('y-ok').value==='zayıf'?'Yazma akıcılığı düşük: disgrafi hattı için ergoterapi değerlendirmesi ve yazılı işlerde uyarlama düşünülür.':'Yazma mekaniği okumadan bağımsız olarak korunmuş görünüyor.'}</div></div>`;
+      setActions([{label:'Modül Menüsü',fn:()=>{renderOrtMenu();show('scr-mod')}},{label:'Profil →',fn:showResults}])}}])}
+  setActions([{label:'İptal',ghost:true,fn:()=>{if(iv)clearInterval(iv);renderOrtMenu();show('scr-mod')}},{label:'▶ Başlat (60 sn)',cls:'btn-ok',fn:start}])}
+function ortStatus(){const o=S.ort,g=S.info.sinif;if(!o)return null;
+  if(o.dik){const b=dikBand(o.dik.acc,g);return {src:'ÖLÇÜT-TEMELLİ',lab:`dikte doğruluk %${o.dik.acc}; hata profili ${o.dik.profil}${o.dik.rule.ayri||o.dik.rule.buyuk||o.dik.rule.nokta?`; cümle kuralları: ${['buyuk','nokta','ayri'].filter(k=>o.dik.rule[k]).map(k=>({buyuk:'büyük harf',nokta:'noktalama',ayri:'ayrı yazım'})[k]).join(', ')} hatalı`:''}`,renk:b[1],level:b[0]}}
+  const gap=ortGap();if(gap)return {src:'ÖLÇÜT-TEMELLİ',lab:`gözlem: sözcük–anlamsız sözcük ayrışması ${gap.flag?'var':'yok'} (fark ${gap.accGap} puan)`,renk:'var(--sub)',level:'Gözlendi'};
+  return null}
+function coreStatus(){const o=S.ort,g=S.info.sinif,I=S.info,D=decide(I.form),R=S.sobat.results[I.form];const lv=[];const parts=[];
+  if(o&&o.nw&&o.nw.attempted){const b=listBand('nw',o.nw.acc,g);lv.push(b[0]);parts.push(`anlamsız sözcük %${o.nw.acc}, ${o.nw.cpm}/dk (${b[0].toLocaleLowerCase('tr-TR')})`)}
+  if(o&&o.rw&&o.rw.attempted){const b=listBand('rw',o.rw.acc,g);lv.push(b[0]);parts.push(`gerçek sözcük %${o.rw.acc}, ${o.rw.cpm}/dk (${b[0].toLocaleLowerCase('tr-TR')})`)}
+  if(D.done.length){const fark=D.best===null?null:D.best-I.sinif;const s=D.best===null||fark<=-2?'Yetersiz':fark===-1?'Sınırda':'Yeterli';lv.push(s);parts.push(`metin: ${D.best===null?'en düşük düzeyde endişe':'öğretimsel '+D.best+'. sınıf'} (${s.toLocaleLowerCase('tr-TR')})`);
+    if(D.done.some(l=>R[l].acc>=95&&R[l].cwpm<70)){lv.push('Sınırda');parts.push('doğru ama yavaş imzası')}}
+  if(!parts.length)return null;const level=lv.includes('Yetersiz')?'Yetersiz':lv.includes('Sınırda')?'Sınırda':'Yeterli';
+  return {src:'ÖLÇÜT-TEMELLİ',lab:parts.join(' • '),renk:level==='Yetersiz'?'var(--yok)':level==='Sınırda'?'var(--bel2)':'var(--kaz)',level}}
+function ortSection(){const o=S.ort,g=S.info.sinif;if(!o)return '';let rows='';
+  const lr=(d,k,name)=>d?`<div class="resrow"><span class="badge b-ort">${k==='nw'?'ASO':'GSO'}</span><span class="rn">${name}</span><span style="font-weight:800;font-size:.84rem">${d.correct}/${d.attempted} (%${d.acc}) • ${d.sec} sn • ${d.cpm}/dk</span><span class="pill" style="background:${listBand(k,d.acc,g)[1]}">${listBand(k,d.acc,g)[0]}</span></div>`:'';
+  rows+=lr(o.nw,'nw','Anlamsız sözcük okuma')+lr(o.rw,'rw','Gerçek sözcük okuma');
+  const gap=ortGap();if(gap)rows+=`<div class="${gap.flag?'warn':'good'}" style="margin-top:8px"><b>Sözcük–anlamsız sözcük ayrışması:</b> ${gap.flag?'var':'yok'} — doğruluk farkı ${gap.accGap} puan${gap.ratio!==null?`, hız oranı ${gap.ratio}`:''}.</div>`;
+  if(o.nw&&o.nw.errors)rows+=`<div class="note">Anlamsız sözcük hataları uzunluk düzeyine göre: ${o.nw.errLvl.map((e,i)=>`${LVL_NAMES[i]} ${e}`).join(' • ')}.</div>`;
+  if(o.dik){const b=dikBand(o.dik.acc,g),d=o.dik;rows+=`<div class="resrow"><span class="badge b-ort">Dk</span><span class="rn">Dikte (15 sözcük + 3 cümle)</span><span style="font-weight:800;font-size:.84rem">${d.dogru}/${d.n} (%${d.acc}) • F${d.fon} O${d.ort} B${d.bic} —${d.yok}</span><span class="pill" style="background:${b[1]}">${b[0]}</span></div>
+    <div class="compcard" style="background:${b[1]}"><div class="ct">YAZIM — HATA PROFİLİ</div><div class="cn">${d.profil.charAt(0).toUpperCase()+d.profil.slice(1)}</div><div class="cd">Fonolojik ${d.fon} • ortografik/kural ${d.ort} • biçim ${d.bic} • yazılmadı ${d.yok}. Cümle kuralları hatalı: büyük harf ${d.rule.buyuk}/3, noktalama ${d.rule.nokta}/3, ayrı yazım ${d.rule.ayri}/3.</div></div>`}
+  if(o.yaz)rows+=`<div class="resrow"><span class="badge b-ort">Yz</span><span class="rn">Yazma akıcılığı (60 sn kopyalama)</span><span style="font-weight:800;font-size:.84rem">${o.yaz.harf} harf/dk • ${o.yaz.okunak} • ${o.yaz.hiz}</span></div>`;
+  return `<h4>🟢 5 • Kod Çözme &amp; Yazım (sözcük düzeyi)</h4>${rows||'<div class="note">Modül 5 uygulanmadı.</div>'}`}
+/* ---- KTA veri bloğu (yönlendirme sayfası için makine-okunur) ---- */
+function kv(k,v){return `${k}=${v===null||v===undefined||v===''?'na':String(v).replace(/[\r\n=]/g,' ')}`}
+function lowTr(s){return s?String(s).toLocaleLowerCase('tr-TR').replace(/ı/g,'i').replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ç/g,'c').replace(/ö/g,'o').replace(/ü/g,'u').replace(/[^a-z0-9_]/g,'_'):'na'}
+function buildBlock(){const I=S.info,L=[],rb=ranBands(),Fs=ffSummary(),M=memSummary(),F=I.form,R=S.sobat.results[F],D=decide(F),o=S.ort||{},p=S.psw,w=p.wisc||{},c=p.cnsvs||{},g=I.sinif;
+  L.push('===KTA-VERI-1===');
+  L.push(kv('rumuz',I.rumuz),kv('yas_yil',I.yil),kv('yas_ay_toplam',I.ayToplam),kv('sinif',g),kv('tarih',S.date),kv('uygulayici',I.uyg),kv('ran_kart',I.kart),kv('isitme_kontrol',I.isitme.includes('edilmedi')?0:1),kv('gorme_kontrol',I.gorme.includes('edilmedi')?0:1),kv('ksb',I.ksb.includes('Var')?1:0),kv('ff_mod',I.mode));
+  const ranDurum=!rb.done?null:rb.slow>=2?'yetersiz':rb.slow===1?'sinirda':'yeterli';
+  L.push(kv('ran_done',rb.done),kv('ran_yavas',rb.slow),kv('ran_durum',ranDurum),kv('ran_norm',rb.done?(I.kart==='app'?'yonlendirici':'normlu'):null));
+  RTASKS.forEach(t=>{const d=S.ran.results[t.key],N=normFor(t.key,g);L.push(kv(`ran_${t.key}_sn`,d&&d.sure!==undefined?d.sure.toFixed(1):null),kv(`ran_${t.key}_bant`,!d?null:d.uygulanmadi?'uygulanmadi':d.gecersiz?'gecersiz':N?bandOf(d.sure,N.M,N.SD):'normyok'))});
+  L.push(kv('ff_durum',Fs.durum==='Değerlendirilmedi'?null:lowTr(Fs.durum)),kv('ff_beklenen',Fs.bek.length),kv('ff_alt',Fs.alt.length),kv('ff_kazanilmamis',Fs.agir.length),kv('ff_alt_gorevler',Fs.alt.length?Fs.alt.map(t=>t.id).join(','):'yok'));
+  ['soz','kaf','hec','fon'].forEach(Lv=>{const bek=Fs.bek.filter(t=>t.lvl===Lv);if(!bek.length){L.push(kv(`ff_${Lv}`,null));return}const alt=bek.filter(t=>S.fip.ff[t.id].sc<5),agir=bek.filter(t=>S.fip.ff[t.id].sc<3);L.push(kv(`ff_${Lv}`,agir.length||alt.length/bek.length>=0.5?'yetersiz':alt.length?'sinirda':'yeterli'))});
+  L.push(kv('mem_durum',M?lowTr(M.durum):null),kv('mem_ast',M&&M.n?M.n.sc:null),kv('mem_sd_ileri',M&&M.d?M.d.f:null),kv('mem_sd_geri',M&&M.d?M.d.b:null),kv('mem_beklenti',M?M.bek:null),kv('mem_makas',M&&M.d?M.d.f-M.d.b:null));
+  const fark=D.best===null?null:D.best-g;let ref=null;if(D.done.length){ref=D.best!==null?R[D.best]:R[Math.min(...D.done)]}
+  const imza=[];if(D.done.some(l=>R[l].acc>=95&&R[l].cwpm<70))imza.push('dogru_yavas');if(D.done.some(l=>R[l].acc<90&&R[l].wpm>=90))imza.push('hizli_hatali');if(D.done.some(l=>R[l].acc>=95&&R[l].comp<=2))imza.push('anlama_dusuk');
+  L.push(kv('sob_form',D.done.length?F:null),kv('sob_duzeyler',D.done.length?D.done.join(','):null),kv('sob_ogretimsel',D.done.length?(D.best===null?'yok':D.best):null),kv('sob_bagimsiz',D.done.length?(D.bestBag||'yok'):null),kv('sob_takvim',g),kv('sob_fark',D.done.length?(fark===null?'endise':fark):null),
+    kv('sob_ref_acc',ref?ref.acc:null),kv('sob_ref_cwpm',ref?ref.cwpm:null),kv('sob_ref_wpm',ref?ref.wpm:null),kv('sob_ref_anlama',ref?ref.comp:null),kv('sob_imza',D.done.length?(imza.length?imza.join(','):'yok'):null));
+  const lst=(d,k,pre)=>{L.push(kv(`${pre}_done`,d&&d.attempted?1:0),kv(`${pre}_dogru`,d?d.correct:null),kv(`${pre}_denenen`,d?d.attempted:null),kv(`${pre}_acc`,d?d.acc:null),kv(`${pre}_sn`,d?d.sec:null),kv(`${pre}_dogru_dk`,d?d.cpm:null),kv(`${pre}_durum`,d?lowTr(listBand(k,d.acc,g)[0]):null));if(k==='nw')L.push(kv('nw_hata_kisa',d?d.errLvl[0]+d.errLvl[1]:null),kv('nw_hata_orta',d?d.errLvl[2]:null),kv('nw_hata_uzun',d?d.errLvl[3]+d.errLvl[4]:null))};
+  lst(o.nw,'nw','nw');lst(o.rw,'rw','rw');const gap=ortGap();L.push(kv('nw_rw_ayrisma',gap?(gap.flag?1:0):null),kv('nw_rw_acc_fark',gap?gap.accGap:null),kv('nw_rw_hiz_oran',gap?gap.ratio:null));
+  const d=o.dik;L.push(kv('dik_done',d?1:0),kv('dik_dogru',d?d.dogru:null),kv('dik_n',d?d.n:null),kv('dik_acc',d?d.acc:null),kv('dik_durum',d?lowTr(dikBand(d.acc,g)[0]):null),kv('dik_fon',d?d.fon:null),kv('dik_ort',d?d.ort:null),kv('dik_bicim',d?d.bic:null),kv('dik_yazmadi',d?d.yok:null),kv('dik_profil',d?lowTr(d.profil):null),kv('dik_buyuk_hata',d?d.rule.buyuk:null),kv('dik_nokta_hata',d?d.rule.nokta:null),kv('dik_ayri_hata',d?d.rule.ayri:null));
+  const y=o.yaz;L.push(kv('yaz_done',y?1:0),kv('yaz_harf_dk',y?y.harf:null),kv('yaz_okunak',y?lowTr(y.okunak):null),kv('yaz_hiz',y?lowTr(y.hiz):null));
+  const dS=psStatus(),dW=wmStatus(),dP=phonStatus(),dO=ortStatus(),dC=coreStatus();
+  L.push(kv('ih_kaynak',dS?lowTr(dS.src):null),kv('ih_durum',dS?lowTr(dS.level):null),kv('ih_wisc_ihe',w.ihe),kv('ih_cnsvs_ps',c.ps),kv('cb_kaynak',dW?lowTr(dW.src):null),kv('cb_durum',dW?lowTr(dW.level):null),kv('cb_wisc_cbe',w.cbe),kv('cb_cnsvs_wm',c.wm));
+  L.push(kv('kod_hata_oran',p.kod&&(p.kod.correct+p.kod.errors)?Math.round(p.kod.errors/(p.kod.correct+p.kod.errors)*100):null),kv('sim_yanlis_oran',p.sim&&p.sim.attempted?Math.round(p.sim.incorrect/p.sim.attempted*100):null));
+  L.push(kv('delphi_fonolojik',dP?lowTr(dP.level):null),kv('delphi_ortografik',dO?lowTr(dO.level):null),kv('delphi_islemleme_hizi',dS?lowTr(dS.level):null),kv('delphi_calisma_bellegi',dW?lowTr(dW.level):null),kv('cekirdek_okuma',dC?lowTr(dC.level):null));
+  L.push('===/KTA-VERI-1===');return L.join('\n')}
+async function copyBlock(){const t=buildBlock();try{await navigator.clipboard.writeText(t);toast('KTA veri bloğu kopyalandı — ÖÖG Müdahale Yönlendirme sayfasına yapıştırın.')}catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('Kopyalandı.')}}
+function ortProgress(){const o=S.ort;if(!o)return '—';const n=[o.nw,o.rw,o.dik,o.yaz].filter(x=>x).length;return n?n+'/4 görev':'başlanmadı'}
+function ortPrint(){const page=(title,list)=>`<div class="ptext"><div class="phead">${title}</div><div class="pgrid">${list.flat().map(w=>`<span>${w}</span>`).join('')}</div></div>`;
+  let h=page('Modül 5 • Anlamsız Sözcük Okuma — çocuk sayfası (örnek: pöta, kudal)',NW_L)+page('Modül 5 • Gerçek Sözcük Okuma — çocuk sayfası (örnek: kalem, pencere)',RW_L);
+  h+=`<div class="ptext"><div class="phead">Modül 5 • Dikte — UYGULAYICI sayfası (çocuğa gösterilmez)</div><div style="font-size:1rem;line-height:1.8">${DIK_W.map((w,i)=>`${i+1}. ${w}`).join(' &nbsp;•&nbsp; ')}<br><br>${DIK_S.map((s,i)=>`C${i+1}. ${s.tx} <small>(${s.r})</small>`).join('<br>')}<br><br><small>Puanlama: D doğru • F fonolojik (ses eksik/fazla/sıra) • O ortografik-kural (yaamur, kitapı, ağaçda, sende) • B biçim (ayna, b/d) • — yazmadı</small></div></div>`;
+  h+=`<div class="ptext"><div class="phead">Modül 5 • Yazma Akıcılığı — model cümle (çocuğun önünde durur, 60 sn kopyalama)</div><div style="font-size:1.6rem;text-align:center;padding:20px 0">${YAZ_S}</div>${'<div style="border-bottom:1px solid #999;height:34px"></div>'.repeat(14)}</div>`;
+  return h}
 
 /* ======================= BÜTÜNLEŞİK SONUÇ ======================= */
 function showResults(){
@@ -746,9 +953,10 @@ function showResults(){
     <h4>🟤 3 • Sesli Okuma Provası (Form ${F})</h4>
     ${D.done.length?`<table class="res"><tr><th>Düzey</th><th>Süre</th><th>Sözcük/dk (doğru)</th><th>Hata</th><th>Anlama</th><th>Düzey</th></tr>${sobRows}</table>
       <div class="compcard" style="background:${D.best===null?'var(--end)':fark<0?'var(--sob)':'var(--ogr)'}"><div class="ct">SINIF DÜZEYİ KARŞILIĞI (okuma envanteri ölçütleri)</div>
-      <div class="cn">${D.best===null?'En düşük düzeyde bile endişe':`Öğretimsel düzey: ${D.best}. sınıf`}</div><div class="cd">${D.bestBag?`Bağımsız: ${D.bestBag}. sınıf • `:''}Takvim: ${gradeName(I.sinif)}${fark!==null?` • fark ${fark>0?'+':''}${fark}`:''}.
+      <div class="cn">${D.best===null?`Uygulanan en düşük düzeyde (${Math.min(...D.done)}. sınıf) bile endişe`:`Öğretimsel düzey: ${D.best}. sınıf`}</div><div class="cd">${D.bestBag?`Bağımsız: ${D.bestBag}. sınıf • `:''}Takvim: ${gradeName(I.sinif)}${fark!==null?` • fark ${fark>0?'+':''}${fark}`:''}.
       ${D.done.some(l=>R[l].acc>=95&&R[l].cwpm<70)?'"Doğru ama yavaş" imzası. ':''}${D.done.some(l=>R[l].acc<90&&R[l].wpm>=90)?'Hızlı-hatalı: dikkat hattıyla değerlendirin. ':''}${D.done.some(l=>R[l].acc>=95&&R[l].comp<=2)?'Doğru çözümleme + düşük anlama: dil hattıyla karşılaştırın. ':''}</div></div>`
       :'<div class="note">Okuma provası uygulanmadı.</div>'}
+    ${ortSection()}
     ${pswSection()}
     <h4>📄 Bütünleşik Rapor Metni</h4><div class="reportbox" id="report">${buildReport()}</div>`;
   show('scr-res')}
@@ -758,7 +966,7 @@ function buildReport(){
   L.push('OKUMA BATARYASI — BÜTÜNLEŞİK DEĞERLENDİRME');
   L.push(`Rumuz: ${I.rumuz} | Yaş: ${ageStr()} (${I.ayToplam} ay) | Sınıf: ${gradeName(I.sinif)} | Tarih: ${S.date} | Uygulayıcı: ${I.uyg}`);
   L.push(`İşitme: ${I.isitme} | Görme: ${I.gorme}${I.ksb.includes('Var')?' | Konuşma sesi bozukluğu: var/şüpheli (üretim-farkındalık ayrımı gözetildi)':''}`);L.push('');
-  L.push('YÖNTEM: Değerlendirme tek oturumda üç modülle yapılmıştır. (1) Hızlı adlandırma: Denckla ve Rudel paradigması, dört alt test (nesne, renk, harf, rakam), 50 maddenin toplam süresi; sınıflandırma Ergül ve Demir (2022) sınıf düzeyi ortalama/SS değerlerinden türetilen beş bantla'+(I.kart==='app'?' (uygulama kartı: HOTİ sembol seti; sınıflandırma yönlendiricidir)':I.kart==='hit'?' (orijinal HİT kiti)':' (orijinal HOTİ kiti)')+'. (2) Fonolojik işlemleme: güncel uzlaşının üç bileşeni; farkındalık görevleri Türkçe FFT\'nin dört dilbilimsel düzey mimarisi ve CTOPP-2 yapısı referans alınarak hazırlanmış özgün ölçüt-temelli maddelerle ('+(I.mode==='tam'?'tam profil':'çekirdek tarama')+'); fonolojik kısa süreli bellek yalnız depolama görevleriyle (ileri sayı dizisi, anlamsız sözcük tekrarı), geri sayı dizisi bileşen dışı ek yürütücü ölçüm olarak. (3) Sesli okuma: SOBAT-II yapısını taklit eden özgün düzeyli metinler ve uygulayıcının sesli okuduğu 5 çoktan seçmeli soru; düzey kararı okuma envanteri ölçütleriyle. (4) İşlemleme hızı ve çalışma belleği: WISC-IV alt testlerinin paradigmasını taklit eden özgün ölçüt-temelli görevler (Kodlama, Simge Arama, Harf-Rakam Dizisi; Sayı Dizisi Modül 2 ile ortak) ve varsa WISC-IV/CNSVS normlu puanlarının aktarımı; normlu puan mevcutsa yorum ona dayandırılmıştır. Modül 2, 3 ve 4 görevleri norm-referanslı değildir; STANDART PUAN ÜRETİLMEMİŞTİR.');L.push('');
+  L.push('YÖNTEM: Değerlendirme tek oturumda beş modülle yapılmıştır. (1) Hızlı adlandırma: Denckla ve Rudel paradigması, dört alt test (nesne, renk, harf, rakam), 50 maddenin toplam süresi; sınıflandırma Ergül ve Demir (2022) sınıf düzeyi ortalama/SS değerlerinden türetilen beş bantla'+(I.kart==='app'?' (uygulama kartı: HOTİ sembol seti; sınıflandırma yönlendiricidir)':I.kart==='hit'?' (orijinal HİT kiti)':' (orijinal HOTİ kiti)')+'. (2) Fonolojik işlemleme: güncel uzlaşının üç bileşeni; farkındalık görevleri Türkçe FFT\'nin dört dilbilimsel düzey mimarisi ve CTOPP-2 yapısı referans alınarak hazırlanmış özgün ölçüt-temelli maddelerle ('+(I.mode==='tam'?'tam profil':'çekirdek tarama')+'); fonolojik kısa süreli bellek yalnız depolama görevleriyle (ileri sayı dizisi, anlamsız sözcük tekrarı), geri sayı dizisi bileşen dışı ek yürütücü ölçüm olarak. (3) Sesli okuma: SOBAT-II yapısını taklit eden özgün düzeyli metinler ve uygulayıcının sesli okuduğu 5 çoktan seçmeli soru; düzey kararı okuma envanteri ölçütleriyle. (4) İşlemleme hızı ve çalışma belleği: WISC-IV alt testlerinin paradigmasını taklit eden özgün ölçüt-temelli görevler (Kodlama, Simge Arama, Harf-Rakam Dizisi; Sayı Dizisi Modül 2 ile ortak) ve varsa WISC-IV/CNSVS normlu puanlarının aktarımı; normlu puan mevcutsa yorum ona dayandırılmıştır. (5) Sözcük düzeyi kod çözme ve yazım: Türkçe fonotaktiğine uygun, hece sayısına göre kademeli 40 anlamsız sözcük ve eşleştirilmiş 40 gerçek sözcük listesi (zamanlı; doğruluk ve dakikada doğru sözcük), 15 sözcük + 3 cümle dikte (hata türü sınıflaması: fonolojik / ortografik-kural / biçim; cümlede büyük harf, noktalama, ayrı yazım) ve 60 sn kopyalama ile yazma akıcılığı. Modül 2, 3, 4 ve 5 görevleri norm-referanslı değildir; STANDART PUAN ÜRETİLMEMİŞTİR.');L.push('');
   L.push('BULGULAR:');
   RTASKS.forEach(t=>{const d=S.ran.results[t.key],N=normFor(t.key,I.sinif);if(!d)return;
     if(d.uygulanmadi){L.push(`• ${t.name}: deneme sayfasında semboller bilinmediğinden uygulanmadı.`);return}
@@ -766,39 +974,49 @@ function buildReport(){
     L.push(`• ${t.name}: ${d.sure.toFixed(1)} sn${N?` — "${RBANDS[bandOf(d.sure,N.M,N.SD)].n}" bandı (${gradeName(I.sinif)} ort ${N.M.toFixed(1)}, SS ${N.SD.toFixed(2)})`:' — sınıf normu yok'}; ${d.hata} hata, ${d.duzeltme} kendini düzeltme.`)});
   if(rb.done)L.push(`• ADLANDIRMA HIZI ÖZETİ: ${rb.done} alt testten ${rb.slow} tanesi yavaş/çok yavaş → ${ranDurum}.`);
   ['soz','kaf','hec','fon'].forEach(Lv=>{const list=FF.filter(t=>t.lvl===Lv&&S.fip.ff[t.id]);if(!list.length)return;
-    L.push(`• ${LVL[Lv][0]}: `+list.map(t=>`${t.n} ${S.fip.ff[t.id].sc}/6 (${kazanim(S.fip.ff[t.id].sc)[0].toLowerCase()}${expected(t)?'':', henüz beklenmiyor'})`).join('; ')+'.')});
-  if(Fs.done.length)L.push(`• FONOLOJİK FARKINDALIK ÖZETİ: ${Fs.durum.toLowerCase()} — ${Fs.acik}`);
-  if(M){const p=[];if(M.n)p.push(`anlamsız sözcük tekrarı ${M.n.sc}/10`);if(M.d)p.push(`ileri sayı dizisi ${M.d.f}`);L.push(`• FONOLOJİK KISA SÜRELİ BELLEK: ${p.join('; ')} → ${M.durum.toLowerCase()}.`);
+    L.push(`• ${LVL[Lv][0]}: `+list.map(t=>`${t.n} ${S.fip.ff[t.id].sc}/6 (${kazanim(S.fip.ff[t.id].sc)[0].toLocaleLowerCase('tr-TR')}${expected(t)?'':', henüz beklenmiyor'})`).join('; ')+'.')});
+  if(Fs.done.length)L.push(`• FONOLOJİK FARKINDALIK ÖZETİ: ${Fs.durum.toLocaleLowerCase('tr-TR')} — ${Fs.acik}`);
+  if(M){const p=[];if(M.n)p.push(`anlamsız sözcük tekrarı ${M.n.sc}/10`);if(M.d)p.push(`ileri sayı dizisi ${M.d.f}`);L.push(`• FONOLOJİK KISA SÜRELİ BELLEK: ${p.join('; ')} → ${M.durum.toLocaleLowerCase('tr-TR')}.`);
     if(M.d)L.push(`• EK YÜRÜTÜCÜ ÖLÇÜM (bileşen puanına dahil değil): geri sayı dizisi ${M.d.b}; ileri-geri makası ${M.d.f-M.d.b} — sözel çalışma belleği/yürütücü yük altında ek performans göstergesi.`)}
   D.done.forEach(l=>{const d=R[l],lv=levelOf(d.acc,d.comp);L.push(`• Sesli okuma ${l}. sınıf düzeyi ("${T[F][l].tt}", ${d.words} sözcük): ${d.sec} sn; ${d.wpm} sözcük/dk, ${d.cwpm} doğru sözcük/dk; ${d.err} hata (doğruluk %${d.acc}), ${d.corr} kendini düzeltme; anlama ${d.comp}/5 → ${lv.n}.${d.errWords.length?` Hatalı sözcükler: ${d.errWords.join(', ')}.`:''}`)});
   if(D.done.length)L.push(D.best===null?'• OKUMA DÜZEYİ: uygulanan en düşük düzeyde bile endişe düzeyi.':`• OKUMA DÜZEYİ: öğretimsel ${D.best}. sınıf${D.bestBag?`, bağımsız ${D.bestBag}. sınıf`:''}; takvim ${gradeName(I.sinif)}.`);
+  const o5=S.ort||{},g5=I.sinif;
+  if(o5.nw&&o5.nw.attempted)L.push(`• Anlamsız sözcük okuma (ölçüt-temelli): ${o5.nw.correct}/${o5.nw.attempted} doğru (%${o5.nw.acc}), ${o5.nw.sec} sn, ${o5.nw.cpm} doğru sözcük/dk → ${listBand('nw',o5.nw.acc,g5)[0].toLocaleLowerCase('tr-TR')}${o5.nw.complete?'':' (liste tamamlanmadı)'}. Hatalar uzunluk düzeyine göre: 1 heceli + 2 heceli açık ${o5.nw.errLvl[0]+o5.nw.errLvl[1]}, 2 heceli kapalı ${o5.nw.errLvl[2]}, 3–4 heceli ${o5.nw.errLvl[3]+o5.nw.errLvl[4]}.${o5.nw.errWords.length?` Hatalı sözcükler: ${o5.nw.errWords.join(', ')}.`:''}`);
+  if(o5.rw&&o5.rw.attempted)L.push(`• Gerçek sözcük okuma (eşleştirilmiş liste): ${o5.rw.correct}/${o5.rw.attempted} doğru (%${o5.rw.acc}), ${o5.rw.sec} sn, ${o5.rw.cpm} doğru sözcük/dk → ${listBand('rw',o5.rw.acc,g5)[0].toLocaleLowerCase('tr-TR')}.${o5.rw.errWords.length?` Hatalı sözcükler: ${o5.rw.errWords.join(', ')}.`:''}`);
+  {const gp=ortGap();if(gp)L.push(`• Sözcük–anlamsız sözcük ayrışması: ${gp.flag?'VAR':'yok'} (doğruluk farkı ${gp.accGap} puan${gp.ratio!==null?`, hız oranı ${gp.ratio}`:''})${gp.flag?' — fonolojik kod çözme yolu zayıf; tanıdık sözcükler sözcüksel yoldan okunuyor olabilir.':'.'}`)}
+  if(o5.dik){const d=o5.dik;L.push(`• Dikte: sözcük ${d.sozDogru}/${d.sozN}, cümle sözcükleri ${d.cumDogru}/${d.cumN} (toplam doğruluk %${d.acc}) → ${dikBand(d.acc,g5)[0].toLocaleLowerCase('tr-TR')}. Hata türleri: fonolojik ${d.fon}, ortografik/kural ${d.ort}, biçim ${d.bic}, yazılmadı ${d.yok}; profil ${d.profil}. Cümle kuralları hatalı: büyük harf ${d.rule.buyuk}/3, noktalama ${d.rule.nokta}/3, ayrı yazım ${d.rule.ayri}/3.`)}
+  if(o5.yaz)L.push(`• Yazma akıcılığı (60 sn kopyalama, gözlem): ${o5.yaz.harf} harf/dk; okunaklılık ${o5.yaz.okunak}; hız yargısı ${o5.yaz.hiz}.${o5.yaz.not?` Gözlem: ${o5.yaz.not}.`:''}`);
   const p=S.psw,w=p.wisc||{},cn=p.cnsvs||{};
   if(p.kod)L.push(`• Kodlama (WISC-IV paradigması, ölçüt-temelli): ${p.kod.correct} doğru, ${p.kod.errors} hata, ${p.kod.time} sn (dakikada ${Math.round(p.kod.correct/p.kod.time*60)} doğru).`);
   if(p.sim)L.push(`• Simge Arama (paradigma, ölçüt-temelli): ${p.sim.correct} doğru − ${p.sim.incorrect} yanlış = ${p.sim.score}; ${p.sim.attempted} madde/${p.sim.time} sn.`);
   if(p.hrd)L.push(`• Harf-Rakam Dizisi (paradigma, ölçüt-temelli): ${p.hrd.score}/12 deneme doğru, en uzun dizi ${p.hrd.maxLen}.`);
-  if(w.ihe||w.cbe)L.push(`• WISC-IV (normlu): ${w.ihe?`İşlemleme Hızı Endeksi ${w.ihe} (${ssBand(w.ihe)[0].toLowerCase()})`:''}${w.ihe&&w.cbe?'; ':''}${w.cbe?`Çalışma Belleği Endeksi ${w.cbe} (${ssBand(w.cbe)[0].toLowerCase()})`:''}${[w.kod?'Kodlama '+w.kod:'',w.sim?'Simge Arama '+w.sim:'',w.sd?'Sayı Dizisi '+w.sd:'',w.hrd?'Harf-Rakam '+w.hrd:''].filter(x=>x).length?'; alt testler: '+[w.kod?'Kodlama '+w.kod:'',w.sim?'Simge Arama '+w.sim:'',w.sd?'Sayı Dizisi '+w.sd:'',w.hrd?'Harf-Rakam '+w.hrd:''].filter(x=>x).join(', '):''}.`);
+  if(w.ihe||w.cbe)L.push(`• WISC-IV (normlu): ${w.ihe?`İşlemleme Hızı Endeksi ${w.ihe} (${ssBand(w.ihe)[0].toLocaleLowerCase('tr-TR')})`:''}${w.ihe&&w.cbe?'; ':''}${w.cbe?`Çalışma Belleği Endeksi ${w.cbe} (${ssBand(w.cbe)[0].toLocaleLowerCase('tr-TR')})`:''}${[w.kod?'Kodlama '+w.kod:'',w.sim?'Simge Arama '+w.sim:'',w.sd?'Sayı Dizisi '+w.sd:'',w.hrd?'Harf-Rakam '+w.hrd:''].filter(x=>x).length?'; alt testler: '+[w.kod?'Kodlama '+w.kod:'',w.sim?'Simge Arama '+w.sim:'',w.sd?'Sayı Dizisi '+w.sd:'',w.hrd?'Harf-Rakam '+w.hrd:''].filter(x=>x).join(', '):''}.`);
   if(cn.ps||cn.pms||cn.wm)L.push(`• CNSVS (normlu): ${[cn.ps?'işlemleme hızı '+cn.ps:'',cn.pms?'psikomotor hız '+cn.pms:'',cn.wm?'çalışma belleği '+cn.wm:''].filter(x=>x).join('; ')}.`);
   L.push('');
   const dP=phonStatus(),dS=psStatus(),dW=wmStatus();
-  L.push('DELPHI HİPOTEZ-TEST ÖZETİ (Holden ve ark., 2025 — dört alan):');
-  L.push(`• Fonolojik beceriler: ${dP?dP.level.toLowerCase()+' ['+dP.src.toLowerCase()+'] — '+dP.lab:'değerlendirilmedi'}.`);
-  L.push('• Ortografik beceriler: bu oturumda değerlendirilmedi.');
-  L.push(`• İşlemleme hızı: ${dS?dS.level.toLowerCase()+' ['+dS.src.toLowerCase()+'] — '+dS.lab:'değerlendirilmedi'}.`);
-  L.push(`• Çalışma belleği: ${dW?dW.level.toLowerCase()+' ['+dW.src.toLowerCase()+'] — '+dW.lab:'değerlendirilmedi'}.`);
+  const dC=coreStatus(),dO=ortStatus();
+  L.push('UZLAŞI ÖZETİ (Carroll ve Holden ve ark., 2025 — çekirdek + dört alan):');
+  L.push(`• Çekirdek — sözcük düzeyi okuma doğruluğu/akıcılığı: ${dC?dC.level.toLocaleLowerCase('tr-TR')+' ['+dC.src.toLocaleLowerCase('tr-TR')+'] — '+dC.lab:'değerlendirilmedi'}.`);
+  L.push(`• Fonolojik beceriler: ${dP?dP.level.toLocaleLowerCase('tr-TR')+' ['+dP.src.toLocaleLowerCase('tr-TR')+'] — '+dP.lab:'değerlendirilmedi'}.`);
+  L.push(`• Ortografik beceriler (yazım): ${dO?dO.level.toLocaleLowerCase('tr-TR')+' ['+dO.src.toLocaleLowerCase('tr-TR')+'] — '+dO.lab:'değerlendirilmedi'}.`);
+  L.push(`• İşlemleme hızı: ${dS?dS.level.toLocaleLowerCase('tr-TR')+' ['+dS.src.toLocaleLowerCase('tr-TR')+'] — '+dS.lab:'değerlendirilmedi'}.`);
+  L.push(`• Çalışma belleği: ${dW?dW.level.toLocaleLowerCase('tr-TR')+' ['+dW.src.toLocaleLowerCase('tr-TR')+'] — '+dW.lab:'değerlendirilmedi'}.`);
   L.push('');
-  const parts=[];if(Fs.done.length)parts.push(`fonolojik farkındalık ${Fs.durum.toLowerCase()}`);if(M)parts.push(`fonolojik kısa süreli bellek ${M.durum.toLowerCase()}`);if(ranDurum)parts.push(`adlandırma hızı ${ranDurum}`);
+  const parts=[];if(Fs.done.length)parts.push(`fonolojik farkındalık ${Fs.durum.toLocaleLowerCase('tr-TR')}`);if(M)parts.push(`fonolojik kısa süreli bellek ${M.durum.toLocaleLowerCase('tr-TR')}`);if(ranDurum)parts.push(`adlandırma hızı ${ranDurum}`);
   if(parts.length)L.push(`DEĞERLENDİRME: ${parts.join(', ')}.`);
   if(Fs.durum!=='Değerlendirilmedi'&&ranDurum){const ffY=Fs.durum==='Yetersiz',ranY=ranDurum==='yetersiz';
     L.push(ffY&&ranY?'Çift yetersizlik örüntüsü (fonolojik farkındalık + adlandırma hızı) ile uyumlu profil; literatürde daha ağır seyreden okuma güçlükleriyle ilişkilendirilir.':ffY?'Yetersizlik fonolojik farkındalıkta yoğunlaşmaktadır; adlandırma hızı görece korunmuştur.':ranY?'Yetersizlik adlandırma hızında yoğunlaşmaktadır; fonolojik farkındalık görece korunmuştur.':'Fonolojik işlemlemenin bileşenlerinde belirgin yetersizlik saptanmamıştır.')}
   L.push('');
   L.push('NOT: Hiçbir bulgu tek başına tanı koydurmaz. Güncel uzlaşı, fonolojik güçlüklerin değişkenliği tam açıklamadığını; çalışma belleği, işlemleme hızı ve ortografik becerilerin de katkıda bulunduğunu ve değerlendirmenin hipotez-test yaklaşımıyla çok kaynaklı yürütülmesi gerektiğini belirtir. ÖÖG kararı DSM-5 ölçütleri, gelişim öyküsü, okul verileri ve normlu araçlarla (resmî tanılamada orijinal kitler) klinik olarak verilir.');
+  L.push('');L.push('--- Aşağıdaki blok ÖÖG Müdahale Yönlendirme sayfası için makine-okunur özettir; rapora eklenmesi zararsızdır. ---');L.push(buildBlock());
   return L.join('\n')}
-async function copyReport(){const t=$('report').innerText;try{await navigator.clipboard.writeText(t);alert('Rapor metni kopyalandı.')}catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();alert('Kopyalandı.')}}
+async function copyReport(){const t=$('report').innerText;try{await navigator.clipboard.writeText(t);toast('Rapor metni kopyalandı.')}catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('Kopyalandı.')}}
 
 /* ======================= YAZDIR ======================= */
 function openPrint(){renderPrint();show('scr-print')}
 function renderPrint(){const w=$('p-what').value;let h='';
   if(w==='ran')RTASKS.forEach(t=>{h+=`<div class="printcard"><div class="printhead">${t.name} — Deneme Sayfası</div>${renderDeneme(t.key)}</div><div class="printcard"><div class="printhead">${t.name} — Uygulama Kartı (50 madde)</div>${renderCard(t.key,S.ran.cards[t.key])}</div>`});
+  else if(w==='ort')h=ortPrint();
   else{const F=w==='sobA'?'A':'B';h=LV.map(l=>`<div class="ptext"><div class="phead">Form ${F} • ${l}. sınıf düzeyi • "${T[F][l].tt}"</div>${T[F][l].tx}</div>`).join('')}
   $('printarea').innerHTML=h}
 loadS();
